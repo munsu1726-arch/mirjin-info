@@ -359,6 +359,184 @@
       border-color: rgba(191,219,254,0.9);
     }
 
+    .info-list-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 11px;
+    }
+
+    .info-list-toggle {
+      border: 1px solid rgba(250, 204, 21, 0.42);
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: rgba(250, 204, 21, 0.92);
+      color: #111827;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .info-list-toggle:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .info-list-toggle-sub {
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .info-list-panel {
+      display: none;
+      margin-top: 11px;
+      padding: 12px;
+      border-radius: 15px;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(147,197,253,0.24);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.24);
+      text-align: left;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .info-list-panel.info-list-open {
+      display: block;
+    }
+
+    .info-list-toolbar {
+      display: grid;
+      grid-template-columns: 1fr minmax(160px, 260px);
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .info-list-heading {
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .info-list-count {
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 800;
+      margin-left: 5px;
+    }
+
+    .info-list-filter {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.96);
+      color: #111827;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .info-category {
+      margin-top: 8px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .info-category:first-of-type {
+      margin-top: 0;
+    }
+
+    .info-category summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .info-category summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .info-category summary::after {
+      content: "펼치기";
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .info-category[open] summary::after {
+      content: "접기";
+      color: #facc15;
+    }
+
+    .info-category-count {
+      margin-left: 6px;
+      color: #a7f3d0;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .info-item-list {
+      display: grid;
+      gap: 7px;
+      padding: 0 10px 10px;
+    }
+
+    .info-item-button {
+      width: 100%;
+      border: 1px solid rgba(147,197,253,0.18);
+      border-radius: 11px;
+      padding: 9px 10px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #f8fafc;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .info-item-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(250,204,21,0.48);
+      background: rgba(30, 41, 59, 0.92);
+    }
+
+    .info-item-title {
+      display: block;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .info-item-meta {
+      display: block;
+      margin-top: 3px;
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .info-list-empty {
+      padding: 14px 6px;
+      color: #94a3b8;
+      font-size: 13px;
+      text-align: center;
+    }
+
     .recent-update-box {
       margin-top: 12px;
       padding: 12px 14px;
@@ -1185,6 +1363,37 @@
         font-size: 12px;
       }
 
+      .info-list-toggle-row {
+        margin-top: 9px;
+      }
+
+      .info-list-toggle {
+        padding: 7px 11px;
+        font-size: 12px;
+      }
+
+      .info-list-toggle-sub {
+        width: 100%;
+        font-size: 11px;
+      }
+
+      .info-list-panel {
+        max-height: 320px;
+        padding: 10px;
+      }
+
+      .info-list-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .info-category summary {
+        padding: 9px 10px;
+      }
+
+      .info-item-title {
+        font-size: 12px;
+      }
+
       .recent-update-box {
         font-size: 12px;
       }
@@ -1855,6 +2064,21 @@
           <button class="quick-search-button" type="button" onclick="searchKeyword('선악')">선악</button>
           <button class="quick-search-button" type="button" onclick="searchKeyword('스킬설정')">스킬설정</button>
           <button class="quick-search-button" type="button" onclick="searchKeyword('GM답변')">GM답변</button>
+        </div>
+
+        <div class="info-list-toggle-row">
+          <button id="infoListToggle" class="info-list-toggle" type="button" aria-expanded="false" aria-controls="infoListPanel">전체 목록 보기</button>
+          <span class="info-list-toggle-sub">카테고리별로 등록된 정보를 한눈에 볼 수 있습니다.</span>
+        </div>
+
+        <div id="infoListPanel" class="info-list-panel" hidden>
+          <div class="info-list-toolbar">
+            <div class="info-list-heading">등록된 정보 목록 <span id="infoListCount" class="info-list-count"></span></div>
+            <input id="infoListFilter" class="info-list-filter" type="text" placeholder="목록 안에서 검색" autocomplete="off" />
+          </div>
+          <div id="infoListContent" class="info-list-content">
+            <div class="info-list-empty">목록을 불러오는 중입니다.</div>
+          </div>
         </div>
       </div>
 
@@ -3513,6 +3737,130 @@
       searchInput.focus();
     }
 
+    function getInfoListPosts() {
+      const seen = new Set();
+      return posts.concat(firebaseSearchPosts)
+        .filter(post => post && (post.title || post.content || post.category))
+        .filter(post => {
+          const key = [post.category || "", post.title || "", post.date || "", String(post.content || "").slice(0, 80)].join("|");
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    function getInfoCategoryOrder(category) {
+      const order = ["GM답변", "쿠폰", "공성", "보스", "사냥터", "스킬북", "원소", "감옥", "전직", "문파공지", "제보", "기타"];
+      const index = order.indexOf(category || "기타");
+      return index === -1 ? order.length : index;
+    }
+
+    function renderInfoList() {
+      const listContent = document.getElementById("infoListContent");
+      const listCount = document.getElementById("infoListCount");
+      const filterInput = document.getElementById("infoListFilter");
+
+      if (!listContent) return;
+
+      const filterKeyword = filterInput ? normalizeText(filterInput.value.trim()) : "";
+      let listPosts = getInfoListPosts();
+
+      if (filterKeyword) {
+        listPosts = listPosts.filter(post => normalizeText([
+          post.title,
+          post.category,
+          post.source,
+          post.date,
+          post.content,
+          getPostTags(post).join(" ")
+        ].join(" ")).includes(filterKeyword));
+      }
+
+      listPosts.sort((a, b) => {
+        const categoryDiff = getInfoCategoryOrder(a.category || "기타") - getInfoCategoryOrder(b.category || "기타");
+        if (categoryDiff !== 0) return categoryDiff;
+        const dateDiff = String(b.date || "").localeCompare(String(a.date || ""));
+        if (dateDiff !== 0) return dateDiff;
+        return String(a.title || "").localeCompare(String(b.title || ""), "ko");
+      });
+
+      if (listCount) {
+        listCount.textContent = `${listPosts.length}개`;
+      }
+
+      if (listPosts.length === 0) {
+        listContent.innerHTML = `<div class="info-list-empty">표시할 정보가 없습니다.</div>`;
+        return;
+      }
+
+      const grouped = listPosts.reduce((acc, post) => {
+        const category = post.category || "기타";
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(post);
+        return acc;
+      }, {});
+
+      const categories = Object.keys(grouped).sort((a, b) => {
+        const orderDiff = getInfoCategoryOrder(a) - getInfoCategoryOrder(b);
+        if (orderDiff !== 0) return orderDiff;
+        return a.localeCompare(b, "ko");
+      });
+
+      listContent.innerHTML = categories.map((category, categoryIndex) => {
+        const items = grouped[category];
+        const openAttribute = categoryIndex < 2 ? " open" : "";
+        return `
+          <details class="info-category"${openAttribute}>
+            <summary>${escapeHtml(category)} <span class="info-category-count">${items.length}개</span></summary>
+            <div class="info-item-list">
+              ${items.map(post => {
+                const title = post.title || "제목 없음";
+                const searchTerm = title;
+                return `
+                  <button class="info-item-button" type="button" onclick="searchKeyword('${escapeJsString(searchTerm)}')">
+                    <span class="info-item-title">${escapeHtml(title)}</span>
+                    <span class="info-item-meta">${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(post.date || "날짜 없음")}</span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </details>
+        `;
+      }).join("");
+    }
+
+    function initInfoListPanel() {
+      const toggleButton = document.getElementById("infoListToggle");
+      const panel = document.getElementById("infoListPanel");
+      const filterInput = document.getElementById("infoListFilter");
+
+      if (!toggleButton || !panel) return;
+
+      function setInfoListOpen(isOpen) {
+        panel.hidden = !isOpen;
+        panel.classList.toggle("info-list-open", isOpen);
+        toggleButton.setAttribute("aria-expanded", String(isOpen));
+        toggleButton.textContent = isOpen ? "전체 목록 닫기" : "전체 목록 보기";
+
+        if (isOpen) {
+          renderInfoList();
+          if (filterInput && window.innerWidth > 600) {
+            setTimeout(() => filterInput.focus(), 60);
+          }
+        }
+      }
+
+      toggleButton.addEventListener("click", () => {
+        setInfoListOpen(panel.hidden);
+      });
+
+      if (filterInput) {
+        filterInput.addEventListener("input", renderInfoList);
+      }
+
+      renderInfoList();
+    }
+
 
     function buildNaverCafeBoardUrl(keyword) {
       const params = new URLSearchParams();
@@ -4556,6 +4904,8 @@
         .map((message, index) => convertChatMessageToSearchPost(message, `local_${index}`))
         .filter(Boolean);
 
+      renderInfoList();
+
       if (searchInput.value.trim()) {
         render();
       }
@@ -5131,6 +5481,7 @@
         if (signature !== lastRenderedSearchPostsSignature) {
           lastRenderedSearchPostsSignature = signature;
           firebaseSearchPosts = searchPosts;
+          renderInfoList();
 
           if (searchInput.value.trim()) {
             render();
@@ -5281,6 +5632,7 @@
     initPopularKeywordSync();
     initGmAlertBox();
     initAdminUploadPanel();
+    initInfoListPanel();
     render();
   </script>
 
