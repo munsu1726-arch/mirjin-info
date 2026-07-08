@@ -592,7 +592,7 @@
       </form>
 
       <p class="chat-note">
-        공개 채팅방입니다. 모든 방문자가 닉네임을 입력하고 실시간으로 대화할 수 있습니다. 욕설/비속어가 포함된 메시지는 전송되지 않습니다.
+        공개 채팅방입니다. 닉네임과 채팅 내용에 욕설/비속어가 포함되면 전송되지 않습니다. 욕설/비속어가 포함된 메시지는 전송되지 않습니다.
       </p>
     </div>
   </section>
@@ -1727,49 +1727,115 @@
     }
 
     const BLOCKED_CHAT_WORDS = [
-      "시발", "씨발", "ㅅㅂ", "ㅆㅂ", "쉬발", "씨바", "시바",
-      "병신", "ㅂㅅ", "븅신", "등신",
-      "개새", "개색", "새끼", "색기", "쌔끼",
-      "좆", "존나", "졸라", "ㅈ같", "좃",
-      "지랄", "ㅈㄹ", "염병", "꺼져", "죽어",
+      "시발", "씨발", "ㅅㅂ", "ㅆㅂ", "쉬발", "씨바", "시바", "십발", "씹",
+      "병신", "ㅂㅅ", "븅신", "등신", "모지리",
+      "개새", "개색", "개자식", "새끼", "색기", "쌔끼", "개같", "개판",
+      "좆", "존나", "졸라", "좃", "ㅈ같", "ㅈㄴ", "ㅈㄹ",
+      "지랄", "염병", "꺼져", "죽어", "닥쳐",
       "느금마", "니애미", "애미",
-      "fuck", "shit", "bitch", "asshole"
+      "fuck", "shit", "bitch", "asshole", "fucking"
     ];
+
+    function toKoreanJamo(value) {
+      const cho = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+      const jung = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
+      const jong = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+
+      return String(value || "").split("").map(char => {
+        const code = char.charCodeAt(0);
+        if (code < 0xac00 || code > 0xd7a3) {
+          return char;
+        }
+
+        const index = code - 0xac00;
+        const choIndex = Math.floor(index / 588);
+        const jungIndex = Math.floor((index % 588) / 28);
+        const jongIndex = index % 28;
+        return cho[choIndex] + jung[jungIndex] + jong[jongIndex];
+      }).join("");
+    }
 
     function normalizeBlockedText(value) {
       return String(value || "")
         .toLowerCase()
+        .replace(/[0０]/g, "o")
+        .replace(/[1!！|]/g, "i")
+        .replace(/[3３]/g, "e")
+        .replace(/[4４@＠]/g, "a")
+        .replace(/[5５$＄]/g, "s")
+        .replace(/[7７+＋]/g, "t")
         .replace(/\s+/g, "")
-        .replace(/[·ㆍ:：,\.\-_/\\|!\?~`'"\[\]\(\){}<>@#$%^&*=+]/g, "")
+        .replace(/[·ㆍ:：,\.\-_/\\~`'"“”‘’\[\]\(\){}<>@#$%^&*=+|!?！？。]/g, "")
         .replace(/(.)\1{2,}/g, "$1$1");
     }
 
-    const normalizedBlockedChatWords = BLOCKED_CHAT_WORDS
-      .map(word => normalizeBlockedText(word))
-      .filter(Boolean);
+    function getBlockedCandidates(value) {
+      const source = String(value || "");
+      const candidates = [
+        normalizeBlockedText(source),
+        normalizeBlockedText(toKoreanJamo(source)),
+        normalizeBlockedText(source.normalize ? source.normalize("NFKD") : source)
+      ];
+
+      return [...new Set(candidates.filter(Boolean))];
+    }
+
+    const normalizedBlockedChatWords = [...new Set(
+      BLOCKED_CHAT_WORDS
+        .flatMap(word => getBlockedCandidates(word))
+        .filter(word => word.length >= 2)
+    )];
 
     function containsBlockedExpression(value) {
-      const normalizedValue = normalizeBlockedText(value);
+      const candidates = getBlockedCandidates(value);
 
-      if (!normalizedValue) {
+      if (!candidates.length) {
         return false;
       }
 
-      return normalizedBlockedChatWords.some(word => normalizedValue.includes(word));
+      return candidates.some(candidate =>
+        normalizedBlockedChatWords.some(word => candidate.includes(word))
+      );
+    }
+
+    function isAllowedChatName(name) {
+      const cleanName = String(name || "").trim();
+
+      if (!cleanName) {
+        return true;
+      }
+
+      if (cleanName.length > 12) {
+        return false;
+      }
+
+      return /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9_]{1,12}$/.test(cleanName);
+    }
+
+    function isValidChatName(name) {
+      const cleanName = String(name || "").trim();
+      return isAllowedChatName(cleanName) && !containsBlockedExpression(cleanName);
     }
 
     function getSafeChatName(name) {
-      return containsBlockedExpression(name) ? "익명" : name;
+      const cleanName = String(name || "익명").trim().slice(0, 12) || "익명";
+      return isValidChatName(cleanName) ? cleanName : "익명";
     }
 
     function getSafeChatText(text) {
       return containsBlockedExpression(text) ? "부적절한 표현이 포함된 메시지입니다." : text;
     }
 
+    function rejectBlockedChatName() {
+      setChatStatus("닉네임에 사용할 수 없는 표현이 포함되어 전송하지 않았습니다.");
+      chatName.focus();
+      alert("닉네임에 욕설, 비속어 또는 사용할 수 없는 문자가 포함되어 전송하지 않았습니다.");
+    }
+
     function rejectBlockedChatMessage() {
-      setChatStatus("욕설/비속어가 포함되어 전송하지 않았습니다.");
+      setChatStatus("채팅 내용에 욕설/비속어가 포함되어 전송하지 않았습니다.");
       chatText.focus();
-      alert("욕설 또는 비속어가 포함되어 전송하지 않았습니다.");
+      alert("채팅 내용에 욕설 또는 비속어가 포함되어 전송하지 않았습니다.");
     }
 
     function renderChatMessages(messages) {
@@ -1809,9 +1875,11 @@
     }
 
     function getCleanChatInput() {
-      const name = (chatName.value.trim() || "익명").slice(0, 12);
-      const text = chatText.value.trim().slice(0, 200);
-      return { name, text };
+      const rawName = chatName.value.trim();
+      const rawText = chatText.value.trim();
+      const name = (rawName || "익명").slice(0, 12);
+      const text = rawText.slice(0, 200);
+      return { rawName, rawText, name, text };
     }
 
     function setChatStatus(message) {
@@ -1824,13 +1892,18 @@
 
       chatForm.addEventListener("submit", event => {
         event.preventDefault();
-        const { name, text } = getCleanChatInput();
+        const { rawName, rawText, name, text } = getCleanChatInput();
 
         if (!text) {
           return;
         }
 
-        if (containsBlockedExpression(name) || containsBlockedExpression(text)) {
+        if (!isValidChatName(rawName)) {
+          rejectBlockedChatName();
+          return;
+        }
+
+        if (containsBlockedExpression(rawText)) {
           rejectBlockedChatMessage();
           return;
         }
@@ -1955,13 +2028,18 @@
 
       chatForm.addEventListener("submit", async event => {
         event.preventDefault();
-        const { name, text } = getCleanChatInput();
+        const { rawName, rawText, name, text } = getCleanChatInput();
 
         if (!text) {
           return;
         }
 
-        if (containsBlockedExpression(name) || containsBlockedExpression(text)) {
+        if (!isValidChatName(rawName)) {
+          rejectBlockedChatName();
+          return;
+        }
+
+        if (containsBlockedExpression(rawText)) {
           rejectBlockedChatMessage();
           return;
         }
