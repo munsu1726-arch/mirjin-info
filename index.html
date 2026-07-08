@@ -591,7 +591,7 @@
       </form>
 
       <p class="chat-note">
-        공개 채팅방 모드입니다. Firebase 설정값과 공개 Realtime Database 규칙을 적용하면 모든 방문자가 같이 읽고 쓸 수 있습니다.
+        공개 채팅방입니다. 모든 방문자가 닉네임을 입력하고 실시간으로 대화할 수 있습니다.
       </p>
     </div>
   </section>
@@ -1681,14 +1681,14 @@
     */
 
     const firebaseConfig = {
-      // Firebase Console → Project settings → General → Your apps → SDK setup and configuration 값으로 교체하세요.
-      apiKey: "",
-      authDomain: "",
-      databaseURL: "",
-      projectId: "",
-      storageBucket: "",
-      messagingSenderId: "",
-      appId: ""
+      apiKey: "AIzaSyAIOrwfCx8UgYXeTGFaocu20yM4jQ0ee74",
+      authDomain: "mirjin-info.firebaseapp.com",
+      databaseURL: "https://mirjin-info-default-rtdb.firebaseio.com",
+      projectId: "mirjin-info",
+      storageBucket: "mirjin-info.firebasestorage.app",
+      messagingSenderId: "174948878163",
+      appId: "1:174948878163:web:9db7ee28dc9b22c56b43a6",
+      measurementId: "G-XP418T71FD"
     };
 
     const CHAT_ROOM_PATH = "mirjinAraChat/messages";
@@ -1760,8 +1760,8 @@
     }
 
     function startLocalChatMode() {
-      chatStatus.textContent = "Firebase 설정 필요";
-      chatMessages.innerHTML = `<div class="chat-empty">아직 Firebase 설정값이 없습니다.<br>설정 전에는 내 기기에서만 테스트 채팅으로 표시됩니다.</div>`;
+      chatStatus.textContent = "테스트 모드";
+      chatMessages.innerHTML = `<div class="chat-empty">Realtime Database 연결 전에는 내 기기에서만 테스트 채팅으로 표시됩니다.</div>`;
 
       getLocalChatMessages().forEach(addChatMessage);
 
