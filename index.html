@@ -3,63 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미르의전설: 진 정보 검색</title>
+  <title>미르의전설: 진 5서버 아라 문파 정보 검색</title>
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
       background: #111827;
       color: #f9fafb;
+      font-family: Arial, sans-serif;
     }
 
-    header {
-      padding: 40px 20px;
+    .hero-search {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      box-sizing: border-box;
       text-align: center;
-      background: #1f2937;
     }
 
-    header h1 {
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url("intro.png");
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      animation: introMove 5s ease forwards;
+    }
+
+    .hero-pixel {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
+      background-size: 5px 5px, 8px 8px;
+      background-position: 0 0, 3px 3px;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      animation: pixelMove 5s ease forwards;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(17,24,39,0.92)),
+        radial-gradient(circle at center, rgba(0,0,0,0.1), rgba(0,0,0,0.75));
+    }
+
+    .hero-box {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: heroTextIn 1s ease forwards;
+      animation-delay: 1.5s;
+    }
+
+    .hero-box h1 {
       margin: 0 0 12px;
-      font-size: 32px;
+      font-size: 38px;
+      color: white;
+      text-shadow: 0 0 14px rgba(0,0,0,0.95);
     }
 
-    header p {
-      margin: 0;
-      color: #d1d5db;
+    .hero-box p {
+      margin: 0 0 28px;
+      color: #e5e7eb;
+      font-size: 17px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.9);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 18px 20px;
+      font-size: 18px;
+      border-radius: 12px;
+      border: none;
+      box-sizing: border-box;
+      outline: none;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
 
     main {
       max-width: 900px;
       margin: 30px auto;
-      padding: 0 20px;
-    }
-
-    .search-box {
-      width: 100%;
-      padding: 16px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: none;
-      margin-bottom: 20px;
-      box-sizing: border-box;
-    }
-
-    .filters {
-      margin-bottom: 20px;
-    }
-
-    .filters button {
-      margin: 4px;
-      padding: 8px 14px;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      background: #374151;
-      color: white;
-    }
-
-    .filters button:hover {
-      background: #4b5563;
+      padding: 0 20px 60px;
     }
 
     .card {
@@ -81,10 +117,6 @@
       margin-bottom: 10px;
     }
 
-    .tags {
-      margin-top: 10px;
-    }
-
     .tag {
       display: inline-block;
       background: #2563eb;
@@ -93,535 +125,84 @@
       border-radius: 999px;
       font-size: 12px;
       margin-right: 4px;
+      margin-top: 4px;
     }
 
     .empty {
       color: #9ca3af;
       text-align: center;
-      margin-top: 40px;
+      margin-top: 20px;
     }
-    #intro {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: radial-gradient(circle at center, #1e3a8a 0%, #111827 45%, #020617 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  animation: introFadeOut 0.8s ease forwards;
-  animation-delay: 2.2s;
-}
 
-.magic-circle {
-  width: 140px;
-  height: 140px;
-  border: 3px solid #60a5fa;
-  border-top-color: transparent;
-  border-bottom-color: #facc15;
-  border-radius: 50%;
-  box-shadow:
-    0 0 20px #3b82f6,
-    0 0 40px #2563eb,
-    inset 0 0 20px rgba(250, 204, 21, 0.4);
-  animation: spin 1.5s linear infinite, pulse 1.4s ease-in-out infinite;
-  margin-bottom: 28px;
-}
-
-.intro-title {
-  font-size: 42px;
-  margin: 0;
-  letter-spacing: 2px;
-  color: #facc15;
-  text-shadow:
-    0 0 10px #facc15,
-    0 0 25px #f59e0b;
-  animation: titleUp 1s ease forwards;
-}
-
-.intro-subtitle {
-  margin-top: 12px;
-  font-size: 18px;
-  color: #dbeafe;
-  opacity: 0;
-  animation: subtitleFade 1s ease forwards;
-  animation-delay: 0.6s;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    scale: 1;
-  }
-
-  50% {
-    scale: 1.08;
-  }
-}
-
-@keyframes titleUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes subtitleFade {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes introFadeOut {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-}
-    #intro {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #050505;
-  overflow: hidden;
-  animation: introClose 1.2s ease forwards;
-  animation-delay: 3s;
-}
-
-.intro-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url("intro.png");
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.04);
-  animation: introImageEffect 4.2s ease forwards;
-}
-
-.pixel-layer {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
-  background-size: 6px 6px, 9px 9px;
-  background-position: 0 0, 3px 3px;
-  opacity: 0;
-  animation: pixelFade 3.8s ease forwards;
-  mix-blend-mode: overlay;
-}
-
-.intro-enter {
-  position: absolute;
-  left: 50%;
-  bottom: 12%;
-  transform: translateX(-50%);
-  padding: 12px 24px;
-  border: 1px solid rgba(255,255,255,0.7);
-  border-radius: 999px;
-  color: white;
-  font-size: 16px;
-  letter-spacing: 1px;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  animation: enterText 2.5s ease forwards;
-}
-
-@keyframes introImageEffect {
-  0% {
-    filter: blur(0px) brightness(1);
-    transform: scale(1.04);
-    opacity: 1;
-  }
-
-  45% {
-    filter: blur(0px) brightness(1.1);
-    transform: scale(1.07);
-    opacity: 1;
-  }
-
-  75% {
-    filter: blur(5px) brightness(1.25);
-    transform: scale(1.12);
-    opacity: 0.85;
-  }
-
-  100% {
-    filter: blur(14px) brightness(1.7);
-    transform: scale(1.22);
-    opacity: 0;
-  }
-}
-
-@keyframes pixelFade {
-  0% {
-    opacity: 0;
-    background-size: 4px 4px, 7px 7px;
-  }
-
-  45% {
-    opacity: 0.15;
-  }
-
-  75% {
-    opacity: 0.75;
-    background-size: 10px 10px, 14px 14px;
-  }
-
-  100% {
-    opacity: 0;
-    background-size: 24px 24px, 30px 30px;
-  }
-}
-
-@keyframes enterText {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-
-  35% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  80% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-}
-
-@keyframes introClose {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-}
-.intro-hero {
-  position: relative;
-  height: 360px;
-  overflow: hidden;
-  background: #050505;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url("intro.png");
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.08);
-  animation: heroIntroImage 4s ease forwards;
-}
-
-.hero-pixel {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
-  background-size: 5px 5px, 8px 8px;
-  background-position: 0 0, 3px 3px;
-  opacity: 0;
-  mix-blend-mode: overlay;
-  animation: heroPixel 4s ease forwards;
-}
-
-.hero-dark {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(17,24,39,0.95)),
-    radial-gradient(circle at center, rgba(0,0,0,0.1), rgba(0,0,0,0.75));
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  opacity: 0;
-  transform: translateY(24px);
-  animation: heroTextIn 1.2s ease forwards;
-  animation-delay: 2.4s;
-}
-
-.hero-content h1 {
-  margin: 0 0 14px;
-  font-size: 34px;
-  color: #ffffff;
-  text-shadow:
-    0 0 8px rgba(0,0,0,0.9),
-    0 0 18px rgba(255,255,255,0.25);
-}
-
-.hero-content p {
-  margin: 0;
-  color: #e5e7eb;
-  font-size: 16px;
-  text-shadow: 0 0 8px rgba(0,0,0,0.9);
-}
-
-@keyframes heroIntroImage {
-  0% {
-    filter: blur(0px) brightness(1.05);
-    transform: scale(1.03);
-  }
-
-  45% {
-    filter: blur(0px) brightness(1.15);
-    transform: scale(1.08);
-  }
-
-  75% {
-    filter: blur(4px) brightness(1.25);
-    transform: scale(1.12);
-  }
-
-  100% {
-    filter: blur(2px) brightness(0.75);
-    transform: scale(1.08);
-  }
-}
-
-@keyframes heroPixel {
-  0% {
-    opacity: 0;
-    background-size: 4px 4px, 7px 7px;
-  }
-
-  45% {
-    opacity: 0.2;
-  }
-
-  75% {
-    opacity: 0.75;
-    background-size: 12px 12px, 16px 16px;
-  }
-
-  100% {
-    opacity: 0.18;
-    background-size: 7px 7px, 11px 11px;
-  }
-}
-
-@keyframes heroTextIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-    body {
-  margin: 0;
-  background: #111827;
-  color: #f9fafb;
-  font-family: Arial, sans-serif;
-}
-
-.hero-search {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url("intro.png");
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-  animation: introMove 5s ease forwards;
-}
-
-.hero-pixel {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
-  background-size: 5px 5px, 8px 8px;
-  background-position: 0 0, 3px 3px;
-  opacity: 0;
-  mix-blend-mode: overlay;
-  animation: pixelMove 5s ease forwards;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(17,24,39,0.9)),
-    radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.75));
-}
-
-.hero-box {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 900px;
-  opacity: 0;
-  transform: translateY(24px);
-  animation: heroTextIn 1s ease forwards;
-  animation-delay: 1.8s;
-}
-
-.hero-box h1 {
-  margin: 0 0 12px;
-  font-size: 36px;
-  color: white;
-  text-shadow: 0 0 12px rgba(0,0,0,0.9);
-}
-
-.hero-box p {
-  margin: 0 0 28px;
-  color: #e5e7eb;
-  font-size: 17px;
-  text-shadow: 0 0 10px rgba(0,0,0,0.9);
-}
-
-.search-box {
-  width: 100%;
-  padding: 18px 20px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: none;
-  box-sizing: border-box;
-  outline: none;
-}
-
-main {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 0 20px 60px;
-}
-
-.card {
-  background: #1f2937;
-  padding: 18px;
-  border-radius: 12px;
-  margin-bottom: 14px;
-  border: 1px solid #374151;
-}
-
-.card h2 {
-  margin: 0 0 8px;
-  font-size: 20px;
-}
-
-.meta {
-  font-size: 14px;
-  color: #9ca3af;
-  margin-bottom: 10px;
-}
-
-.tag {
-  display: inline-block;
-  background: #2563eb;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  margin-right: 4px;
-}
-
-.empty {
-  color: #9ca3af;
-  text-align: center;
-  margin-top: 20px;
-}
-
-@keyframes introMove {
-  0% {
-    filter: blur(0px) brightness(1.1);
-    transform: scale(1.02);
-  }
-
-  60% {
-    filter: blur(3px) brightness(1.25);
-    transform: scale(1.1);
-  }
-
-  100% {
-    filter: blur(2px) brightness(0.75);
-    transform: scale(1.06);
-  }
-}
-
-@keyframes pixelMove {
-  0% {
-    opacity: 0;
-    background-size: 4px 4px, 7px 7px;
-  }
-
-  60% {
-    opacity: 0.65;
-    background-size: 12px 12px, 16px 16px;
-  }
-
-  100% {
-    opacity: 0.2;
-    background-size: 7px 7px, 11px 11px;
-  }
-}
-
-@keyframes heroTextIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    @keyframes introMove {
+      0% {
+        filter: blur(0px) brightness(1.1);
+        transform: scale(1.02);
+      }
+
+      60% {
+        filter: blur(3px) brightness(1.25);
+        transform: scale(1.1);
+      }
+
+      100% {
+        filter: blur(2px) brightness(0.78);
+        transform: scale(1.06);
+      }
+    }
+
+    @keyframes pixelMove {
+      0% {
+        opacity: 0;
+        background-size: 4px 4px, 7px 7px;
+      }
+
+      60% {
+        opacity: 0.65;
+        background-size: 12px 12px, 16px 16px;
+      }
+
+      100% {
+        opacity: 0.2;
+        background-size: 7px 7px, 11px 11px;
+      }
+    }
+
+    @keyframes heroTextIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero-box h1 {
+        font-size: 26px;
+      }
+
+      .hero-box p {
+        font-size: 14px;
+      }
+
+      .search-box {
+        font-size: 16px;
+        padding: 15px;
+      }
+    }
   </style>
 </head>
+
 <body>
- <header class="intro-hero">
+  <section class="hero-search">
     <div class="hero-bg"></div>
     <div class="hero-pixel"></div>
-    <div class="hero-dark"></div>
+    <div class="hero-overlay"></div>
 
-    <div class="hero-content">
+    <div class="hero-box">
       <h1>미르의전설: 진 5서버 아라 문파 정보 검색</h1>
       <p>공지, 공략, 쿠폰, 카카오톡 정리 내용을 검색합니다.</p>
-    </div>
-  </header>
 
-  <main>
-     <input
+      <input
         id="searchInput"
         class="search-box"
         type="text"
@@ -666,47 +247,24 @@ main {
     const results = document.getElementById("results");
 
     function render() {
-  const keyword = searchInput.value.trim().toLowerCase();
+      const keyword = searchInput.value.trim().toLowerCase();
 
-  if (keyword === "") {
-    results.innerHTML = "";
-    return;
-  }
+      if (keyword === "") {
+        results.innerHTML = "";
+        return;
+      }
 
-  const filtered = posts.filter(post => {
-    const targetText = [
-      post.title,
-      post.category,
-      post.source,
-      post.content,
-      post.tags.join(" ")
-    ].join(" ").toLowerCase();
+      const filtered = posts.filter(post => {
+        const targetText = [
+          post.title,
+          post.category,
+          post.source,
+          post.content,
+          post.tags.join(" ")
+        ].join(" ").toLowerCase();
 
-    return targetText.includes(keyword);
-  });
-
-  if (filtered.length === 0) {
-    results.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
-    return;
-  }
-
-  results.innerHTML = filtered.map(post => `
-    <div class="card">
-      <h2>${post.title}</h2>
-      <div class="meta">
-        ${post.category} · ${post.source} · ${post.date}
-      </div>
-      <p>${post.content}</p>
-      <div class="tags">
-        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
-      </div>
-    </div>
-  `).join("");
-}
-
-searchInput.addEventListener("input", render);
-
-render();
+        return targetText.includes(keyword);
+      });
 
       if (filtered.length === 0) {
         results.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
@@ -720,11 +278,16 @@ render();
             ${post.category} · ${post.source} · ${post.date}
           </div>
           <p>${post.content}</p>
-          <div class="tags">
+          <div>
             ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
           </div>
         </div>
       `).join("");
+
+      results.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     }
 
     searchInput.addEventListener("input", render);
