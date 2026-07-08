@@ -1661,19 +1661,16 @@
     const CHAT_NAME_KEY = "mirjin_chat_name";
 
     /*
-      공개 채팅방 Firebase Realtime Database 규칙
-      Firebase Console → Realtime Database → Rules 에 아래 내용을 붙여넣고 Publish 하세요.
+      Firebase Console → Build → Realtime Database → Rules 에 아래 내용을 붙여넣고 Publish 하세요.
+      공개 채팅방 규칙입니다. 누구나 읽고 쓸 수 있습니다.
 
       {
         "rules": {
           "mirjinAraChat": {
             "messages": {
               ".read": true,
-              ".indexOn": ["createdAt"],
-              "$messageId": {
-                ".write": true,
-                ".validate": "newData.hasChildren(['name','text','userId','createdAt']) && newData.child('name').isString() && newData.child('name').val().length <= 12 && newData.child('text').isString() && newData.child('text').val().length <= 200 && newData.child('userId').isString() && newData.child('createdAt').isNumber()"
-              }
+              ".write": true,
+              ".indexOn": ["createdAt"]
             }
           }
         }
@@ -1692,6 +1689,10 @@
     };
 
     const CHAT_ROOM_PATH = "mirjinAraChat/messages";
+    const MAX_CHAT_MESSAGES = 100;
+    let firebaseChatReady = false;
+    let firebaseModules = null;
+    let firebaseMessagesRef = null;
 
     const myChatId = localStorage.getItem(MY_CHAT_ID_KEY) || `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     localStorage.setItem(MY_CHAT_ID_KEY, myChatId);
@@ -1724,26 +1725,27 @@
       });
     }
 
-    function clearChatEmpty() {
-      const empty = chatMessages.querySelector(".chat-empty");
-      if (empty) {
-        empty.remove();
+    function renderChatMessages(messages) {
+      chatMessages.innerHTML = "";
+
+      if (!messages.length) {
+        chatMessages.innerHTML = `<div class="chat-empty">아직 채팅이 없습니다.</div>`;
+        return;
       }
-    }
 
-    function addChatMessage(message) {
-      clearChatEmpty();
+      messages.forEach(message => {
+        const item = document.createElement("div");
+        item.className = `chat-message ${message.userId === myChatId ? "mine" : ""}`;
+        item.innerHTML = `
+          <div class="chat-meta">
+            <span class="chat-name">${escapeHtml(message.name || "익명")}</span>
+            <span class="chat-time">${formatChatTime(message.createdAt)}</span>
+          </div>
+          <p class="chat-text">${escapeHtml(message.text || "")}</p>
+        `;
+        chatMessages.appendChild(item);
+      });
 
-      const item = document.createElement("div");
-      item.className = `chat-message ${message.userId === myChatId ? "mine" : ""}`;
-      item.innerHTML = `
-        <div class="chat-meta">
-          <span class="chat-name">${escapeHtml(message.name || "익명")}</span>
-          <span class="chat-time">${formatChatTime(message.createdAt)}</span>
-        </div>
-        <p class="chat-text">${escapeHtml(message.text || "")}</p>
-      `;
-      chatMessages.appendChild(item);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -1756,37 +1758,53 @@
     }
 
     function saveLocalChatMessages(messages) {
-      localStorage.setItem("mirjin_local_chat_messages", JSON.stringify(messages.slice(-50)));
+      localStorage.setItem("mirjin_local_chat_messages", JSON.stringify(messages.slice(-MAX_CHAT_MESSAGES)));
+    }
+
+    function getCleanChatInput() {
+      const name = (chatName.value.trim() || "익명").slice(0, 12);
+      const text = chatText.value.trim().slice(0, 200);
+      return { name, text };
+    }
+
+    function setChatStatus(message) {
+      chatStatus.textContent = message;
     }
 
     function startLocalChatMode() {
-      chatStatus.textContent = "테스트 모드";
-      chatMessages.innerHTML = `<div class="chat-empty">Realtime Database 연결 전에는 내 기기에서만 테스트 채팅으로 표시됩니다.</div>`;
-
-      getLocalChatMessages().forEach(addChatMessage);
+      setChatStatus("테스트 모드: 내 기기에서만 보임");
+      renderChatMessages(getLocalChatMessages());
 
       chatForm.addEventListener("submit", event => {
         event.preventDefault();
-        const name = chatName.value.trim() || "익명";
-        const text = chatText.value.trim();
+        const { name, text } = getCleanChatInput();
 
         if (!text) {
           return;
         }
 
         localStorage.setItem(CHAT_NAME_KEY, name);
-        const message = {
+        const messages = getLocalChatMessages();
+        messages.push({
           name,
           text,
           userId: myChatId,
           createdAt: Date.now()
-        };
-        const messages = getLocalChatMessages();
-        messages.push(message);
+        });
         saveLocalChatMessages(messages);
-        addChatMessage(message);
+        renderChatMessages(messages);
         chatText.value = "";
+        chatText.focus();
       });
+    }
+
+    function waitWithTimeout(promise, timeoutMs) {
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("timeout")), timeoutMs);
+        })
+      ]);
     }
 
     async function startFirebaseChatMode() {
@@ -1796,24 +1814,44 @@
 
         const app = appModule.initializeApp(firebaseConfig);
         const db = databaseModule.getDatabase(app);
-        const messagesRef = databaseModule.ref(db, CHAT_ROOM_PATH);
+        firebaseMessagesRef = databaseModule.ref(db, CHAT_ROOM_PATH);
+        firebaseModules = databaseModule;
+
+        databaseModule.onValue(databaseModule.ref(db, ".info/connected"), snapshot => {
+          if (snapshot.val() === true) {
+            firebaseChatReady = true;
+            setChatStatus("공개 채팅방 연결됨");
+          } else {
+            setChatStatus("채팅 서버 연결 중...");
+          }
+        });
+
         const recentMessagesQuery = databaseModule.query(
-          messagesRef,
+          firebaseMessagesRef,
           databaseModule.orderByChild("createdAt"),
-          databaseModule.limitToLast(80)
+          databaseModule.limitToLast(MAX_CHAT_MESSAGES)
         );
 
-        chatStatus.textContent = "공개 채팅방 연결됨";
-        chatMessages.innerHTML = `<div class="chat-empty">아직 채팅이 없습니다.</div>`;
-
-        databaseModule.onChildAdded(recentMessagesQuery, snapshot => {
-          addChatMessage(snapshot.val());
+        databaseModule.onValue(recentMessagesQuery, snapshot => {
+          const messages = [];
+          snapshot.forEach(childSnapshot => {
+            const value = childSnapshot.val();
+            if (value && value.text) {
+              messages.push(value);
+            }
+          });
+          messages.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+          renderChatMessages(messages);
+        }, error => {
+          firebaseChatReady = false;
+          setChatStatus("읽기 실패: Firebase Rules 확인 필요");
+          chatMessages.innerHTML = `<div class="chat-empty">다른 사람 채팅을 불러오지 못했습니다.<br>Realtime Database Rules를 공개 읽기/쓰기로 바꿔주세요.</div>`;
+          console.error(error);
         });
 
         chatForm.addEventListener("submit", async event => {
           event.preventDefault();
-          const name = chatName.value.trim() || "익명";
-          const text = chatText.value.trim();
+          const { name, text } = getCleanChatInput();
 
           if (!text) {
             return;
@@ -1821,26 +1859,32 @@
 
           localStorage.setItem(CHAT_NAME_KEY, name);
           chatSend.disabled = true;
+          setChatStatus(firebaseChatReady ? "전송 중..." : "채팅 서버 연결 중...");
 
           try {
-            await databaseModule.push(messagesRef, {
-              name: name.slice(0, 12),
-              text: text.slice(0, 200),
+            await waitWithTimeout(databaseModule.push(firebaseMessagesRef, {
+              name,
+              text,
               userId: myChatId,
               createdAt: Date.now()
-            });
+            }), 10000);
+
             chatText.value = "";
+            chatText.focus();
+            setChatStatus("공개 채팅방 연결됨");
           } catch (error) {
-            chatStatus.textContent = "전송 실패: Firebase 규칙 확인 필요";
+            setChatStatus("전송 실패: Realtime Database URL 또는 Rules 확인 필요");
             console.error(error);
           } finally {
             chatSend.disabled = false;
           }
         });
       } catch (error) {
-        chatStatus.textContent = "Firebase 연결 실패: 설정값 확인 필요";
-        chatMessages.innerHTML = `<div class="chat-empty">Firebase 연결에 실패했습니다.<br>config와 Realtime Database 규칙을 확인하세요.</div>`;
+        firebaseChatReady = false;
+        setChatStatus("Firebase 연결 실패: 설정값 확인 필요");
+        chatMessages.innerHTML = `<div class="chat-empty">Firebase 연결에 실패했습니다.<br>config, databaseURL, Realtime Database 생성 여부를 확인하세요.</div>`;
         console.error(error);
+        startLocalChatMode();
       }
     }
 
