@@ -176,6 +176,10 @@
       gap: 8px;
     }
 
+    .naver-board-form-single {
+      grid-template-columns: 1fr;
+    }
+
     .naver-board-input {
       width: 100%;
       padding: 12px 13px;
@@ -206,6 +210,35 @@
     .naver-board-button:hover {
       transform: translateY(-1px);
       filter: brightness(1.04);
+    }
+
+    .naver-inline-search {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #03c75a;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      vertical-align: middle;
+    }
+
+    .naver-inline-search:hover {
+      filter: brightness(1.05);
+      text-decoration: none;
+    }
+
+    .naver-result-card {
+      border-color: rgba(3,199,90,0.36);
+      background: rgba(3,199,90,0.08);
+    }
+
+    .naver-result-card h2 {
+      color: #bbf7d0;
     }
 
     .naver-board-hint {
@@ -844,17 +877,10 @@
 
       <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
         <div class="naver-board-title">미르의 전설: 진 네이버 카페</div>
-        <div class="naver-board-form">
-          <input
-            id="naverBoardSearchInput"
-            class="naver-board-input"
-            type="text"
-            placeholder="카페 게시판 검색어 입력"
-            autocomplete="off"
-          />
-          <button id="naverBoardSearchButton" class="naver-board-button" type="button">게시판 검색</button>
+        <div class="naver-board-form naver-board-form-single">
+          <button id="naverBoardSearchButton" class="naver-board-button" type="button">현재 검색어로 카페 글 검색</button>
         </div>
-        <div class="naver-board-hint">검색 결과는 네이버 카페 새 창에서 열립니다. 로그인/가입이 필요한 글은 네이버에서 확인해야 합니다.</div>
+        <div class="naver-board-hint">위 검색창에 입력한 단어로 네이버 카페 게시글 검색 결과가 새 창에서 열립니다. 검색어가 없으면 카페 게시판이 열립니다.</div>
       </div>
 
       <div class="link-buttons">
@@ -2175,7 +2201,7 @@
     }
 
     function openNaverCafeBoardSearch() {
-      const keyword = naverBoardSearchInput ? naverBoardSearchInput.value.trim() : "";
+      const keyword = (searchInput ? searchInput.value.trim() : "") || (naverBoardSearchInput ? naverBoardSearchInput.value.trim() : "");
       const url = buildNaverCafeBoardUrl(keyword);
 
       if (keyword.length >= 2) {
@@ -2226,13 +2252,23 @@
         return normalizeText(targetText).includes(normalizedKeyword);
       });
 
+      const naverCafeSearchUrl = buildNaverCafeBoardUrl(keyword);
+      const cafeSearchButton = `<a class="naver-inline-search" href="${escapeHtml(naverCafeSearchUrl)}" target="_blank" rel="noopener noreferrer">네이버 카페에서도 검색</a>`;
+
       if (filtered.length === 0) {
-        results.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
+        results.innerHTML = `
+          <div class="empty">사이트 내 검색 결과가 없습니다.</div>
+          <article class="card naver-result-card">
+            <h2>네이버 카페 글 검색</h2>
+            <p>입력한 검색어 <strong>${escapeHtml(keyword)}</strong>로 미르의 전설: 진 네이버 카페 게시글을 바로 검색할 수 있습니다.</p>
+            <a class="post-link" href="${escapeHtml(naverCafeSearchUrl)}" target="_blank" rel="noopener noreferrer">네이버 카페에서 검색 결과 열기</a>
+          </article>
+        `;
         return;
       }
 
       results.innerHTML = `
-        <div class="result-summary">총 ${filtered.length}개의 검색 결과</div>
+        <div class="result-summary">총 ${filtered.length}개의 사이트 내 검색 결과 ${cafeSearchButton}</div>
         ${filtered.map(post => {
           const tags = getPostTags(post);
           const safeUrl = getSafePostUrl(post.url);
