@@ -440,6 +440,172 @@
     transform: translateY(0);
   }
 }
+    body {
+  margin: 0;
+  background: #111827;
+  color: #f9fafb;
+  font-family: Arial, sans-serif;
+}
+
+.hero-search {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("intro.png");
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  animation: introMove 5s ease forwards;
+}
+
+.hero-pixel {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
+  background-size: 5px 5px, 8px 8px;
+  background-position: 0 0, 3px 3px;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  animation: pixelMove 5s ease forwards;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(17,24,39,0.9)),
+    radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.75));
+}
+
+.hero-box {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroTextIn 1s ease forwards;
+  animation-delay: 1.8s;
+}
+
+.hero-box h1 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  color: white;
+  text-shadow: 0 0 12px rgba(0,0,0,0.9);
+}
+
+.hero-box p {
+  margin: 0 0 28px;
+  color: #e5e7eb;
+  font-size: 17px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.9);
+}
+
+.search-box {
+  width: 100%;
+  padding: 18px 20px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  box-sizing: border-box;
+  outline: none;
+}
+
+main {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px 60px;
+}
+
+.card {
+  background: #1f2937;
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1px solid #374151;
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.meta {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.tag {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.empty {
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 20px;
+}
+
+@keyframes introMove {
+  0% {
+    filter: blur(0px) brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  60% {
+    filter: blur(3px) brightness(1.25);
+    transform: scale(1.1);
+  }
+
+  100% {
+    filter: blur(2px) brightness(0.75);
+    transform: scale(1.06);
+  }
+}
+
+@keyframes pixelMove {
+  0% {
+    opacity: 0;
+    background-size: 4px 4px, 7px 7px;
+  }
+
+  60% {
+    opacity: 0.65;
+    background-size: 12px 12px, 16px 16px;
+  }
+
+  100% {
+    opacity: 0.2;
+    background-size: 7px 7px, 11px 11px;
+  }
+}
+
+@keyframes heroTextIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
   </style>
 </head>
 <body>
@@ -455,23 +621,16 @@
   </header>
 
   <main>
-    <input
-      id="searchInput"
-      class="search-box"
-      type="text"
-      placeholder="검색어를 입력하세요. 예: 쿠폰, 궁수, 사냥터, 보스, 강화"
-    />
-
-    <div class="filters">
-      <button onclick="setCategory('전체')">전체</button>
-      <button onclick="setCategory('공지')">공지</button>
-      <button onclick="setCategory('쿠폰')">쿠폰</button>
-      <button onclick="setCategory('육성')">육성</button>
-      <button onclick="setCategory('장비')">장비</button>
-      <button onclick="setCategory('보스')">보스</button>
-      <button onclick="setCategory('카톡정리')">카톡정리</button>
+     <input
+        id="searchInput"
+        class="search-box"
+        type="text"
+        placeholder="검색어를 입력하세요. 예: 쿠폰, 공수, 사냥터, 보스, 강화"
+      />
     </div>
+  </section>
 
+  <main>
     <div id="results"></div>
   </main>
 
