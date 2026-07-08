@@ -92,7 +92,9 @@
     .hero-box p {
       margin: 0 0 22px;
       color: #e5e7eb;
-      font-size: 17px;
+      font-size: clamp(10px, calc((100vw - 36px) / 34), 17px);
+      line-height: 1.35;
+      white-space: nowrap;
       text-shadow: 0 0 10px rgba(0,0,0,0.9);
     }
 
@@ -160,7 +162,7 @@
       background: rgba(15,23,42,0.78);
       border: 1px solid rgba(96,165,250,0.28);
       box-shadow: 0 12px 30px rgba(0,0,0,0.24);
-      text-align: left;
+      text-align: center;
     }
 
     .naver-board-title {
@@ -168,6 +170,7 @@
       font-size: 14px;
       font-weight: 900;
       margin-bottom: 9px;
+      text-align: center;
     }
 
     .naver-board-form {
@@ -205,6 +208,8 @@
       font-weight: 900;
       cursor: pointer;
       transition: transform 0.2s ease, filter 0.2s ease;
+      padding: 12px 16px;
+      text-align: center;
     }
 
     .naver-board-button:hover {
@@ -246,6 +251,7 @@
       color: #cbd5e1;
       font-size: 12px;
       line-height: 1.45;
+      text-align: center;
     }
 
 
@@ -285,6 +291,10 @@
 
     .link-buttons .openchat-button {
       margin-top: 0;
+      min-width: 150px;
+      height: 46px;
+      padding: 0 18px;
+      white-space: nowrap;
     }
 
     .gm-button {
@@ -449,12 +459,14 @@
 
     .chat-header {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: center;
+      gap: 6px;
       padding: 18px 20px;
       background: #111827;
       border-bottom: 1px solid #374151;
+      text-align: center;
     }
 
     .chat-header h2 {
@@ -713,7 +725,7 @@
       }
 
       .hero-box p {
-        font-size: 14px;
+        font-size: clamp(10px, calc((100vw - 32px) / 34), 14px);
       }
 
       .search-box {
@@ -752,8 +764,9 @@
       }
 
       .chat-header {
-        align-items: flex-start;
+        align-items: center;
         flex-direction: column;
+        text-align: center;
       }
 
       .chat-status {
@@ -778,6 +791,20 @@
         display: inline-block;
         margin-top: 4px;
         white-space: normal;
+      }
+
+      .link-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .link-buttons .openchat-button {
+        width: 100%;
+        min-width: 0;
+        height: 44px;
+        padding: 0 10px;
+        font-size: 13px;
       }
     }
 
@@ -918,11 +945,20 @@
       <div class="link-buttons">
         <a
           class="openchat-button"
-          href="https://open.kakao.com/o/pEuO4oyi"
+          href="https://open.kakao.com/o/gDdjY6Ci"
           target="_blank"
           rel="noopener noreferrer"
         >
-          아라 문파 오픈채팅 바로가기
+          문파 가입 문의
+        </a>
+
+        <a
+          class="openchat-button gm-button"
+          href="https://www.mobileindex.com/mi-chart/realtime-rank"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          모바일 인덱스
         </a>
 
 
@@ -931,7 +967,7 @@
           class="openchat-button chat-jump-button"
           href="#liveChat"
         >
-          실시간 채팅 열기
+          실시간 채팅
         </a>
 
         <a
@@ -940,7 +976,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          GM패왕 게시글 보기
+          GM패왕 게시글
         </a>
       </div>
 
@@ -1889,6 +1925,146 @@
                   "결제"
             ]
       }
+      ,
+      {
+            "title": "4차 - 서버 통합 가능성 대화",
+            "category": "서버",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "7월 8일 대화에서 이번 달 서버 통합 가능성이 언급되었습니다. 통합 후 공성과 사냥터 혼잡도가 달라질 수 있으니 실제 일정은 공식 공지와 게임 내 안내를 확인하세요.",
+            "tags": [
+                  "서버통합",
+                  "섭통",
+                  "통합섭",
+                  "공성",
+                  "사냥터혼잡",
+                  "공지확인"
+            ]
+      },
+      {
+            "title": "4차 - 점검 요일 확인",
+            "category": "공지",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "대화에서 점검이 보통 금요일인지 확인하는 질문이 있었습니다. 점검 일정은 변동될 수 있으므로 점검 전날과 당일 공식 공지를 확인하는 것이 좋습니다.",
+            "tags": [
+                  "점검",
+                  "금요일",
+                  "공지",
+                  "업데이트",
+                  "패치"
+            ]
+      },
+      {
+            "title": "4차 - 쌍두 2층 자동사냥 체감",
+            "category": "사냥터",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "쌍두 2층은 방어 700대, 마방 400후반 기준으로 중간물약 자동사냥이 가능하다는 경험담이 공유되었습니다. 다만 보스나 함정성 이동으로 사망할 수 있으니 장시간 자사 전 위치를 확인하세요.",
+            "tags": [
+                  "쌍두",
+                  "쌍두2층",
+                  "자동사냥",
+                  "자사",
+                  "중간물약",
+                  "700방",
+                  "마방",
+                  "용마왕"
+            ]
+      },
+      {
+            "title": "4차 - 82~83레벨 사냥 체감",
+            "category": "사냥터",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "82~83레벨 구간에서는 손컨이 필요하거나 자동사냥이 빡세다는 경험담이 있었습니다. 상위 사냥터 진입 전 방어, 마방, 물약 세팅을 먼저 확인하는 것이 좋습니다.",
+            "tags": [
+                  "82레벨",
+                  "83레벨",
+                  "상위사냥터",
+                  "손컨",
+                  "자동사냥",
+                  "방어",
+                  "마방"
+            ]
+      },
+      {
+            "title": "4차 - 귀신존 방어 질문",
+            "category": "사냥터",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "귀신존은 방어가 어느 정도 필요하냐는 질문이 있었습니다. 명확한 답변 수치는 정리되지 않았으므로 귀신존 진입 전 문파원 체감과 자신의 방어/마방 수치를 함께 확인하세요.",
+            "tags": [
+                  "귀신존",
+                  "방어",
+                  "마방",
+                  "사냥터",
+                  "스펙"
+            ]
+      },
+      {
+            "title": "4차 - 원소 획득과 룰렛",
+            "category": "원소",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "원소는 룰렛에서 얻는 방식이 언급되었고, 주기적으로 열리면 바로 진행하라는 의견이 있었습니다. 원소 관련 이벤트나 룰렛 재오픈 여부는 게임 내 이벤트를 확인하세요.",
+            "tags": [
+                  "원소",
+                  "원석",
+                  "양원석",
+                  "룰렛",
+                  "이벤트",
+                  "랜덤",
+                  "선택"
+            ]
+      },
+      {
+            "title": "4차 - 원소 개방 레벨과 만렙",
+            "category": "원소",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "원소는 72레벨 전후부터 나온다는 대화가 있었고, 원소 레벨은 5레벨이 만렙인 것으로 체감 공유되었습니다. 실제 개방 조건과 최대 레벨은 게임 내 메뉴를 확인하세요.",
+            "tags": [
+                  "원소",
+                  "72레벨",
+                  "5레벨",
+                  "만렙",
+                  "개방조건",
+                  "원소레벨"
+            ]
+      },
+      {
+            "title": "4차 - 외공과 내공 체감",
+            "category": "스펙",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "대화에서 맥뎀 체감은 내공과 외공이 확실하다는 의견이 공유되었습니다. 세공, 경지, 장기, 장비 등 여러 요소가 조금씩 누적되어 전투력 차이로 이어진다는 흐름이 있었습니다.",
+            "tags": [
+                  "외공",
+                  "내공",
+                  "맥뎀",
+                  "세공",
+                  "경지",
+                  "장기",
+                  "전투력"
+            ]
+      },
+      {
+            "title": "4차 - 체격 투자는 신중",
+            "category": "스펙",
+            "source": "카카오톡정리 4차",
+            "date": "2026-07-08",
+            "content": "체격은 투자 대비 체감이 아깝고 확률이 낮다는 의견이 있었습니다. 체격 강화는 급하게 진행하기보다 다른 성장 요소와 비교해 신중히 판단하세요.",
+            "tags": [
+                  "체격",
+                  "강화",
+                  "확률",
+                  "성장",
+                  "스펙",
+                  "투자비추"
+            ]
+      }
+
 
     ];
 
