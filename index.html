@@ -1424,18 +1424,379 @@
       }
     }
 
+
+    /* 실시간 채팅: 화면 고정 토글 패널 */
+    .chat-toggle-control {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .chat-section {
+      position: fixed;
+      right: 20px;
+      bottom: 84px;
+      width: min(430px, calc(100vw - 40px));
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      z-index: 60;
+      display: none;
+      scroll-margin-top: 0;
+    }
+
+    .chat-section.chat-open {
+      display: block;
+    }
+
+    .chat-card {
+      max-height: calc(100vh - 112px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chat-header-row h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .chat-close-button {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.08);
+      color: #e5e7eb;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .chat-close-button:hover {
+      background: rgba(255,255,255,0.16);
+      color: #ffffff;
+    }
+
+    .chat-section.chat-open .chat-messages {
+      flex: 1 1 auto;
+      height: min(320px, 36vh);
+      min-height: 180px;
+    }
+
+    .chat-floating-toggle {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 70;
+      min-height: 46px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.42);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .chat-floating-toggle:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .chat-floating-toggle.chat-toggle-active,
+    .chat-jump-button.chat-toggle-active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+    }
+
+    @media (max-width: 600px) {
+      .chat-section {
+        left: 10px;
+        right: 10px;
+        bottom: 72px;
+        width: auto;
+      }
+
+      .chat-card {
+        max-height: calc(100vh - 92px);
+      }
+
+      .chat-section.chat-open .chat-messages {
+        height: min(300px, 34vh);
+        min-height: 160px;
+      }
+
+      .chat-floating-toggle {
+        left: 10px;
+        right: 10px;
+        bottom: 12px;
+        width: auto;
+      }
+
+      .chat-header-row h2 {
+        font-size: 18px;
+      }
+    }
+
+
+    /* 네이버 카페 검색: 상단 검색창 바로 아래 소형 배치 */
+    .naver-board-search {
+      width: fit-content;
+      max-width: 100%;
+      margin: 8px auto 0;
+      padding: 7px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      background: rgba(3, 199, 90, 0.12);
+      border: 1px solid rgba(3, 199, 90, 0.36);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .naver-board-title {
+      margin: 0;
+      color: #bbf7d0;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(0,0,0,0.8);
+    }
+
+    .naver-board-form,
+    .naver-board-form-single {
+      display: flex;
+      grid-template-columns: none;
+      gap: 0;
+    }
+
+    .naver-board-button {
+      min-height: 30px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      line-height: 1;
+      box-shadow: none;
+    }
+
+    .naver-board-hint {
+      flex-basis: 100%;
+      margin-top: -2px;
+      color: #cbd5e1;
+      font-size: 10.5px;
+      line-height: 1.25;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+      .naver-board-search {
+        margin-top: 7px;
+        padding: 7px 8px;
+        border-radius: 14px;
+        gap: 6px;
+      }
+
+      .naver-board-title {
+        font-size: 11px;
+      }
+
+      .naver-board-button {
+        min-height: 28px;
+        padding: 7px 9px;
+        font-size: 11px;
+      }
+
+      .naver-board-hint {
+        display: none;
+      }
+    }
+
+
+
+    /* 상단 바로가기 묶음: 공식홈페이지 옆에 관리자 톱니바퀴 배치 */
+    .top-left-links {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .top-left-links .official-home-text-link {
+      position: static;
+      top: auto;
+      left: auto;
+    }
+
+    .admin-gear-button {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid rgba(250, 204, 21, 0.38);
+      background: rgba(15, 23, 42, 0.52);
+      color: #facc15;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+      backdrop-filter: blur(4px);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .admin-gear-button:hover,
+    .admin-gear-button.admin-open {
+      transform: translateY(-1px) rotate(18deg);
+      background: rgba(15, 23, 42, 0.82);
+      border-color: rgba(250, 204, 21, 0.78);
+      color: #ffffff;
+    }
+
+    /* 관리자 업로드는 평소에는 숨기고, 톱니바퀴를 눌렀을 때만 작은 팝업으로 표시 */
+    .admin-upload-section {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      max-width: none;
+      margin: 0;
+      padding: 68px 16px 22px;
+      background: rgba(15, 23, 42, 0.68);
+      backdrop-filter: blur(5px);
+      scroll-margin-top: 0;
+    }
+
+    .admin-upload-section.admin-upload-open {
+      display: flex;
+    }
+
+    .admin-upload-section .admin-upload-card {
+      width: min(900px, calc(100vw - 32px));
+      max-height: calc(100vh - 92px);
+      overflow: auto;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.58);
+    }
+
+    .admin-upload-section .admin-upload-header {
+      position: relative;
+      padding-right: 58px;
+    }
+
+    .admin-upload-close {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(15,23,42,0.76);
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .admin-upload-close:hover {
+      transform: translateY(-1px);
+      background: rgba(220,38,38,0.72);
+      border-color: rgba(254,202,202,0.9);
+    }
+
+    body.admin-upload-lock {
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .top-left-links {
+        top: 8px;
+        left: 10px;
+        gap: 5px;
+      }
+
+      .admin-gear-button {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
+      }
+
+      .admin-upload-section {
+        align-items: flex-start;
+        padding: 52px 10px 14px;
+      }
+
+      .admin-upload-section .admin-upload-card {
+        width: calc(100vw - 20px);
+        max-height: calc(100vh - 66px);
+        border-radius: 16px;
+      }
+
+      .admin-upload-section .admin-upload-header {
+        padding: 16px 50px 16px 16px;
+      }
+
+      .admin-upload-close {
+        top: 11px;
+        right: 12px;
+        width: 31px;
+        height: 31px;
+        font-size: 20px;
+      }
+    }
+
   </style>
 </head>
 
 <body>
   <section class="hero-search">
-    <a
-      class="official-home-text-link"
-      href="https://www.mirjin.com/share/etc3"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="미르의전설: 진 공식홈페이지로 이동"
-    >공식홈페이지 바로가기</a>
+    <div class="top-left-links" aria-label="상단 바로가기">
+      <a
+        class="official-home-text-link"
+        href="https://www.mirjin.com/share/etc3"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="미르의전설: 진 공식홈페이지로 이동"
+      >공식홈페이지 바로가기</a>
+      <button
+        id="adminUploadTopButton"
+        class="admin-gear-button"
+        type="button"
+        aria-controls="adminUpload"
+        aria-expanded="false"
+        title="관리자 정보 업로드 열기"
+      >⚙</button>
+    </div>
     <div class="hero-bg"></div>
     <div class="hero-pixel"></div>
     <div class="hero-overlay"></div>
@@ -1464,6 +1825,15 @@
         placeholder="검색어를 입력하세요. 예: 쿠폰, 공성, 장비강화, 선악, 감옥, 보스"
         autocomplete="off"
       />
+
+      <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
+        <div class="naver-board-title">네이버 카페 검색</div>
+        <div class="naver-board-form naver-board-form-single">
+          <button id="naverBoardSearchButton" class="naver-board-button" type="button">현재 검색어로 카페 글 검색</button>
+        </div>
+        <div class="naver-board-hint">검색어가 없으면 카페 게시판이 열립니다.</div>
+      </div>
+
 
       <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
 
@@ -1511,14 +1881,6 @@
         </div>
       </div>
 
-      <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
-        <div class="naver-board-title">미르의 전설: 진 네이버 카페</div>
-        <div class="naver-board-form naver-board-form-single">
-          <button id="naverBoardSearchButton" class="naver-board-button" type="button">현재 검색어로 카페 글 검색</button>
-        </div>
-        <div class="naver-board-hint">위 검색창에 입력한 단어로 네이버 카페 게시글 검색 결과가 새 창에서 열립니다. 검색어가 없으면 카페 게시판이 열립니다.</div>
-      </div>
-
       <div class="link-buttons">
         <a
           class="openchat-button"
@@ -1540,19 +1902,15 @@
 
 
 
-        <a
-          class="openchat-button chat-jump-button"
-          href="#liveChat"
+        <button
+          id="chatToggleTop"
+          class="openchat-button chat-jump-button chat-toggle-control"
+          type="button"
+          aria-controls="liveChat"
+          aria-expanded="false"
         >
-          실시간 채팅
-        </a>
-
-        <a
-          class="openchat-button admin-upload-link-button"
-          href="#adminUpload"
-        >
-          관리자 업로드
-        </a>
+          실시간 채팅 켜기
+        </button>
 
       </div>
 
@@ -1564,10 +1922,23 @@
   </main>
 
 
+  <button
+    id="chatFloatingToggle"
+    class="chat-floating-toggle"
+    type="button"
+    aria-controls="liveChat"
+    aria-expanded="false"
+  >
+    실시간 채팅 켜기
+  </button>
+
   <section id="liveChat" class="chat-section">
     <div class="chat-card">
       <div class="chat-header">
-        <h2>실시간 문파 채팅</h2>
+        <div class="chat-header-row">
+          <h2>실시간 문파 채팅</h2>
+          <button id="chatCloseButton" class="chat-close-button" type="button" aria-label="실시간 채팅 닫기">닫기</button>
+        </div>
         <div id="chatStatus" class="chat-status">채팅 준비 중...</div>
       </div>
 
@@ -1615,6 +1986,7 @@
   <section id="adminUpload" class="admin-upload-section">
     <div class="admin-upload-card">
       <div class="admin-upload-header">
+        <button id="adminUploadClose" class="admin-upload-close" type="button" aria-label="관리자 업로드 창 닫기">×</button>
         <h2>관리자 정보 업로드</h2>
         <p>채팅 욕설 필터와 관계없이, 운영자가 확인한 게임 정보를 사이트 검색 데이터에 바로 등록합니다.</p>
       </div>
@@ -4911,5 +5283,101 @@
     initAdminUploadPanel();
     render();
   </script>
+
+  <script>
+    // 실시간 채팅 토글: 아래로 이동하지 않고 화면에서 바로 켜고 끌 수 있게 처리
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatSection = document.getElementById("liveChat");
+      const topButton = document.getElementById("chatToggleTop");
+      const floatingButton = document.getElementById("chatFloatingToggle");
+      const closeButton = document.getElementById("chatCloseButton");
+      const chatText = document.getElementById("chatText");
+
+      if (!chatSection) return;
+
+      const toggleButtons = [topButton, floatingButton].filter(Boolean);
+
+      function setChatOpen(isOpen) {
+        chatSection.classList.toggle("chat-open", isOpen);
+
+        toggleButtons.forEach(function (button) {
+          button.setAttribute("aria-expanded", String(isOpen));
+          button.classList.toggle("chat-toggle-active", isOpen);
+          button.textContent = isOpen ? "실시간 채팅 끄기" : "실시간 채팅 켜기";
+        });
+
+        if (isOpen && chatText && window.innerWidth > 600) {
+          setTimeout(function () {
+            chatText.focus();
+          }, 80);
+        }
+      }
+
+      toggleButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          setChatOpen(!chatSection.classList.contains("chat-open"));
+        });
+      });
+
+      if (closeButton) {
+        closeButton.addEventListener("click", function () {
+          setChatOpen(false);
+        });
+      }
+    });
+  </script>
+
+
+
+  <script>
+    // 관리자 업로드 토글: 상단 톱니바퀴로 열고 닫기
+    document.addEventListener("DOMContentLoaded", function () {
+      const adminSection = document.getElementById("adminUpload");
+      const adminGearButton = document.getElementById("adminUploadTopButton");
+      const adminCloseButton = document.getElementById("adminUploadClose");
+      const adminCodeInput = document.getElementById("adminUploadCode");
+
+      if (!adminSection || !adminGearButton) return;
+
+      function setAdminOpen(isOpen) {
+        adminSection.classList.toggle("admin-upload-open", isOpen);
+        adminGearButton.classList.toggle("admin-open", isOpen);
+        adminGearButton.setAttribute("aria-expanded", String(isOpen));
+        adminSection.setAttribute("aria-hidden", String(!isOpen));
+        document.body.classList.toggle("admin-upload-lock", isOpen);
+
+        if (isOpen && adminCodeInput && window.innerWidth > 600) {
+          setTimeout(function () {
+            adminCodeInput.focus();
+          }, 80);
+        }
+      }
+
+      adminSection.setAttribute("aria-hidden", "true");
+
+      adminGearButton.addEventListener("click", function () {
+        setAdminOpen(!adminSection.classList.contains("admin-upload-open"));
+      });
+
+      if (adminCloseButton) {
+        adminCloseButton.addEventListener("click", function () {
+          setAdminOpen(false);
+        });
+      }
+
+      adminSection.addEventListener("click", function (event) {
+        if (event.target === adminSection) {
+          setAdminOpen(false);
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && adminSection.classList.contains("admin-upload-open")) {
+          setAdminOpen(false);
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
