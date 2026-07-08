@@ -1033,7 +1033,7 @@
         id="searchInput"
         class="search-box"
         type="text"
-        placeholder="검색어를 입력하세요. 예: 쿠폰, 공성, 뇌전, 냉협신공, 거미, 보스"
+        placeholder="검색어를 입력하세요. 예: 쿠폰, 공성, 장비강화, 선악, 감옥, 보스"
         autocomplete="off"
       />
 
@@ -1053,12 +1053,16 @@
           <button class="quick-search-button" type="button" onclick="searchKeyword('봉마록')">봉마록</button>
           <button class="quick-search-button" type="button" onclick="searchKeyword('감옥')">감옥</button>
           <button class="quick-search-button" type="button" onclick="searchKeyword('전직')">전직</button>
+          <button class="quick-search-button" type="button" onclick="searchKeyword('장비강화')">장비강화</button>
+          <button class="quick-search-button" type="button" onclick="searchKeyword('선악')">선악</button>
+          <button class="quick-search-button" type="button" onclick="searchKeyword('스킬설정')">스킬설정</button>
+          <button class="quick-search-button" type="button" onclick="searchKeyword('GM답변')">GM답변</button>
         </div>
       </div>
 
       <div class="recent-update-box" aria-label="최근 업데이트">
         <span class="recent-update-label">최근 업데이트</span>
-        감옥 수감 시간/무공 연마 · 전직 술사 능력치 · 원소 정보 추가
+        GM패왕 답변: 장비강화 · 선악점수 · 타직업 스킬 · 보조장비 진화 정보 추가
       </div>
 
       <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
@@ -1185,6 +1189,72 @@
 
   <script>
     const posts = [
+
+      {
+        title: "GM답변 - 장비 강화 노출 조건",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "장비 강화는 추후 장비 강화 대장장이 메인퀘스트를 진행하면 노출된다는 GM패왕 답변이 있었습니다. 장비강화 메뉴가 보이지 않으면 관련 메인퀘스트 진행 여부를 먼저 확인하세요.",
+        tags: ["GM답변", "GM패왕", "장비강화", "강화", "장비", "대장장이", "메인퀘스트", "메인퀘", "노출조건"]
+      },
+      {
+        title: "GM답변 - 선악점수 감소 방법",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "선악점수는 다이아 사용 외에도 접속을 유지하면 자동으로 감소한다는 GM패왕 답변이 있었습니다. 선악점수가 높을 때는 캐릭터 접속을 유지해 감소되는지 확인하세요.",
+        tags: ["GM답변", "GM패왕", "선악", "선악점수", "카오", "카오틱", "접속유지", "자동감소", "다이아"]
+      },
+      {
+        title: "GM답변 - 타직업 스킬이 계속 나갈 때",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "화술사인데 양전사 등 타직업 스킬이 계속 나가는 경우, 설정 > 보조설정에서 타직업 스킬이 적용되어 있는지 확인하라는 GM패왕 답변이 있었습니다.",
+        tags: ["GM답변", "GM패왕", "타직업스킬", "타직업", "스킬설정", "보조설정", "화술사", "양전사", "스킬오류", "스킬"]
+      },
+      {
+        title: "GM답변 - 기본평타 무공 OFF 방법",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "기본평타 무공이나 잘못 배운 타직업 스킬을 끄려면 스킬 > 단축키 설정 > 습득한 타직업 스킬 > 스킬창 등록 후 해당 스킬을 터치해 OFF하면 된다는 GM패왕 답변이 있었습니다.",
+        tags: ["GM답변", "GM패왕", "기본평타", "무공", "무공OFF", "스킬OFF", "단축키설정", "타직업스킬", "스킬창", "습득한타직업스킬"]
+      },
+      {
+        title: "GM답변 - 공성 신청과 공성령 제출",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "공성 신청 관련 문의에 대해 17시 이후 공성령 제출 시간이 시작된다는 GM패왕 답변이 있었습니다. 공성전 세부 정보는 GM 가이드 글도 함께 확인하세요.",
+        url: "https://cafe.naver.com/mir1jin/2012",
+        tags: ["GM답변", "GM패왕", "공성", "공성신청", "공성령", "17시", "5시", "공성전", "가이드"]
+      },
+      {
+        title: "GM답변 - 아이템 도감/백과 요청",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "아이템 도감 문의에 대해 몹백과 외 아이템 백과 시스템 추가도 요청하겠다는 GM패왕 답변이 있었습니다. 현재는 추가 요청 사항으로 정리합니다.",
+        tags: ["GM답변", "GM패왕", "아이템도감", "아이템백과", "도감", "백과", "몹백과", "시스템추가", "요청"]
+      },
+      {
+        title: "GM답변 - 채집 시간과 채팅 사라짐 개선 요청",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "채집 2시간 리셋 방식과 채팅 글이 몇 분 만에 사라지는 문제에 대해 GM패왕은 해당 사항을 즉시 취합하여 전달했고, 빠르게 개선될 수 있도록 노력하겠다고 답변했습니다.",
+        tags: ["GM답변", "GM패왕", "채집", "채집시간", "리셋", "채팅", "채팅글", "사라짐", "개선요청", "개선"]
+      },
+      {
+        title: "GM답변 - 보조장비 진화 수치 감소처럼 보이는 문제",
+        category: "GM답변",
+        source: "GM패왕",
+        date: "2026-07-08",
+        content: "선구자요대에서 전혼요대 등으로 장비 진화 시 방어력과 마법저항 수치가 26에서 24처럼 줄어든 것처럼 보일 수 있지만, 이는 보조장비 레벨업 수치가 표기되지 않아 생긴 혼동이라는 GM패왕 답변이 있었습니다. 실제로는 감소된 것이 아니며 장비 진화를 완료하면 레벨업된 수치가 정상 적용됩니다.",
+        tags: ["GM답변", "GM패왕", "장비진화", "보조장비", "선구자요대", "전혼요대", "방어력", "마법저항", "수치감소", "표기", "레벨업", "정상적용"]
+      },
 
       {
         title: "감옥 수감 시간과 주의점",
