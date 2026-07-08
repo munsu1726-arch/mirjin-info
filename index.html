@@ -20,12 +20,12 @@
 
     .hero-search {
       position: relative;
-      min-height: 100vh;
+      min-height: auto;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 30px;
+      padding: 42px 30px 34px;
       text-align: center;
     }
 
@@ -72,14 +72,14 @@
     }
 
     .hero-box h1 {
-      margin: 0 0 12px;
-      font-size: 38px;
+      margin: 0 0 10px;
+      font-size: 36px;
       color: white;
       text-shadow: 0 0 14px rgba(0,0,0,0.95);
     }
 
     .hero-box p {
-      margin: 0 0 28px;
+      margin: 0 0 22px;
       color: #e5e7eb;
       font-size: 17px;
       text-shadow: 0 0 10px rgba(0,0,0,0.9);
@@ -205,8 +205,12 @@
 
     main {
       max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px 60px;
+      margin: 16px auto 18px;
+      padding: 0 20px;
+    }
+
+    #results:empty {
+      display: none;
     }
 
     .result-summary {
@@ -277,8 +281,9 @@
 
     .chat-section {
       max-width: 900px;
-      margin: 0 auto 70px;
+      margin: 0 auto 44px;
       padding: 0 20px;
+      scroll-margin-top: 16px;
     }
 
     .chat-card {
@@ -311,8 +316,8 @@
     }
 
     .chat-search-tip {
-      margin: 14px 16px 0;
-      padding: 14px 16px;
+      margin: 12px 16px 0;
+      padding: 12px 16px;
       display: flex;
       align-items: flex-start;
       gap: 12px;
@@ -366,7 +371,7 @@
     }
 
     .chat-messages {
-      height: 340px;
+      height: 320px;
       overflow-y: auto;
       padding: 18px;
       background:
@@ -629,8 +634,32 @@
       }
 
       main {
-        margin: 20px auto;
-        padding: 0 14px 40px;
+        margin: 12px auto 16px;
+        padding: 0 14px;
+      }
+    }
+
+
+    @media (max-height: 760px) and (min-width: 601px) {
+      .hero-search {
+        padding-top: 30px;
+        padding-bottom: 26px;
+      }
+
+      .hero-box h1 {
+        font-size: 32px;
+      }
+
+      .hero-box p {
+        margin-bottom: 18px;
+      }
+
+      .search-box {
+        padding: 15px 18px;
+      }
+
+      .popular-box {
+        margin-top: 14px;
       }
     }
 
