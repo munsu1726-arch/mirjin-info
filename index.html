@@ -78,6 +78,17 @@
       text-shadow: 0 0 14px rgba(0,0,0,0.95);
     }
 
+    .title-refresh-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .title-refresh-link:hover {
+      text-decoration: none;
+      filter: brightness(1.08);
+    }
+
     .hero-box p {
       margin: 0 0 22px;
       color: #e5e7eb;
@@ -93,6 +104,115 @@
       border: none;
       outline: none;
       box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    }
+
+
+
+
+    .top-dashboard {
+      position: absolute;
+      top: -32px;
+      right: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      z-index: 3;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .top-stat-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 0;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      text-align: right;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+
+    .top-stat-label {
+      color: rgba(229,231,235,0.9);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .top-stat-value {
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .naver-board-search {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(15,23,42,0.78);
+      border: 1px solid rgba(96,165,250,0.28);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.24);
+      text-align: left;
+    }
+
+    .naver-board-title {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 9px;
+    }
+
+    .naver-board-form {
+      display: grid;
+      grid-template-columns: 1fr 118px;
+      gap: 8px;
+    }
+
+    .naver-board-input {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.96);
+      color: #111827;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .naver-board-input:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px rgba(147,197,253,0.18);
+    }
+
+    .naver-board-button {
+      border: none;
+      border-radius: 11px;
+      background: #03c75a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .naver-board-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .naver-board-hint {
+      margin-top: 8px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
 
@@ -569,6 +689,31 @@
       }
 
 
+
+
+      .top-dashboard {
+        top: -28px;
+        right: 0;
+        gap: 8px;
+      }
+
+      .top-stat-label {
+        font-size: 10px;
+      }
+
+      .top-stat-value {
+        font-size: 11px;
+      }
+
+      .naver-board-form {
+        grid-template-columns: 1fr;
+      }
+
+      .naver-board-button {
+        padding: 12px;
+      }
+
+
       .chat-form {
         grid-template-columns: 1fr;
       }
@@ -673,7 +818,18 @@
     <div class="hero-overlay"></div>
 
     <div class="hero-box">
-      <h1>미르의전설: 진 5서버 아라 문파 정보 검색</h1>
+      <div class="top-dashboard" aria-label="방문자 수 요약">
+        <div class="top-stat-card">
+          <span class="top-stat-label">오늘입장</span>
+          <span id="todayVisitorCount" class="top-stat-value">-</span>
+        </div>
+        <div class="top-stat-card">
+          <span class="top-stat-label">전체입장</span>
+          <span id="totalVisitorCount" class="top-stat-value">-</span>
+        </div>
+      </div>
+
+      <h1><a class="title-refresh-link" href="#" onclick="location.reload(); return false;">미르의전설: 진 5서버<br />아라 문파 정보 검색</a></h1>
       <p>공지, 공략, 쿠폰, 보스, 스킬북, 카카오톡 정리 내용을 검색합니다.</p>
 
       <input
@@ -686,11 +842,20 @@
 
       <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
 
-      <div class="popular-box">
-        <div class="popular-title">키워드 검색 인기순위 TOP 5</div>
-        <div id="popularList" class="popular-list"></div>
+      <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
+        <div class="naver-board-title">미르의 전설: 진 네이버 카페</div>
+        <div class="naver-board-form">
+          <input
+            id="naverBoardSearchInput"
+            class="naver-board-input"
+            type="text"
+            placeholder="카페 게시판 검색어 입력"
+            autocomplete="off"
+          />
+          <button id="naverBoardSearchButton" class="naver-board-button" type="button">게시판 검색</button>
+        </div>
+        <div class="naver-board-hint">검색 결과는 네이버 카페 새 창에서 열립니다. 로그인/가입이 필요한 글은 네이버에서 확인해야 합니다.</div>
       </div>
-
 
       <div class="link-buttons">
         <a
@@ -1656,6 +1821,16 @@
     const searchInput = document.getElementById("searchInput");
     const results = document.getElementById("results");
     const popularList = document.getElementById("popularList");
+    const topDashboardPopularList = document.getElementById("topDashboardPopularList");
+    const todayVisitorCount = document.getElementById("todayVisitorCount");
+    const totalVisitorCount = document.getElementById("totalVisitorCount");
+    const naverBoardSearchInput = document.getElementById("naverBoardSearchInput");
+    const naverBoardSearchButton = document.getElementById("naverBoardSearchButton");
+
+    const NAVER_CAFE_ID = "31717562";
+    const NAVER_CAFE_MENU_ID = "13";
+    const NAVER_CAFE_SEARCH_BASE_URL = "https://m.cafe.naver.com/ArticleSearchList.nhn";
+    const NAVER_CAFE_BOARD_BASE_URL = "https://m.cafe.naver.com/ArticleList.nhn";
 
     const POPULAR_STORAGE_KEY = "mirjinAraPopularSearches_v2";
     const POPULAR_OLD_STORAGE_KEY = "mirjinAraPopularSearches";
@@ -1787,13 +1962,27 @@
 
       lastRenderedPopularSignature = signature;
 
-      popularList.innerHTML = topKeywords.map((item, index) => `
+      const popularHtml = topKeywords.map((item, index) => `
         <button class="popular-keyword" type="button" onclick="searchKeyword('${escapeJsString(item.keyword)}')">
           <span class="popular-rank">${index + 1}위</span>
           ${escapeHtml(item.keyword)}
           <span class="popular-count">${item.count}회</span>
         </button>
       `).join("");
+
+      const topDashboardHtml = topKeywords.map((item, index) => `
+        <button class="top-popular-keyword" type="button" onclick="searchKeyword('${escapeJsString(item.keyword)}')">
+          ${index + 1}. ${escapeHtml(item.keyword)}
+        </button>
+      `).join("");
+
+      if (popularList) {
+        popularList.innerHTML = popularHtml;
+      }
+
+      if (topDashboardPopularList) {
+        topDashboardPopularList.innerHTML = topDashboardHtml || `<span class="naver-board-hint">검색 기록이 없습니다.</span>`;
+      }
     }
 
     async function fetchPopularStatsFromFirebase() {
@@ -1969,6 +2158,34 @@
       searchInput.focus();
     }
 
+
+    function buildNaverCafeBoardUrl(keyword) {
+      const params = new URLSearchParams();
+      params.set("search.clubid", NAVER_CAFE_ID);
+      params.set("search.menuid", NAVER_CAFE_MENU_ID);
+
+      if (keyword) {
+        params.set("search.sortBy", "date");
+        params.set("search.searchBy", "0");
+        params.set("search.query", keyword);
+        return `${NAVER_CAFE_SEARCH_BASE_URL}?${params.toString()}`;
+      }
+
+      return `${NAVER_CAFE_BOARD_BASE_URL}?${params.toString()}`;
+    }
+
+    function openNaverCafeBoardSearch() {
+      const keyword = naverBoardSearchInput ? naverBoardSearchInput.value.trim() : "";
+      const url = buildNaverCafeBoardUrl(keyword);
+
+      if (keyword.length >= 2) {
+        recordSearchKeyword(keyword);
+        lastRecordedKeyword = keyword;
+      }
+
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
     function normalizeText(text) {
       return String(text)
         .toLowerCase()
@@ -2056,6 +2273,19 @@
       }
     });
 
+    if (naverBoardSearchButton) {
+      naverBoardSearchButton.addEventListener("click", openNaverCafeBoardSearch);
+    }
+
+    if (naverBoardSearchInput) {
+      naverBoardSearchInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          openNaverCafeBoardSearch();
+        }
+      });
+    }
+
 
 
     const chatMessages = document.getElementById("chatMessages");
@@ -2073,10 +2303,6 @@
 
       {
         "rules": {
-          "mirjinAraPopularSearches": {
-            ".read": true,
-            ".write": true
-          },
           "mirjinAraChat": {
             "messages": {
               ".read": true,
@@ -2088,6 +2314,14 @@
               ".write": true,
               ".indexOn": ["createdAt"]
             }
+          },
+          "mirjinAraPopularSearches": {
+            ".read": true,
+            ".write": true
+          },
+          "mirjinAraVisitors": {
+            ".read": true,
+            ".write": true
           }
         }
       }
@@ -2461,6 +2695,124 @@
       별도 SDK import가 없어서 GitHub Pages, 일반 웹호스팅, 로컬 테스트에서 더 안정적입니다.
     */
     const CHAT_DATABASE_URL = firebaseConfig.databaseURL.replace(/\/$/, "");
+    const VISITOR_DB_PATH = "mirjinAraVisitors";
+    const VISITOR_ID_KEY = "mirjinAraVisitorId_v1";
+    const VISITOR_LOCAL_STATS_KEY = "mirjinAraVisitorStats_v1";
+    let visitorRefreshTimer = null;
+
+    function getKoreanDateKey(timestamp = Date.now()) {
+      return new Date(timestamp + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    }
+
+    function getVisitorId() {
+      let visitorId = localStorage.getItem(VISITOR_ID_KEY);
+
+      if (!visitorId) {
+        visitorId = `visitor_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+        localStorage.setItem(VISITOR_ID_KEY, visitorId);
+      }
+
+      return visitorId.replace(/[^a-zA-Z0-9_-]/g, "_");
+    }
+
+    function getVisitorRestUrl(path = "") {
+      const cleanPath = path ? `/${path}` : "";
+      return `${CHAT_DATABASE_URL}/${VISITOR_DB_PATH}${cleanPath}.json`;
+    }
+
+    function setVisitorCounts(todayCount, totalCount) {
+      if (todayVisitorCount) {
+        todayVisitorCount.textContent = Number(todayCount || 0).toLocaleString("ko-KR");
+      }
+
+      if (totalVisitorCount) {
+        totalVisitorCount.textContent = Number(totalCount || 0).toLocaleString("ko-KR");
+      }
+    }
+
+    function countObjectKeys(value) {
+      return value && typeof value === "object" ? Object.keys(value).length : 0;
+    }
+
+    function updateLocalVisitorCounts() {
+      const todayKey = getKoreanDateKey();
+      const visitorId = getVisitorId();
+      let stats = { unique: {}, daily: {} };
+
+      try {
+        stats = JSON.parse(localStorage.getItem(VISITOR_LOCAL_STATS_KEY) || JSON.stringify(stats));
+      } catch (error) {
+        console.warn("방문자 로컬 저장값을 읽지 못했습니다.", error);
+      }
+
+      stats.unique = stats.unique || {};
+      stats.daily = stats.daily || {};
+      stats.daily[todayKey] = stats.daily[todayKey] || {};
+      stats.unique[visitorId] = Date.now();
+      stats.daily[todayKey][visitorId] = Date.now();
+      localStorage.setItem(VISITOR_LOCAL_STATS_KEY, JSON.stringify(stats));
+      setVisitorCounts(countObjectKeys(stats.daily[todayKey]), countObjectKeys(stats.unique));
+    }
+
+    async function registerFirebaseVisitor() {
+      const visitorId = getVisitorId();
+      const todayKey = getKoreanDateKey();
+      const now = Date.now();
+
+      await Promise.all([
+        fetch(getVisitorRestUrl(`unique/${visitorId}`), {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstVisitedAt: now, lastVisitedAt: now })
+        }),
+        fetch(getVisitorRestUrl(`daily/${todayKey}/${visitorId}`), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ visitedAt: now })
+        })
+      ]);
+    }
+
+    async function refreshFirebaseVisitorCounts() {
+      const todayKey = getKoreanDateKey();
+      const [todayResponse, totalResponse] = await Promise.all([
+        fetch(getVisitorRestUrl(`daily/${todayKey}`), { method: "GET", cache: "no-store" }),
+        fetch(getVisitorRestUrl("unique"), { method: "GET", cache: "no-store" })
+      ]);
+
+      if (!todayResponse.ok || !totalResponse.ok) {
+        throw new Error("방문자 수를 읽지 못했습니다.");
+      }
+
+      const [todayData, totalData] = await Promise.all([
+        todayResponse.json(),
+        totalResponse.json()
+      ]);
+
+      setVisitorCounts(countObjectKeys(todayData), countObjectKeys(totalData));
+    }
+
+    async function initVisitorCounter() {
+      updateLocalVisitorCounts();
+
+      if (typeof hasFirebaseConfig !== "function" || !hasFirebaseConfig()) {
+        return;
+      }
+
+      try {
+        await registerFirebaseVisitor();
+        await refreshFirebaseVisitorCounts();
+
+        if (visitorRefreshTimer) {
+          clearInterval(visitorRefreshTimer);
+        }
+
+        visitorRefreshTimer = setInterval(refreshFirebaseVisitorCounts, 15000);
+      } catch (error) {
+        console.warn("방문자 수 Firebase 동기화 실패. 로컬 기준으로 표시합니다.", error);
+      }
+    }
+
     let chatRefreshTimer = null;
     let lastRenderedChatSignature = "";
     let lastRenderedSearchPostsSignature = "";
@@ -2714,6 +3066,7 @@
     }
 
 
+    initVisitorCounter();
     initPopularKeywordSync();
     render();
   </script>
