@@ -662,36 +662,51 @@ main {
       }
     ];
 
-    let currentCategory = "전체";
-
     const searchInput = document.getElementById("searchInput");
     const results = document.getElementById("results");
 
-    function setCategory(category) {
-      currentCategory = category;
-      render();
-    }
-
     function render() {
-      const keyword = searchInput.value.trim().toLowerCase();
+  const keyword = searchInput.value.trim().toLowerCase();
 
-      const filtered = posts.filter(post => {
-        const matchCategory =
-          currentCategory === "전체" || post.category === currentCategory;
+  if (keyword === "") {
+    results.innerHTML = "";
+    return;
+  }
 
-        const targetText = [
-          post.title,
-          post.category,
-          post.source,
-          post.content,
-          post.tags.join(" ")
-        ].join(" ").toLowerCase();
+  const filtered = posts.filter(post => {
+    const targetText = [
+      post.title,
+      post.category,
+      post.source,
+      post.content,
+      post.tags.join(" ")
+    ].join(" ").toLowerCase();
 
-        const matchKeyword =
-          keyword === "" || targetText.includes(keyword);
+    return targetText.includes(keyword);
+  });
 
-        return matchCategory && matchKeyword;
-      });
+  if (filtered.length === 0) {
+    results.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
+    return;
+  }
+
+  results.innerHTML = filtered.map(post => `
+    <div class="card">
+      <h2>${post.title}</h2>
+      <div class="meta">
+        ${post.category} · ${post.source} · ${post.date}
+      </div>
+      <p>${post.content}</p>
+      <div class="tags">
+        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+searchInput.addEventListener("input", render);
+
+render();
 
       if (filtered.length === 0) {
         results.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`;
