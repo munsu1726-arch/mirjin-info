@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>미르의전설: 진 5서버 아라 문파 정보 검색</title>
-  <!-- Firebase 채팅 수정 버전: Realtime Database REST 방식 -->
 
   <style>
     * {
@@ -1681,7 +1680,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyAIOrwfCx8UgYXeTGFaocu20yM4jQ0ee74",
       authDomain: "mirjin-info.firebaseapp.com",
-      databaseURL: "https://mirjin-info-default-rtdb.asia-southeast1.firebasedatabase.app",
+      databaseURL: "https://mirjin-info-default-rtdb.firebaseio.com",
       projectId: "mirjin-info",
       storageBucket: "mirjin-info.firebasestorage.app",
       messagingSenderId: "174948878163",
@@ -1808,131 +1807,85 @@
       ]);
     }
 
-    /*
-      Firebase SDK 실시간 연결이 일부 호스팅/브라우저 환경에서 계속 "연결 중"으로 멈추는 경우가 있어,
-      이 버전은 Realtime Database REST API + 2초 자동 새로고침 방식으로 동작합니다.
-      별도 SDK import가 없어서 GitHub Pages, 일반 웹호스팅, 로컬 테스트에서 더 안정적입니다.
-    */
-    const CHAT_DATABASE_URL = firebaseConfig.databaseURL.replace(/\/$/, "");
-    let chatRefreshTimer = null;
-    let lastRenderedChatSignature = "";
-
-    function getChatRestUrl() {
-      return `${CHAT_DATABASE_URL}/${CHAT_ROOM_PATH}.json`;
-    }
-
-    function normalizeChatData(data) {
-      const messages = Object.values(data || {})
-        .filter(message => message && message.text)
-        .map(message => ({
-          name: String(message.name || "익명").slice(0, 12),
-          text: String(message.text || "").slice(0, 200),
-          userId: String(message.userId || ""),
-          createdAt: Number(message.createdAt || 0)
-        }))
-        .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
-        .slice(-MAX_CHAT_MESSAGES);
-
-      return messages;
-    }
-
-    async function fetchChatMessages() {
-      const response = await fetch(getChatRestUrl(), {
-        method: "GET",
-        cache: "no-store"
-      });
-
-      if (!response.ok) {
-        const message = await response.text().catch(() => "");
-        throw new Error(`채팅 읽기 실패: HTTP ${response.status} ${message}`);
-      }
-
-      const data = await response.json();
-      return normalizeChatData(data);
-    }
-
-    async function sendChatMessage(message) {
-      const response = await fetch(getChatRestUrl(), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(message)
-      });
-
-      if (!response.ok) {
-        const errorMessage = await response.text().catch(() => "");
-        throw new Error(`채팅 전송 실패: HTTP ${response.status} ${errorMessage}`);
-      }
-
-      return response.json();
-    }
-
-    async function refreshChatMessages() {
+    async function startFirebaseChatMode() {
       try {
-        const messages = await fetchChatMessages();
-        const signature = JSON.stringify(messages);
+        const appModule = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js");
+        const databaseModule = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js");
 
-        firebaseChatReady = true;
-        if (!chatSend.disabled) {
-          setChatStatus("공개 채팅방 연결됨");
-        }
+        const app = appModule.initializeApp(firebaseConfig);
+        const db = databaseModule.getDatabase(app);
+        firebaseMessagesRef = databaseModule.ref(db, CHAT_ROOM_PATH);
+        firebaseModules = databaseModule;
 
-        if (signature !== lastRenderedChatSignature) {
-          lastRenderedChatSignature = signature;
+        databaseModule.onValue(databaseModule.ref(db, ".info/connected"), snapshot => {
+          if (snapshot.val() === true) {
+            firebaseChatReady = true;
+            setChatStatus("공개 채팅방 연결됨");
+          } else {
+            setChatStatus("채팅 서버 연결 중...");
+          }
+        });
+
+        const recentMessagesQuery = databaseModule.query(
+          firebaseMessagesRef,
+          databaseModule.orderByChild("createdAt"),
+          databaseModule.limitToLast(MAX_CHAT_MESSAGES)
+        );
+
+        databaseModule.onValue(recentMessagesQuery, snapshot => {
+          const messages = [];
+          snapshot.forEach(childSnapshot => {
+            const value = childSnapshot.val();
+            if (value && value.text) {
+              messages.push(value);
+            }
+          });
+          messages.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
           renderChatMessages(messages);
-        }
+        }, error => {
+          firebaseChatReady = false;
+          setChatStatus("읽기 실패: Firebase Rules 확인 필요");
+          chatMessages.innerHTML = `<div class="chat-empty">다른 사람 채팅을 불러오지 못했습니다.<br>Realtime Database Rules를 공개 읽기/쓰기로 바꿔주세요.</div>`;
+          console.error(error);
+        });
+
+        chatForm.addEventListener("submit", async event => {
+          event.preventDefault();
+          const { name, text } = getCleanChatInput();
+
+          if (!text) {
+            return;
+          }
+
+          localStorage.setItem(CHAT_NAME_KEY, name);
+          chatSend.disabled = true;
+          setChatStatus(firebaseChatReady ? "전송 중..." : "채팅 서버 연결 중...");
+
+          try {
+            await waitWithTimeout(databaseModule.push(firebaseMessagesRef, {
+              name,
+              text,
+              userId: myChatId,
+              createdAt: Date.now()
+            }), 10000);
+
+            chatText.value = "";
+            chatText.focus();
+            setChatStatus("공개 채팅방 연결됨");
+          } catch (error) {
+            setChatStatus("전송 실패: Realtime Database URL 또는 Rules 확인 필요");
+            console.error(error);
+          } finally {
+            chatSend.disabled = false;
+          }
+        });
       } catch (error) {
         firebaseChatReady = false;
-        setChatStatus("연결 실패: DB 규칙 확인 필요");
-        chatMessages.innerHTML = `<div class="chat-empty">채팅을 불러오지 못했습니다.<br>Firebase Realtime Database Rules를 확인해 주세요.</div>`;
+        setChatStatus("Firebase 연결 실패: 설정값 확인 필요");
+        chatMessages.innerHTML = `<div class="chat-empty">Firebase 연결에 실패했습니다.<br>config, databaseURL, Realtime Database 생성 여부를 확인하세요.</div>`;
         console.error(error);
+        startLocalChatMode();
       }
-    }
-
-    function startFirebaseChatMode() {
-      setChatStatus("공개 채팅방 연결 시도 중...");
-      chatMessages.innerHTML = `<div class="chat-empty">채팅 서버에 연결 중입니다.<br>잠시만 기다려 주세요.</div>`;
-
-      refreshChatMessages();
-
-      if (chatRefreshTimer) {
-        clearInterval(chatRefreshTimer);
-      }
-
-      chatRefreshTimer = setInterval(refreshChatMessages, 2000);
-
-      chatForm.addEventListener("submit", async event => {
-        event.preventDefault();
-        const { name, text } = getCleanChatInput();
-
-        if (!text) {
-          return;
-        }
-
-        localStorage.setItem(CHAT_NAME_KEY, name);
-        chatSend.disabled = true;
-        setChatStatus("전송 중...");
-
-        try {
-          await waitWithTimeout(sendChatMessage({
-            name,
-            text,
-            userId: myChatId,
-            createdAt: Date.now()
-          }), 10000);
-
-          chatText.value = "";
-          chatText.focus();
-          await refreshChatMessages();
-          setChatStatus("공개 채팅방 연결됨");
-        } catch (error) {
-          setChatStatus("전송 실패: DB 규칙 확인 필요");
-          console.error(error);
-        } finally {
-          chatSend.disabled = false;
-        }
-      });
     }
 
     if (hasFirebaseConfig()) {
