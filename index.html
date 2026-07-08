@@ -1490,6 +1490,7 @@
 
     let searchRecordTimer = null;
     let lastRecordedKeyword = "";
+    let firebaseSearchPosts = [];
 
     function getPopularStats() {
       let stats = {};
@@ -1585,6 +1586,15 @@
         .replace(/[·ㆍ:：,\.\-_/]/g, "");
     }
 
+    function getPostTags(post) {
+      return Array.isArray(post.tags) ? post.tags.map(tag => String(tag || "")) : [];
+    }
+
+    function getSafePostUrl(url) {
+      const cleanUrl = String(url || "").trim();
+      return /^https?:\/\//i.test(cleanUrl) ? cleanUrl : "";
+    }
+
     function render() {
       const keyword = searchInput.value.trim();
       const normalizedKeyword = normalizeText(keyword);
@@ -1594,7 +1604,8 @@
         return;
       }
 
-      const filtered = posts.filter(post => {
+      const searchablePosts = [...posts, ...firebaseSearchPosts];
+      const filtered = searchablePosts.filter(post => {
         const targetText = [
           post.title,
           post.category,
@@ -1602,7 +1613,7 @@
           post.date,
           post.content,
           post.url || "",
-          post.tags.join(" ")
+          getPostTags(post).join(" ")
         ].join(" ");
 
         return normalizeText(targetText).includes(normalizedKeyword);
@@ -1615,17 +1626,22 @@
 
       results.innerHTML = `
         <div class="result-summary">총 ${filtered.length}개의 검색 결과</div>
-        ${filtered.map(post => `
-          <article class="card">
-            <h2>${post.title}</h2>
-            <div class="meta">${post.category} · ${post.source} · ${post.date}</div>
-            <p>${post.content}</p>
-            ${post.url ? `<a class="post-link" href="${post.url}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
-            <div>
-              ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
-            </div>
-          </article>
-        `).join("")}
+        ${filtered.map(post => {
+          const tags = getPostTags(post);
+          const safeUrl = getSafePostUrl(post.url);
+
+          return `
+            <article class="card">
+              <h2>${escapeHtml(post.title || "제목 없음")}</h2>
+              <div class="meta">${escapeHtml(post.category || "기타")} · ${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(post.date || "날짜 없음")}</div>
+              <p>${escapeHtml(post.content || "")}</p>
+              ${safeUrl ? `<a class="post-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
+              <div>
+                ${tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join("")}
+              </div>
+            </article>
+          `;
+        }).join("")}
       `;
 
       results.scrollIntoView({
@@ -1672,6 +1688,11 @@
               ".read": true,
               ".write": true,
               ".indexOn": ["createdAt"]
+            },
+            "searchPosts": {
+              ".read": true,
+              ".write": true,
+              ".indexOn": ["createdAt"]
             }
           }
         }
@@ -1690,7 +1711,9 @@
     };
 
     const CHAT_ROOM_PATH = "mirjinAraChat/messages";
+    const SEARCH_POSTS_PATH = "mirjinAraChat/searchPosts";
     const MAX_CHAT_MESSAGES = 100;
+    const MAX_SEARCH_POSTS = 2000;
     let firebaseChatReady = false;
     let firebaseModules = null;
     let firebaseMessagesRef = null;
@@ -1826,6 +1849,62 @@
       return containsBlockedExpression(text) ? "부적절한 표현이 포함된 메시지입니다." : text;
     }
 
+    function formatSearchDate(timestamp) {
+      const date = timestamp ? new Date(timestamp) : new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function convertChatMessageToSearchPost(message, key = "") {
+      const name = getSafeChatName(message.name || "익명");
+      const text = getSafeChatText(String(message.text || "").slice(0, 200));
+      const createdAt = Number(message.createdAt || Date.now());
+
+      return {
+        title: `채팅 - ${name}`,
+        category: "채팅",
+        source: "실시간채팅",
+        date: formatSearchDate(createdAt),
+        content: text,
+        url: "",
+        tags: ["채팅", "문파채팅", name],
+        createdAt,
+        userId: String(message.userId || ""),
+        chatMessageKey: String(key || "")
+      };
+    }
+
+    function normalizeSearchPostData(data) {
+      return Object.entries(data || {})
+        .filter(([, post]) => post && post.content)
+        .map(([key, post]) => ({
+          title: String(post.title || "채팅").slice(0, 80),
+          category: String(post.category || "채팅").slice(0, 30),
+          source: String(post.source || "실시간채팅").slice(0, 30),
+          date: String(post.date || formatSearchDate(post.createdAt)).slice(0, 20),
+          content: getSafeChatText(String(post.content || "").slice(0, 200)),
+          url: "",
+          tags: Array.isArray(post.tags) ? post.tags.map(tag => String(tag || "").slice(0, 30)) : ["채팅", "문파채팅"],
+          createdAt: Number(post.createdAt || 0),
+          userId: String(post.userId || ""),
+          chatMessageKey: String(post.chatMessageKey || key)
+        }))
+        .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
+        .slice(-MAX_SEARCH_POSTS);
+    }
+
+    function syncLocalChatMessagesToSearchPosts(messages) {
+      firebaseSearchPosts = messages.map((message, index) =>
+        convertChatMessageToSearchPost(message, `local_${index}`)
+      );
+
+      if (searchInput.value.trim()) {
+        render();
+      }
+    }
+
     function rejectBlockedChatName() {
       setChatStatus("닉네임에 사용할 수 없는 표현이 포함되어 전송하지 않았습니다.");
       chatName.focus();
@@ -1888,7 +1967,9 @@
 
     function startLocalChatMode() {
       setChatStatus("테스트 모드: 내 기기에서만 보임");
-      renderChatMessages(getLocalChatMessages());
+      const localMessages = getLocalChatMessages();
+      renderChatMessages(localMessages);
+      syncLocalChatMessagesToSearchPosts(localMessages);
 
       chatForm.addEventListener("submit", event => {
         event.preventDefault();
@@ -1918,6 +1999,7 @@
         });
         saveLocalChatMessages(messages);
         renderChatMessages(messages);
+        syncLocalChatMessagesToSearchPosts(messages);
         chatText.value = "";
         chatText.focus();
       });
@@ -1940,9 +2022,18 @@
     const CHAT_DATABASE_URL = firebaseConfig.databaseURL.replace(/\/$/, "");
     let chatRefreshTimer = null;
     let lastRenderedChatSignature = "";
+    let lastRenderedSearchPostsSignature = "";
 
     function getChatRestUrl() {
       return `${CHAT_DATABASE_URL}/${CHAT_ROOM_PATH}.json`;
+    }
+
+    function getSearchPostsRestUrl() {
+      return `${CHAT_DATABASE_URL}/${SEARCH_POSTS_PATH}.json`;
+    }
+
+    function getSearchPostRestUrl(key) {
+      return `${CHAT_DATABASE_URL}/${SEARCH_POSTS_PATH}/${encodeURIComponent(key)}.json`;
     }
 
     function normalizeChatData(data) {
@@ -1992,6 +2083,57 @@
       return response.json();
     }
 
+    async function fetchSearchPosts() {
+      const response = await fetch(getSearchPostsRestUrl(), {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        const message = await response.text().catch(() => "");
+        throw new Error(`검색 데이터 읽기 실패: HTTP ${response.status} ${message}`);
+      }
+
+      const data = await response.json();
+      return normalizeSearchPostData(data);
+    }
+
+    async function saveChatMessageToSearch(chatMessageKey, message) {
+      const searchPost = convertChatMessageToSearchPost(message, chatMessageKey);
+      const response = await fetch(getSearchPostRestUrl(chatMessageKey || `search_${Date.now()}`), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(searchPost)
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text().catch(() => "");
+        throw new Error(`검색 데이터 저장 실패: HTTP ${response.status} ${errorMessage}`);
+      }
+
+      return response.json();
+    }
+
+    async function refreshSearchPosts() {
+      try {
+        const searchPosts = await fetchSearchPosts();
+        const signature = JSON.stringify(searchPosts);
+
+        if (signature !== lastRenderedSearchPostsSignature) {
+          lastRenderedSearchPostsSignature = signature;
+          firebaseSearchPosts = searchPosts;
+
+          if (searchInput.value.trim()) {
+            render();
+          }
+        }
+      } catch (error) {
+        console.warn("검색용 데이터 동기화 실패", error);
+      }
+    }
+
     async function refreshChatMessages() {
       try {
         const messages = await fetchChatMessages();
@@ -2006,6 +2148,8 @@
           lastRenderedChatSignature = signature;
           renderChatMessages(messages);
         }
+
+        await refreshSearchPosts();
       } catch (error) {
         firebaseChatReady = false;
         setChatStatus("연결 실패: DB 규칙 확인 필요");
@@ -2049,12 +2193,20 @@
         setChatStatus("전송 중...");
 
         try {
-          await waitWithTimeout(sendChatMessage({
+          const message = {
             name,
             text,
             userId: myChatId,
             createdAt: Date.now()
-          }), 10000);
+          };
+          const result = await waitWithTimeout(sendChatMessage(message), 10000);
+
+          await waitWithTimeout(
+            saveChatMessageToSearch(result && result.name ? result.name : `search_${message.createdAt}`, message),
+            10000
+          ).catch(error => {
+            console.warn("채팅은 전송됐지만 검색 데이터 저장에 실패했습니다.", error);
+          });
 
           chatText.value = "";
           chatText.focus();
