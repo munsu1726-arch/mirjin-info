@@ -310,6 +310,61 @@
       white-space: nowrap;
     }
 
+    .chat-search-tip {
+      margin: 14px 16px 0;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1px solid rgba(250, 204, 21, 0.42);
+      border-radius: 16px;
+      background:
+        linear-gradient(135deg, rgba(250,204,21,0.16), rgba(37,99,235,0.12)),
+        rgba(15, 23, 42, 0.92);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.26);
+    }
+
+    .chat-search-tip-badge {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #facc15;
+      color: #111827;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      box-shadow: 0 6px 16px rgba(250,204,21,0.28);
+    }
+
+    .chat-search-tip-text {
+      flex: 1;
+      text-align: left;
+      color: #e5e7eb;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .chat-search-tip-text strong {
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    .chat-search-tip-text span {
+      color: #a7f3d0;
+      font-weight: 800;
+    }
+
+    .chat-search-tip-link {
+      color: #bfdbfe;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .chat-search-tip-link:hover {
+      text-decoration: underline;
+    }
+
     .chat-messages {
       height: 340px;
       overflow-y: auto;
@@ -525,6 +580,22 @@
       .chat-messages {
         height: 300px;
       }
+
+      .chat-search-tip {
+        margin: 12px 12px 0;
+        padding: 12px;
+        gap: 9px;
+      }
+
+      .chat-search-tip-text {
+        font-size: 13px;
+      }
+
+      .chat-search-tip-link {
+        display: inline-block;
+        margin-top: 4px;
+        white-space: normal;
+      }
     }
 
 
@@ -636,6 +707,15 @@
         <div id="chatStatus" class="chat-status">채팅 준비 중...</div>
       </div>
 
+      <div class="chat-search-tip" role="note" aria-label="실시간 채팅 검색 안내">
+        <div class="chat-search-tip-badge">TIP</div>
+        <div class="chat-search-tip-text">
+          <strong>실시간 채팅에 글을 작성하면 검색창에서도 검색할 수 있습니다.</strong><br />
+          <span>예: 닉네임, 보스, 공성, 스킬북, 쿠폰</span>처럼 입력하면 채팅 내용까지 함께 찾아집니다.
+          <a class="chat-search-tip-link" href="#searchInput">상단 검색창으로 이동</a>
+        </div>
+      </div>
+
       <div id="chatMessages" class="chat-messages">
         <div class="chat-empty">채팅을 불러오는 중입니다.</div>
       </div>
@@ -661,7 +741,7 @@
       </form>
 
       <p class="chat-note">
-        공개 채팅방입니다. 닉네임과 채팅 내용에 욕설/비속어가 포함되면 전송되지 않습니다. 누구나 채팅 메시지를 삭제할 수 있습니다.
+        공개 채팅방입니다. 닉네임과 채팅 내용에 욕설/비속어가 포함되면 전송되지 않습니다. 누구나 채팅 메시지를 삭제할 수 있습니다. 전송된 채팅 내용은 검색 결과에도 자동 반영됩니다.
       </p>
     </div>
   </section>
