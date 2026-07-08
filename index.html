@@ -358,6 +358,38 @@
       white-space: nowrap;
     }
 
+    .chat-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .chat-delete {
+      border: 1px solid rgba(248, 113, 113, 0.55);
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(127, 29, 29, 0.42);
+      color: #fecaca;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .chat-delete:hover {
+      transform: translateY(-1px);
+      background: rgba(220, 38, 38, 0.72);
+      border-color: rgba(254, 202, 202, 0.9);
+      color: #ffffff;
+    }
+
+    .chat-delete:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .chat-text {
       margin: 0;
       color: #f8fafc;
@@ -629,7 +661,7 @@
       </form>
 
       <p class="chat-note">
-        공개 채팅방입니다. 닉네임과 채팅 내용에 욕설/비속어가 포함되면 전송되지 않습니다. 욕설/비속어가 포함된 메시지는 전송되지 않습니다.
+        공개 채팅방입니다. 닉네임과 채팅 내용에 욕설/비속어가 포함되면 전송되지 않습니다. 누구나 채팅 메시지를 삭제할 수 있습니다.
       </p>
     </div>
   </section>
@@ -1516,7 +1548,10 @@
     const results = document.getElementById("results");
     const popularList = document.getElementById("popularList");
 
-    const POPULAR_STORAGE_KEY = "mirjinAraPopularSearches";
+    const POPULAR_STORAGE_KEY = "mirjinAraPopularSearches_v2";
+    const POPULAR_OLD_STORAGE_KEY = "mirjinAraPopularSearches";
+    const POPULAR_DB_PATH = "mirjinAraPopularSearches";
+    const POPULAR_REFRESH_MS = 5000;
     const defaultPopularKeywords = [
       { keyword: "GM패왕", count: 50 },
       { keyword: "쿠폰", count: 40 },
@@ -1528,65 +1563,274 @@
     let searchRecordTimer = null;
     let lastRecordedKeyword = "";
     let firebaseSearchPosts = [];
+    let popularStats = getLocalPopularStats();
+    let popularRefreshTimer = null;
+    let lastRenderedPopularSignature = "";
 
-    function getPopularStats() {
-      let stats = {};
-
-      try {
-        stats = JSON.parse(localStorage.getItem(POPULAR_STORAGE_KEY)) || {};
-      } catch (error) {
-        stats = {};
-      }
+    function getDefaultPopularStats() {
+      const stats = {};
 
       defaultPopularKeywords.forEach(item => {
-        if (!stats[item.keyword]) {
-          stats[item.keyword] = item.count;
+        stats[item.keyword] = Number(item.count) || 0;
+      });
+
+      return stats;
+    }
+
+    function normalizePopularStats(stats) {
+      const normalized = {};
+
+      Object.entries(stats || {}).forEach(([keyword, count]) => {
+        const cleanKeyword = String(keyword || "").trim();
+        const cleanCount = Number(count) || 0;
+
+        if (cleanKeyword && cleanCount > 0) {
+          normalized[cleanKeyword] = cleanCount;
+        }
+      });
+
+      return normalized;
+    }
+
+    function getLocalPopularStats() {
+      const storageKeys = [POPULAR_STORAGE_KEY, POPULAR_OLD_STORAGE_KEY];
+
+      for (const storageKey of storageKeys) {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+          const normalized = normalizePopularStats(saved);
+
+          if (Object.keys(normalized).length > 0) {
+            return normalized;
+          }
+        } catch (error) {
+          console.warn("인기검색어 로컬 저장값을 읽지 못했습니다.", error);
+        }
+      }
+
+      return getDefaultPopularStats();
+    }
+
+    function savePopularStats(stats) {
+      popularStats = normalizePopularStats(stats);
+      localStorage.setItem(POPULAR_STORAGE_KEY, JSON.stringify(popularStats));
+    }
+
+    function keywordToFirebaseKey(keyword) {
+      return Array.from(new TextEncoder().encode(keyword))
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function getPopularRestUrl() {
+      return `${CHAT_DATABASE_URL}/${POPULAR_DB_PATH}.json`;
+    }
+
+    function getPopularKeywordRestUrl(keyword) {
+      return `${CHAT_DATABASE_URL}/${POPULAR_DB_PATH}/${keywordToFirebaseKey(keyword)}.json`;
+    }
+
+    function normalizePopularData(data) {
+      const stats = {};
+
+      Object.values(data || {}).forEach(value => {
+        if (!value || !value.keyword) {
+          return;
+        }
+
+        const keyword = String(value.keyword || "").trim();
+        const count = Number(value.count) || 0;
+
+        if (keyword && count > 0) {
+          stats[keyword] = count;
         }
       });
 
       return stats;
     }
 
-    function savePopularStats(stats) {
-      localStorage.setItem(POPULAR_STORAGE_KEY, JSON.stringify(stats));
-    }
-
     function getTopPopularKeywords() {
-      const stats = getPopularStats();
-
-      return Object.entries(stats)
-        .filter(([keyword]) => keyword.trim().length > 0)
+      return Object.entries(popularStats)
+        .filter(([keyword, count]) => keyword.trim().length > 0 && Number(count) > 0)
         .sort((a, b) => {
-          if (b[1] !== a[1]) return b[1] - a[1];
+          if (Number(b[1]) !== Number(a[1])) return Number(b[1]) - Number(a[1]);
           return a[0].localeCompare(b[0], "ko");
         })
         .slice(0, 5)
-        .map(([keyword, count]) => ({ keyword, count }));
+        .map(([keyword, count]) => ({ keyword, count: Number(count) || 0 }));
+    }
+
+    function escapeJsString(value) {
+      return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r");
     }
 
     function renderPopularKeywords() {
       const topKeywords = getTopPopularKeywords();
+      const signature = JSON.stringify(topKeywords);
+
+      if (signature === lastRenderedPopularSignature) {
+        return;
+      }
+
+      lastRenderedPopularSignature = signature;
 
       popularList.innerHTML = topKeywords.map((item, index) => `
-        <button class="popular-keyword" type="button" onclick="searchKeyword('${item.keyword.replace(/'/g, "\\'")}')">
+        <button class="popular-keyword" type="button" onclick="searchKeyword('${escapeJsString(item.keyword)}')">
           <span class="popular-rank">${index + 1}위</span>
-          ${item.keyword}
+          ${escapeHtml(item.keyword)}
           <span class="popular-count">${item.count}회</span>
         </button>
       `).join("");
     }
 
-    function recordSearchKeyword(keyword) {
+    async function fetchPopularStatsFromFirebase() {
+      const response = await fetch(getPopularRestUrl(), {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        const message = await response.text().catch(() => "");
+        throw new Error(`인기검색어 읽기 실패: HTTP ${response.status} ${message}`);
+      }
+
+      const data = await response.json();
+      return normalizePopularData(data);
+    }
+
+    async function savePopularKeywordToFirebase(keyword, localCount) {
+      const keywordUrl = getPopularKeywordRestUrl(keyword);
+      let nextCount = Number(localCount) || 1;
+
+      try {
+        const readResponse = await fetch(keywordUrl, {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (readResponse.ok) {
+          const currentValue = await readResponse.json();
+          const currentCount = Number(currentValue && currentValue.count) || 0;
+
+          if (currentCount > 0) {
+            nextCount = currentCount + 1;
+          }
+        }
+      } catch (error) {
+        console.warn("인기검색어 현재값 확인 실패. 로컬 기준으로 저장합니다.", error);
+      }
+
+      const response = await fetch(keywordUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          keyword,
+          count: nextCount,
+          updatedAt: Date.now()
+        })
+      });
+
+      if (!response.ok) {
+        const message = await response.text().catch(() => "");
+        throw new Error(`인기검색어 저장 실패: HTTP ${response.status} ${message}`);
+      }
+
+      popularStats[keyword] = nextCount;
+      savePopularStats(popularStats);
+      renderPopularKeywords();
+    }
+
+    async function seedPopularStatsToFirebaseIfEmpty() {
+      const defaultStats = getDefaultPopularStats();
+      const body = {};
+
+      Object.entries(defaultStats).forEach(([keyword, count]) => {
+        body[keywordToFirebaseKey(keyword)] = {
+          keyword,
+          count,
+          updatedAt: Date.now()
+        };
+      });
+
+      const response = await fetch(getPopularRestUrl(), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const message = await response.text().catch(() => "");
+        throw new Error(`인기검색어 기본값 저장 실패: HTTP ${response.status} ${message}`);
+      }
+    }
+
+    async function refreshPopularKeywords() {
+      try {
+        const firebaseStats = await fetchPopularStatsFromFirebase();
+
+        if (Object.keys(firebaseStats).length > 0) {
+          savePopularStats(firebaseStats);
+          renderPopularKeywords();
+          return;
+        }
+
+        await seedPopularStatsToFirebaseIfEmpty();
+        const seededStats = await fetchPopularStatsFromFirebase();
+        savePopularStats(Object.keys(seededStats).length > 0 ? seededStats : getDefaultPopularStats());
+        renderPopularKeywords();
+      } catch (error) {
+        console.warn("인기검색어 Firebase 동기화 실패. 로컬 저장값으로 표시합니다.", error);
+        renderPopularKeywords();
+      }
+    }
+
+    function initPopularKeywordSync() {
+      renderPopularKeywords();
+
+      if (typeof hasFirebaseConfig !== "function" || !hasFirebaseConfig()) {
+        console.warn("Firebase 설정이 없어 인기검색어는 이 기기에서만 저장됩니다.");
+        return;
+      }
+
+      refreshPopularKeywords();
+
+      if (popularRefreshTimer) {
+        clearInterval(popularRefreshTimer);
+      }
+
+      popularRefreshTimer = setInterval(refreshPopularKeywords, POPULAR_REFRESH_MS);
+    }
+
+    async function recordSearchKeyword(keyword) {
       const cleanKeyword = keyword.trim();
 
       if (cleanKeyword.length < 2) {
         return;
       }
 
-      const stats = getPopularStats();
-      stats[cleanKeyword] = (stats[cleanKeyword] || 0) + 1;
-      savePopularStats(stats);
+      const nextLocalCount = (Number(popularStats[cleanKeyword]) || 0) + 1;
+      popularStats[cleanKeyword] = nextLocalCount;
+      savePopularStats(popularStats);
       renderPopularKeywords();
+
+      if (typeof hasFirebaseConfig !== "function" || !hasFirebaseConfig()) {
+        return;
+      }
+
+      try {
+        await savePopularKeywordToFirebase(cleanKeyword, nextLocalCount);
+        await refreshPopularKeywords();
+      } catch (error) {
+        console.warn("인기검색어 Firebase 저장 실패. 로컬에는 반영됐습니다.", error);
+      }
     }
 
     function scheduleSearchRecord() {
@@ -1716,10 +1960,14 @@
 
     /*
       Firebase Console → Build → Realtime Database → Rules 에 아래 내용을 붙여넣고 Publish 하세요.
-      공개 채팅방 규칙입니다. 누구나 읽고 쓸 수 있습니다.
+      공개 채팅방 규칙입니다. 누구나 읽고 쓰고 삭제할 수 있습니다.
 
       {
         "rules": {
+          "mirjinAraPopularSearches": {
+            ".read": true,
+            ".write": true
+          },
           "mirjinAraChat": {
             "messages": {
               ".read": true,
@@ -1962,13 +2210,17 @@
         return;
       }
 
-      messages.forEach(message => {
+      messages.forEach((message, index) => {
         const item = document.createElement("div");
+        const chatKey = String(message.key || message.chatMessageKey || `local_${index}`);
         item.className = `chat-message ${message.userId === myChatId ? "mine" : ""}`;
         item.innerHTML = `
           <div class="chat-meta">
             <span class="chat-name">${escapeHtml(getSafeChatName(message.name || "익명"))}</span>
-            <span class="chat-time">${formatChatTime(message.createdAt)}</span>
+            <span class="chat-actions">
+              <span class="chat-time">${formatChatTime(message.createdAt)}</span>
+              <button class="chat-delete" type="button" data-chat-key="${escapeHtml(chatKey)}">삭제</button>
+            </span>
           </div>
           <p class="chat-text">${escapeHtml(getSafeChatText(message.text || ""))}</p>
         `;
@@ -1988,6 +2240,49 @@
 
     function saveLocalChatMessages(messages) {
       localStorage.setItem("mirjin_local_chat_messages", JSON.stringify(messages.slice(-MAX_CHAT_MESSAGES)));
+    }
+
+    function deleteLocalChatMessage(chatKey) {
+      const match = String(chatKey || "").match(/^local_(\d+)$/);
+
+      if (!match) {
+        return false;
+      }
+
+      const index = Number(match[1]);
+      const messages = getLocalChatMessages();
+
+      if (!Number.isInteger(index) || index < 0 || index >= messages.length) {
+        return false;
+      }
+
+      messages.splice(index, 1);
+      saveLocalChatMessages(messages);
+      renderChatMessages(messages);
+      syncLocalChatMessagesToSearchPosts(messages);
+      return true;
+    }
+
+    async function deleteChatMessage(chatKey) {
+      const response = await fetch(getChatMessageRestUrl(chatKey), {
+        method: "DELETE"
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text().catch(() => "");
+        throw new Error(`채팅 삭제 실패: HTTP ${response.status} ${errorMessage}`);
+      }
+
+      const searchDeleteResponse = await fetch(getSearchPostRestUrl(chatKey), {
+        method: "DELETE"
+      }).catch(error => {
+        console.warn("채팅은 삭제됐지만 검색 데이터 삭제 요청에 실패했습니다.", error);
+        return null;
+      });
+
+      if (searchDeleteResponse && !searchDeleteResponse.ok) {
+        console.warn("채팅은 삭제됐지만 검색 데이터 삭제에 실패했습니다.", await searchDeleteResponse.text().catch(() => ""));
+      }
     }
 
     function getCleanChatInput() {
@@ -2065,6 +2360,10 @@
       return `${CHAT_DATABASE_URL}/${CHAT_ROOM_PATH}.json`;
     }
 
+    function getChatMessageRestUrl(key) {
+      return `${CHAT_DATABASE_URL}/${CHAT_ROOM_PATH}/${encodeURIComponent(key)}.json`;
+    }
+
     function getSearchPostsRestUrl() {
       return `${CHAT_DATABASE_URL}/${SEARCH_POSTS_PATH}.json`;
     }
@@ -2074,9 +2373,10 @@
     }
 
     function normalizeChatData(data) {
-      const messages = Object.values(data || {})
-        .filter(message => message && message.text)
-        .map(message => ({
+      const messages = Object.entries(data || {})
+        .filter(([, message]) => message && message.text)
+        .map(([key, message]) => ({
+          key: String(key || ""),
           name: String(message.name || "익명").slice(0, 12),
           text: String(message.text || "").slice(0, 200),
           userId: String(message.userId || ""),
@@ -2258,6 +2558,46 @@
       });
     }
 
+    chatMessages.addEventListener("click", async event => {
+      const deleteButton = event.target.closest(".chat-delete");
+
+      if (!deleteButton) {
+        return;
+      }
+
+      const chatKey = deleteButton.dataset.chatKey || "";
+
+      if (!chatKey) {
+        return;
+      }
+
+      if (!confirm("이 채팅 메시지를 삭제할까요?")) {
+        return;
+      }
+
+      deleteButton.disabled = true;
+      setChatStatus("삭제 중...");
+
+      if (chatKey.startsWith("local_")) {
+        if (deleteLocalChatMessage(chatKey)) {
+          setChatStatus("채팅이 삭제되었습니다.");
+        } else {
+          setChatStatus("삭제할 채팅을 찾지 못했습니다.");
+        }
+        return;
+      }
+
+      try {
+        await waitWithTimeout(deleteChatMessage(chatKey), 10000);
+        await refreshChatMessages();
+        setChatStatus("채팅이 삭제되었습니다.");
+      } catch (error) {
+        setChatStatus("삭제 실패: DB 규칙 확인 필요");
+        deleteButton.disabled = false;
+        console.error(error);
+      }
+    });
+
     if (hasFirebaseConfig()) {
       startFirebaseChatMode();
     } else {
@@ -2265,7 +2605,7 @@
     }
 
 
-    renderPopularKeywords();
+    initPopularKeywordSync();
     render();
   </script>
 </body>
