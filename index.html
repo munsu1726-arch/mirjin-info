@@ -121,11 +121,85 @@
       transform: translateY(0);
     }
 
+    .link-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .link-buttons .openchat-button {
+      margin-top: 0;
+    }
+
+    .gm-button {
+      background: rgba(255,255,255,0.92);
+      color: #111827;
+    }
+
     .hint {
       margin-top: 12px;
       color: #d1d5db;
       font-size: 14px;
       text-shadow: 0 0 8px rgba(0,0,0,0.8);
+    }
+
+
+
+    .popular-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.32);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .popular-title {
+      margin-bottom: 10px;
+      color: #f9fafb;
+      font-size: 15px;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+
+    .popular-list {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .popular-keyword {
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      padding: 9px 12px;
+      background: rgba(17,24,39,0.72);
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .popular-keyword:hover {
+      transform: translateY(-2px);
+      background: rgba(37,99,235,0.82);
+      border-color: rgba(147,197,253,0.9);
+    }
+
+    .popular-rank {
+      color: #facc15;
+      font-weight: 800;
+      margin-right: 4px;
+    }
+
+    .popular-count {
+      margin-left: 5px;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
     }
 
     main {
@@ -162,6 +236,18 @@
     .card p {
       line-height: 1.65;
       margin: 0 0 12px;
+    }
+
+    .post-link {
+      display: inline-block;
+      margin: 4px 0 12px;
+      color: #93c5fd;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .post-link:hover {
+      text-decoration: underline;
     }
 
     .tag {
@@ -259,14 +345,31 @@
 
       <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
 
-      <a
-        class="openchat-button"
-        href="https://open.kakao.com/o/pEuO4oyi"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        아라 문파 오픈채팅 바로가기
-      </a>
+      <div class="popular-box">
+        <div class="popular-title">키워드 검색 인기순위 TOP 5</div>
+        <div id="popularList" class="popular-list"></div>
+      </div>
+
+
+      <div class="link-buttons">
+        <a
+          class="openchat-button"
+          href="https://open.kakao.com/o/pEuO4oyi"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          아라 문파 오픈채팅 바로가기
+        </a>
+
+        <a
+          class="openchat-button gm-button"
+          href="https://cafe.naver.com/f-e/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GM패왕 게시글 보기
+        </a>
+      </div>
 
     </div>
   </section>
@@ -277,6 +380,22 @@
 
   <script>
     const posts = [
+      {
+            "title": "GM패왕 게시글 바로가기",
+            "category": "공지",
+            "source": "네이버카페",
+            "date": "상시",
+            "content": "GM패왕이 작성한 네이버 카페 게시글 목록으로 바로 이동합니다. 최신 공지와 이벤트, 공성 안내는 이 링크에서 확인하세요.",
+            "url": "https://cafe.naver.com/f-e/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8",
+            "tags": [
+                  "GM패왕",
+                  "공지",
+                  "네이버카페",
+                  "카페글",
+                  "이벤트",
+                  "공성"
+            ]
+      },
       {
         title: "미르의전설: 진 쿠폰 9종",
         category: "쿠폰",
@@ -1139,6 +1258,106 @@
 
     const searchInput = document.getElementById("searchInput");
     const results = document.getElementById("results");
+    const popularList = document.getElementById("popularList");
+
+    const POPULAR_STORAGE_KEY = "mirjinAraPopularSearches";
+    const defaultPopularKeywords = [
+      { keyword: "GM패왕", count: 50 },
+      { keyword: "쿠폰", count: 40 },
+      { keyword: "공성", count: 30 },
+      { keyword: "보스", count: 20 },
+      { keyword: "스킬북", count: 10 }
+    ];
+
+    let searchRecordTimer = null;
+    let lastRecordedKeyword = "";
+
+    function getPopularStats() {
+      let stats = {};
+
+      try {
+        stats = JSON.parse(localStorage.getItem(POPULAR_STORAGE_KEY)) || {};
+      } catch (error) {
+        stats = {};
+      }
+
+      defaultPopularKeywords.forEach(item => {
+        if (!stats[item.keyword]) {
+          stats[item.keyword] = item.count;
+        }
+      });
+
+      return stats;
+    }
+
+    function savePopularStats(stats) {
+      localStorage.setItem(POPULAR_STORAGE_KEY, JSON.stringify(stats));
+    }
+
+    function getTopPopularKeywords() {
+      const stats = getPopularStats();
+
+      return Object.entries(stats)
+        .filter(([keyword]) => keyword.trim().length > 0)
+        .sort((a, b) => {
+          if (b[1] !== a[1]) return b[1] - a[1];
+          return a[0].localeCompare(b[0], "ko");
+        })
+        .slice(0, 5)
+        .map(([keyword, count]) => ({ keyword, count }));
+    }
+
+    function renderPopularKeywords() {
+      const topKeywords = getTopPopularKeywords();
+
+      popularList.innerHTML = topKeywords.map((item, index) => `
+        <button class="popular-keyword" type="button" onclick="searchKeyword('${item.keyword.replace(/'/g, "\\'")}')">
+          <span class="popular-rank">${index + 1}위</span>
+          ${item.keyword}
+          <span class="popular-count">${item.count}회</span>
+        </button>
+      `).join("");
+    }
+
+    function recordSearchKeyword(keyword) {
+      const cleanKeyword = keyword.trim();
+
+      if (cleanKeyword.length < 2) {
+        return;
+      }
+
+      const stats = getPopularStats();
+      stats[cleanKeyword] = (stats[cleanKeyword] || 0) + 1;
+      savePopularStats(stats);
+      renderPopularKeywords();
+    }
+
+    function scheduleSearchRecord() {
+      const keyword = searchInput.value.trim();
+
+      clearTimeout(searchRecordTimer);
+
+      if (keyword.length < 2) {
+        return;
+      }
+
+      searchRecordTimer = setTimeout(() => {
+        const currentKeyword = searchInput.value.trim();
+
+        if (currentKeyword.length >= 2 && currentKeyword !== lastRecordedKeyword) {
+          recordSearchKeyword(currentKeyword);
+          lastRecordedKeyword = currentKeyword;
+        }
+      }, 900);
+    }
+
+    function searchKeyword(keyword) {
+      searchInput.value = keyword;
+      recordSearchKeyword(keyword);
+      lastRecordedKeyword = keyword;
+      render();
+      searchInput.focus();
+    }
 
     function normalizeText(text) {
       return String(text)
@@ -1163,6 +1382,7 @@
           post.source,
           post.date,
           post.content,
+          post.url || "",
           post.tags.join(" ")
         ].join(" ");
 
@@ -1181,6 +1401,7 @@
             <h2>${post.title}</h2>
             <div class="meta">${post.category} · ${post.source} · ${post.date}</div>
             <p>${post.content}</p>
+            ${post.url ? `<a class="post-link" href="${post.url}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
             <div>
               ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
             </div>
@@ -1194,7 +1415,23 @@
       });
     }
 
-    searchInput.addEventListener("input", render);
+    searchInput.addEventListener("input", () => {
+      render();
+      scheduleSearchRecord();
+    });
+
+    searchInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        const keyword = searchInput.value.trim();
+
+        if (keyword.length >= 2) {
+          recordSearchKeyword(keyword);
+          lastRecordedKeyword = keyword;
+        }
+      }
+    });
+
+    renderPopularKeywords();
     render();
   </script>
 </body>
