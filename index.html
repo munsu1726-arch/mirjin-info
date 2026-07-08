@@ -199,16 +199,140 @@
     pointer-events: none;
   }
 }
+    #intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050505;
+  overflow: hidden;
+  animation: introClose 1.2s ease forwards;
+  animation-delay: 3s;
+}
+
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("intro.png");
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  animation: introImageEffect 4.2s ease forwards;
+}
+
+.pixel-layer {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
+  background-size: 6px 6px, 9px 9px;
+  background-position: 0 0, 3px 3px;
+  opacity: 0;
+  animation: pixelFade 3.8s ease forwards;
+  mix-blend-mode: overlay;
+}
+
+.intro-enter {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 999px;
+  color: white;
+  font-size: 16px;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  animation: enterText 2.5s ease forwards;
+}
+
+@keyframes introImageEffect {
+  0% {
+    filter: blur(0px) brightness(1);
+    transform: scale(1.04);
+    opacity: 1;
+  }
+
+  45% {
+    filter: blur(0px) brightness(1.1);
+    transform: scale(1.07);
+    opacity: 1;
+  }
+
+  75% {
+    filter: blur(5px) brightness(1.25);
+    transform: scale(1.12);
+    opacity: 0.85;
+  }
+
+  100% {
+    filter: blur(14px) brightness(1.7);
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@keyframes pixelFade {
+  0% {
+    opacity: 0;
+    background-size: 4px 4px, 7px 7px;
+  }
+
+  45% {
+    opacity: 0.15;
+  }
+
+  75% {
+    opacity: 0.75;
+    background-size: 10px 10px, 14px 14px;
+  }
+
+  100% {
+    opacity: 0;
+    background-size: 24px 24px, 30px 30px;
+  }
+}
+
+@keyframes enterText {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+@keyframes introClose {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
   </style>
 </head>
 <body>
-  <div id="intro">
-  <div class="magic-circle"></div>
-  <h1 class="intro-title">미르의전설: 진</h1>
-  <p class="intro-subtitle">정보 검색 아카이브</p>
+<div id="intro">
+  <div class="intro-bg"></div>
+  <div class="pixel-layer"></div>
+  <div class="intro-enter">정보 검색 시작</div>
 </div>
   <header>
-    <h1>미르의전설: 진 정보 검색</h1>
+    <h1>미르의전설: 진 5서버 아라 문파 정보 검색</h1>
     <p>공지, 공략, 쿠폰, 카카오톡 정리 내용을 검색합니다.</p>
   </header>
 
