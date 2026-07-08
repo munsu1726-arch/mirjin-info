@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>미르의전설: 진 5서버 아라 문파 정보 검색</title>
-  <!-- Firebase 채팅 수정 버전: Realtime Database REST 방식 + 욕설/비속어 차단 + GM패왕 모바일 링크 -->
+  <!-- Firebase 채팅 + 검색 자동 업로드 + 영상형 움직이는 메인 배경 버전 -->
 
   <style>
     * {
@@ -27,37 +27,83 @@
       justify-content: center;
       padding: 30px;
       text-align: center;
+      isolation: isolate;
+      background: #05070d;
     }
 
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url("intro.png");
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.05);
-      animation: introMove 5s ease forwards;
-    }
-
-    .hero-pixel {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px),
-        radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1.5px);
-      background-size: 5px 5px, 8px 8px;
-      background-position: 0 0, 3px 3px;
-      opacity: 0;
-      mix-blend-mode: overlay;
-      animation: pixelMove 5s ease forwards;
-    }
-
+    .hero-video,
+    .hero-bg,
+    .hero-pixel,
+    .hero-flare,
+    .hero-smoke,
     .hero-overlay {
       position: absolute;
       inset: 0;
+      pointer-events: none;
+    }
+
+    .hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.68;
+      filter: saturate(1.25) contrast(1.08) brightness(0.8);
+      transform: scale(1.08);
+      animation: videoBreath 11s ease-in-out infinite alternate;
+      z-index: -2;
+    }
+
+    .hero-bg {
+      background-image: url("intro.png");
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.08);
+      animation: introMove 18s ease-in-out infinite alternate;
+      z-index: -3;
+    }
+
+    .hero-pixel {
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.34) 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(96,165,250,0.18) 1px, transparent 1.8px),
+        radial-gradient(circle, rgba(0,0,0,0.42) 1px, transparent 1.7px);
+      background-size: 6px 6px, 13px 13px, 9px 9px;
+      background-position: 0 0, 4px 6px, 3px 3px;
+      opacity: 0.26;
+      mix-blend-mode: overlay;
+      animation: pixelMove 9s linear infinite;
+      z-index: -1;
+    }
+
+    .hero-flare {
       background:
-        linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(17,24,39,0.92)),
-        radial-gradient(circle at center, rgba(0,0,0,0.1), rgba(0,0,0,0.75));
+        radial-gradient(circle at 22% 34%, rgba(250,204,21,0.28), transparent 18%),
+        radial-gradient(circle at 74% 44%, rgba(59,130,246,0.23), transparent 24%),
+        linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.02) 34%, rgba(255,255,255,0.22) 46%, transparent 58%);
+      mix-blend-mode: screen;
+      opacity: 0.72;
+      transform: translateX(-18%) skewX(-10deg);
+      animation: lightSweep 7.5s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    .hero-smoke {
+      background:
+        radial-gradient(circle at 18% 82%, rgba(255,255,255,0.10), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.08), transparent 25%),
+        radial-gradient(circle at 52% 72%, rgba(96,165,250,0.12), transparent 28%);
+      filter: blur(10px);
+      opacity: 0.55;
+      transform: scale(1.15);
+      animation: smokeDrift 16s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    .hero-overlay {
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(17,24,39,0.94)),
+        radial-gradient(circle at center, rgba(0,0,0,0.05), rgba(0,0,0,0.78));
+      z-index: 1;
     }
 
     .hero-box {
@@ -423,35 +469,75 @@
 
     @keyframes introMove {
       0% {
-        filter: blur(0px) brightness(1.1);
-        transform: scale(1.02);
+        filter: blur(1px) brightness(0.86) saturate(1.1);
+        background-position: center center;
+        transform: scale(1.06);
       }
 
-      60% {
-        filter: blur(3px) brightness(1.25);
-        transform: scale(1.1);
+      45% {
+        filter: blur(2.5px) brightness(1.04) saturate(1.28);
+        background-position: 54% 47%;
+        transform: scale(1.13);
       }
 
       100% {
-        filter: blur(2px) brightness(0.78);
-        transform: scale(1.06);
+        filter: blur(1.5px) brightness(0.78) saturate(1.18);
+        background-position: 47% 52%;
+        transform: scale(1.09);
+      }
+    }
+
+    @keyframes videoBreath {
+      0% {
+        transform: scale(1.06) translate3d(-0.6%, -0.4%, 0);
+        filter: saturate(1.16) contrast(1.06) brightness(0.76);
+      }
+
+      100% {
+        transform: scale(1.14) translate3d(0.8%, 0.5%, 0);
+        filter: saturate(1.34) contrast(1.12) brightness(0.88);
       }
     }
 
     @keyframes pixelMove {
       0% {
-        opacity: 0;
-        background-size: 4px 4px, 7px 7px;
+        background-position: 0 0, 4px 6px, 3px 3px;
+        opacity: 0.2;
       }
 
-      60% {
-        opacity: 0.65;
-        background-size: 12px 12px, 16px 16px;
+      50% {
+        opacity: 0.34;
       }
 
       100% {
+        background-position: 46px 34px, -36px 28px, 28px -24px;
         opacity: 0.2;
-        background-size: 7px 7px, 11px 11px;
+      }
+    }
+
+    @keyframes lightSweep {
+      0%, 35% {
+        transform: translateX(-52%) skewX(-10deg);
+        opacity: 0.12;
+      }
+
+      55% {
+        opacity: 0.72;
+      }
+
+      100% {
+        transform: translateX(52%) skewX(-10deg);
+        opacity: 0.18;
+      }
+    }
+
+    @keyframes smokeDrift {
+      0% {
+        transform: scale(1.12) translate3d(-2%, 1%, 0);
+      }
+
+      100% {
+        transform: scale(1.2) translate3d(2%, -1.5%, 0);
       }
     }
 
@@ -499,8 +585,14 @@
 
 <body>
   <section class="hero-search">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="intro.png">
+      <source src="intro.mp4" type="video/mp4" />
+      <source src="intro.webm" type="video/webm" />
+    </video>
     <div class="hero-bg"></div>
     <div class="hero-pixel"></div>
+    <div class="hero-flare"></div>
+    <div class="hero-smoke"></div>
     <div class="hero-overlay"></div>
 
     <div class="hero-box">
