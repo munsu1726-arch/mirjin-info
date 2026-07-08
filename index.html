@@ -94,6 +94,33 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
 
+
+    .openchat-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      background: #fee500;
+      color: #181600;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .openchat-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+      filter: brightness(1.03);
+    }
+
+    .openchat-button:active {
+      transform: translateY(0);
+    }
+
     .hint {
       margin-top: 12px;
       color: #d1d5db;
@@ -231,6 +258,16 @@
       />
 
       <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
+
+      <a
+        class="openchat-button"
+        href="https://open.kakao.com/o/pEuO4oyi"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        아라 문파 오픈채팅 바로가기
+      </a>
+
     </div>
   </section>
 
