@@ -155,6 +155,13 @@
       letter-spacing: -0.02em;
     }
 
+
+    .gm-alert-extra {
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     .naver-board-search {
       margin-top: 14px;
       padding: 14px;
@@ -371,6 +378,124 @@
       margin-right: 5px;
     }
 
+
+
+
+
+    .gm-alert-box {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(37, 99, 235, 0.14)), rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(250, 204, 21, 0.34);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.24);
+      text-align: left;
+    }
+
+    .gm-alert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .gm-alert-title {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+
+    .gm-alert-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 70px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.22);
+      border: 1px solid rgba(134, 239, 172, 0.42);
+      color: #bbf7d0;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .gm-alert-badge.gm-alert-new {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: rgba(252, 165, 165, 0.58);
+      color: #fecaca;
+    }
+
+    .gm-alert-badge.gm-alert-checking {
+      background: rgba(59, 130, 246, 0.24);
+      border-color: rgba(147, 197, 253, 0.58);
+      color: #bfdbfe;
+    }
+
+    .gm-alert-badge.gm-alert-error {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(253, 230, 138, 0.58);
+      color: #fde68a;
+    }
+
+    .gm-alert-message {
+      color: #e5e7eb;
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .gm-alert-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 11px;
+    }
+
+    .gm-alert-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 13px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.94);
+      color: #111827;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .gm-alert-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      text-decoration: none;
+    }
+
+    .gm-alert-button.primary {
+      background: #fee500;
+      color: #181600;
+    }
+
+    .gm-alert-button.naver {
+      background: #03c75a;
+      color: #ffffff;
+    }
+
+    .gm-alert-note {
+      margin-top: 8px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+    }
 
 
     .popular-box {
@@ -897,6 +1022,22 @@
       .recent-update-box {
         font-size: 12px;
       }
+
+
+      .gm-alert-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .gm-alert-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .gm-alert-button {
+        width: 100%;
+      }
     }
 
 
@@ -1065,6 +1206,24 @@
         GM패왕 답변: 장비강화 · 선악점수 · 타직업 스킬 · 보조장비 진화 정보 추가
       </div>
 
+
+      <div id="gmAlertBox" class="gm-alert-box" role="region" aria-label="GM패왕 최신글 알림">
+        <div class="gm-alert-header">
+          <div class="gm-alert-title">GM패왕 최신글 알림</div>
+          <div id="gmAlertBadge" class="gm-alert-badge">확인 대기</div>
+        </div>
+        <div id="gmAlertMessage" class="gm-alert-message">
+          처음 접속할 때 한 번만 GM패왕 최신글을 확인합니다. 이후 다시 확인은 아래 버튼을 눌렀을 때만 진행합니다.
+        </div>
+        <div class="gm-alert-buttons">
+          <button id="gmAutoCheckButton" class="gm-alert-button primary" type="button">지금 GM패왕 글 확인</button>
+          <button id="gmPermissionButton" class="gm-alert-button" type="button">브라우저 알림 허용</button>
+        </div>
+        <div class="gm-alert-note">
+          처음 접속 시 가장 최근 GM패왕 글을 저장합니다. 계속 반복 확인하지 않으며, 다시 확인하려면 “지금 GM패왕 글 확인” 버튼을 누르세요.
+        </div>
+      </div>
+
       <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
         <div class="naver-board-title">미르의 전설: 진 네이버 카페</div>
         <div class="naver-board-form naver-board-form-single">
@@ -1101,14 +1260,6 @@
           실시간 채팅
         </a>
 
-        <a
-          class="openchat-button gm-button"
-          href="https://m.cafe.naver.com/ca-fe/web/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8/articles"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GM패왕 바로가기
-        </a>
       </div>
 
     </div>
@@ -1279,22 +1430,6 @@
         date: "2026-07-08",
         content: "전직 후 술사 기준 외공과 내공이 각각 10씩 상승하고, 외공방어력 +10, PVE 피해 +1%가 함께 상승했다는 제보가 있었습니다. 마력 상승은 내공 상승 영향으로 보인다는 의견도 함께 정리합니다.",
         tags: ["전직", "술사", "외공", "내공", "외공방어력", "PVE", "피해", "마력"]
-      },
-      {
-            "title": "GM패왕 바로가기",
-            "category": "공지",
-            "source": "네이버카페",
-            "date": "상시",
-            "content": "GM패왕이 작성한 네이버 카페 게시글 목록으로 바로 이동합니다. 최신 공지와 이벤트, 공성 안내는 이 링크에서 확인하세요.",
-            "url": "https://m.cafe.naver.com/ca-fe/web/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8/articles",
-            "tags": [
-                  "GM패왕",
-                  "공지",
-                  "네이버카페",
-                  "카페글",
-                  "이벤트",
-                  "공성"
-            ]
       },
       {
         title: "미르의전설: 진 쿠폰 9종",
@@ -2304,11 +2439,29 @@
     const totalVisitorCount = document.getElementById("totalVisitorCount");
     const naverBoardSearchInput = document.getElementById("naverBoardSearchInput");
     const naverBoardSearchButton = document.getElementById("naverBoardSearchButton");
+    const gmAlertBox = document.getElementById("gmAlertBox");
+    const gmAlertBadge = document.getElementById("gmAlertBadge");
+    const gmAlertMessage = document.getElementById("gmAlertMessage");
+    const gmAutoCheckButton = document.getElementById("gmAutoCheckButton");
+    const gmPermissionButton = document.getElementById("gmPermissionButton");
 
     const NAVER_CAFE_ID = "31717562";
     const NAVER_CAFE_MENU_ID = "13";
     const NAVER_CAFE_SEARCH_BASE_URL = "https://m.cafe.naver.com/ArticleSearchList.nhn";
     const NAVER_CAFE_BOARD_BASE_URL = "https://m.cafe.naver.com/ArticleList.nhn";
+
+    const GM_ALERT_STORAGE_KEY = "mirjinGmPaewangAlertLastSeen_v6";
+    const GM_ALERT_ITEM_STORAGE_KEY = "mirjinGmPaewangAlertLastItem_v6";
+    const GM_ALERT_API_URL = ""; // 네이버 연결 제한 해결용 JSON API 주소. Cloudflare Worker 배포 URL을 넣으세요. 예: https://gm-paewang-alert.내계정.workers.dev
+        const GM_ALERT_FETCH_TIMEOUT_MS = 12000;
+    const GM_PAEWANG_MEMBER_URL = "https://m.cafe.naver.com/ca-fe/web/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8/articles";
+    const GM_ALERT_WRITERS = ["GM패왕"];
+    const GM_CAFE_ARTICLE_LIST_API = `https://apis.naver.com/cafe-web/cafe2/ArticleListV2dot1.json?search.queryType=lastArticle&search.clubid=${NAVER_CAFE_ID}&search.page=1&search.perPage=50&ad=false&adUnit=MW_CAFE_ARTICLE_LIST_RS`;
+    const GM_ALERT_FETCH_PREFIXES = [
+      "",
+      "https://api.allorigins.win/raw?url=",
+      "https://corsproxy.io/?url="
+    ];
 
     const POPULAR_STORAGE_KEY = "mirjinAraPopularSearches_v2";
     const POPULAR_OLD_STORAGE_KEY = "mirjinAraPopularSearches";
@@ -2328,6 +2481,10 @@
     let popularStats = getLocalPopularStats();
     let popularRefreshTimer = null;
     let lastRenderedPopularSignature = "";
+    let gmAlertCheckInProgress = false;
+    let gmAlertLastSuccessItem = null;
+    let gmAlertLastSuccessAt = 0;
+    let gmAlertFailCount = 0;
 
     function getDefaultPopularStats() {
       const stats = {};
@@ -2662,6 +2819,590 @@
       }
 
       window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+
+    function openGmCafeSearch(keyword) {
+      const url = buildNaverCafeBoardUrl(keyword);
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function buildGmPaewangAuthorSearchUrl() {
+      return GM_PAEWANG_MEMBER_URL;
+    }
+
+    function openGmPaewangAuthorSearch() {
+      window.open(buildGmPaewangAuthorSearchUrl(), "_blank", "noopener,noreferrer");
+    }
+
+    function getSavedGmAlertId() {
+      try {
+        return localStorage.getItem(GM_ALERT_STORAGE_KEY) || "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function saveGmAlertId(alertId) {
+      try {
+        localStorage.setItem(GM_ALERT_STORAGE_KEY, String(alertId || ""));
+      } catch (error) {
+        console.warn("GM 알림 저장값을 기록하지 못했습니다.", error);
+      }
+    }
+
+    function getSavedGmAlertItem() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(GM_ALERT_ITEM_STORAGE_KEY) || "null");
+        return normalizeGmAlertItem(saved);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveGmAlertItem(item) {
+      if (!item) {
+        return;
+      }
+
+      try {
+        localStorage.setItem(GM_ALERT_ITEM_STORAGE_KEY, JSON.stringify(item));
+      } catch (error) {
+        console.warn("GM 최신글 저장값을 기록하지 못했습니다.", error);
+      }
+    }
+
+    function formatGmCheckTime(timestamp) {
+      const ms = Number(timestamp) || 0;
+      if (!ms) {
+        return "";
+      }
+
+      try {
+        return new Date(ms).toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function normalizeGmAlertItem(item) {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      const title = String(item.title || item.subject || "").trim();
+      const author = String(item.author || item.writer || item.writerNickname || "").trim();
+      const articleId = String(item.id || item.articleId || getArticleIdFromUrl(item.url || item.link || "") || "").trim();
+      const url = getSafePostUrl(item.url || item.link || buildGmArticleUrl(articleId));
+      const createdAt = String(item.createdAt || item.date || "").trim();
+      const timestamp = Number(item.timestamp || item.writeDateTimestamp || 0) || 0;
+      const id = String(articleId || `${author}-${title}-${createdAt || timestamp}`).trim();
+
+      if (!title || !url) {
+        return null;
+      }
+
+      return { id, articleId, title, author, url, createdAt, timestamp };
+    }
+
+    function setGmAlertBadge(text, className = "") {
+      if (!gmAlertBadge) {
+        return;
+      }
+
+      gmAlertBadge.textContent = text;
+      gmAlertBadge.classList.remove("gm-alert-new", "gm-alert-checking", "gm-alert-error");
+
+      if (className) {
+        gmAlertBadge.classList.add(className);
+      }
+    }
+
+    function renderGmAlertStatus(message, badgeText = "확인 대기", badgeClass = "") {
+      setGmAlertBadge(badgeText, badgeClass);
+
+      if (gmAlertMessage) {
+        gmAlertMessage.innerHTML = message;
+      }
+    }
+
+    function renderGmAlert(item, isNew = false, isInitial = false, extraMessage = "") {
+      if (!gmAlertMessage || !gmAlertBadge) {
+        return;
+      }
+
+      if (!item) {
+        renderGmAlertStatus(
+          `GM패왕 최신글을 확인합니다. 새 글이 확인되면 제목과 링크만 보여줍니다.`,
+          "확인 대기"
+        );
+        return;
+      }
+
+      const badgeText = isNew ? "새 글" : isInitial ? "최근 저장" : "최근 글";
+      setGmAlertBadge(badgeText, isNew ? "gm-alert-new" : "");
+
+      const statusText = isNew
+        ? "새 글이 올라왔습니다."
+        : isInitial
+          ? "가장 최근 GM패왕 글을 저장했습니다. 다음 글부터 알림이 뜹니다."
+          : "가장 최근 GM패왕 글입니다.";
+
+      const checkedAt = formatGmCheckTime(gmAlertLastSuccessAt);
+
+      gmAlertMessage.innerHTML = `
+        <strong>${escapeHtml(item.author || "GM패왕")}</strong> ${statusText}<br />
+        제목: <strong>${escapeHtml(item.title)}</strong>${item.createdAt ? ` · ${escapeHtml(item.createdAt)}` : ""}${checkedAt ? ` · 확인 ${escapeHtml(checkedAt)}` : ""}<br />
+        <a class="post-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">글 열기</a>
+        ${extraMessage ? `<br /><span class="gm-alert-extra">${extraMessage}</span>` : ""}
+      `;
+    }
+
+    async function requestGmNotificationPermission() {
+      if (!("Notification" in window)) {
+        alert("이 브라우저는 알림 기능을 지원하지 않습니다.");
+        return false;
+      }
+
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          renderGmAlertStatus("브라우저 알림이 허용되었습니다. 버튼 확인 또는 첫 접속 확인에서 새 글이 감지되면 알림을 띄웁니다.", "알림 허용");
+          return true;
+        }
+        renderGmAlertStatus("브라우저 알림이 허용되지 않았습니다. 그래도 사이트 화면에는 새 글 알림이 표시됩니다.", "화면 알림");
+        return false;
+      } catch (error) {
+        console.warn("브라우저 알림 권한 요청 실패", error);
+        return false;
+      }
+    }
+
+    async function showBrowserGmNotification(item) {
+      if (!item || !("Notification" in window)) {
+        return;
+      }
+
+      try {
+        if (Notification.permission !== "granted") {
+          return;
+        }
+
+        const notice = new Notification("미르의전설: 진 GM패왕 새 글", {
+          body: `${item.author || "GM"} · ${item.title}`,
+          tag: item.id || item.url
+        });
+
+        notice.onclick = () => {
+          window.open(item.url, "_blank", "noopener,noreferrer");
+          notice.close();
+        };
+      } catch (error) {
+        console.warn("브라우저 알림을 표시하지 못했습니다.", error);
+      }
+    }
+
+    function getArticleIdFromUrl(url) {
+      const cleanUrl = String(url || "");
+      const articleMatch = cleanUrl.match(/(?:articleid=|articles\/)(\d+)/i);
+      return articleMatch ? articleMatch[1] : "";
+    }
+
+    function buildGmArticleUrl(articleId) {
+      const cleanArticleId = String(articleId || "").trim();
+      if (!cleanArticleId) {
+        return "";
+      }
+      return `https://m.cafe.naver.com/ca-fe/web/cafes/${NAVER_CAFE_ID}/articles/${cleanArticleId}?fromList=true&tc=cafe_article_list`;
+    }
+
+    function toAbsoluteNaverUrl(href) {
+      const cleanHref = String(href || "").trim();
+
+      if (!cleanHref || cleanHref.startsWith("#") || cleanHref.startsWith("javascript:")) {
+        return "";
+      }
+
+      if (/^https?:\/\//i.test(cleanHref)) {
+        return cleanHref;
+      }
+
+      if (cleanHref.startsWith("//")) {
+        return `https:${cleanHref}`;
+      }
+
+      if (cleanHref.startsWith("/")) {
+        return `https://m.cafe.naver.com${cleanHref}`;
+      }
+
+      return `https://m.cafe.naver.com/${cleanHref}`;
+    }
+
+    function buildGmFetchUrl(targetUrl, prefix) {
+      if (!prefix) {
+        return targetUrl;
+      }
+
+      return `${prefix}${encodeURIComponent(targetUrl)}`;
+    }
+
+    async function fetchTextWithFallback(targetUrl) {
+      let lastError = null;
+
+      for (const prefix of GM_ALERT_FETCH_PREFIXES) {
+        const fetchUrl = buildGmFetchUrl(targetUrl, prefix);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), GM_ALERT_FETCH_TIMEOUT_MS);
+
+        try {
+          const response = await fetch(fetchUrl, {
+            method: "GET",
+            cache: "no-store",
+            signal: controller.signal,
+            headers: {
+              "Accept": "application/json,text/plain,*/*"
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const text = await response.text();
+
+          if (text && text.trim().length > 20) {
+            return text;
+          }
+
+          throw new Error("응답 내용이 비어 있습니다.");
+        } catch (error) {
+          lastError = error;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      throw lastError || new Error("카페 최신글 목록을 읽지 못했습니다.");
+    }
+
+    function decodeHtmlText(value) {
+      const textarea = document.createElement("textarea");
+      textarea.innerHTML = String(value || "");
+      return textarea.value;
+    }
+
+    function cleanGmTitle(value) {
+      return decodeHtmlText(String(value || ""))
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
+        .replace(/새글|댓글|공지|카페북마크/gi, "")
+        .trim();
+    }
+
+    function formatGmWriteTime(timestamp) {
+      const ms = Number(timestamp) || 0;
+      if (!ms) {
+        return "";
+      }
+
+      try {
+        return new Date(ms).toLocaleString("ko-KR", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function getNestedValue(object, paths) {
+      for (const path of paths) {
+        const value = path.split(".").reduce((current, key) => current && current[key], object);
+        if (value !== undefined && value !== null && String(value).trim() !== "") {
+          return value;
+        }
+      }
+      return "";
+    }
+
+    function getCafeArticleListFromJson(data) {
+      const candidates = [
+        data?.message?.result?.articleList,
+        data?.result?.articleList,
+        data?.articleList,
+        data?.items
+      ];
+
+      for (const candidate of candidates) {
+        if (Array.isArray(candidate)) {
+          return candidate;
+        }
+      }
+
+      return [];
+    }
+
+    function parseGmPostsFromArticleListJson(data) {
+      const rawList = getCafeArticleListFromJson(data);
+      const posts = [];
+      const seen = new Set();
+
+      rawList.forEach(raw => {
+        const item = raw?.item && typeof raw.item === "object" ? raw.item : raw;
+        const author = String(getNestedValue(item, [
+          "writerNickname",
+          "writer.nickName",
+          "writer.nickname",
+          "member.nickname",
+          "nickName",
+          "nickname",
+          "author"
+        ]) || "").trim();
+
+        if (!GM_ALERT_WRITERS.includes(author)) {
+          return;
+        }
+
+        const title = cleanGmTitle(getNestedValue(item, ["subject", "title", "articleTitle"]));
+        const articleId = String(getNestedValue(item, ["articleId", "id"])).trim();
+        const timestamp = Number(getNestedValue(item, ["writeDateTimestamp", "createdAt", "timestamp"])) || 0;
+        const createdAt = formatGmWriteTime(timestamp) || String(getNestedValue(item, ["writeDate", "regDate", "date"])).trim();
+        const url = getSafePostUrl(getNestedValue(item, ["url", "link", "articleUrl"]) || buildGmArticleUrl(articleId));
+        const id = articleId || `${author}-${title}-${createdAt || timestamp}`;
+
+        if (!title || !url || seen.has(id)) {
+          return;
+        }
+
+        seen.add(id);
+        posts.push({ id, articleId, title, author, url, createdAt, timestamp });
+      });
+
+      return posts.sort((a, b) => {
+        const timeDiff = Number(b.timestamp || 0) - Number(a.timestamp || 0);
+        if (timeDiff !== 0) return timeDiff;
+        return Number(b.articleId || 0) - Number(a.articleId || 0);
+      });
+    }
+
+    function parseGmPostsFromHtmlText(text) {
+      const html = String(text || "");
+      const posts = [];
+      const seen = new Set();
+
+      const jsonLikePattern = /"articleId"\s*:\s*"?(\d+)"?[\s\S]{0,900}?"(?:subject|title)"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"[\s\S]{0,900}?"(?:writerNickname|nickname|nickName)"\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"/gi;
+      let jsonMatch;
+      while ((jsonMatch = jsonLikePattern.exec(html)) !== null) {
+        const articleId = String(jsonMatch[1] || "").trim();
+        const title = cleanGmTitle(jsonMatch[2].replace(/\\"/g, '"'));
+        const author = decodeHtmlText(jsonMatch[3].replace(/\\"/g, '"')).trim();
+
+        if (!GM_ALERT_WRITERS.includes(author) || !articleId || !title || seen.has(articleId)) {
+          continue;
+        }
+
+        seen.add(articleId);
+        posts.push({
+          id: articleId,
+          articleId,
+          title,
+          author,
+          url: buildGmArticleUrl(articleId),
+          createdAt: "",
+          timestamp: 0
+        });
+      }
+
+      const anchorPattern = /<a[^>]+href=["']([^"']*(?:articleid=|articles\/)\d+[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+      let anchorMatch;
+      while ((anchorMatch = anchorPattern.exec(html)) !== null) {
+        const href = toAbsoluteNaverUrl(anchorMatch[1]);
+        const articleId = getArticleIdFromUrl(href);
+        const nearStart = Math.max(0, anchorMatch.index - 900);
+        const nearEnd = Math.min(html.length, anchorPattern.lastIndex + 900);
+        const nearText = decodeHtmlText(html.slice(nearStart, nearEnd).replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+
+        if (!articleId || seen.has(articleId) || !nearText.includes("GM패왕")) {
+          continue;
+        }
+
+        const title = cleanGmTitle(anchorMatch[2]);
+        if (!title) {
+          continue;
+        }
+
+        seen.add(articleId);
+        posts.push({
+          id: articleId,
+          articleId,
+          title,
+          author: "GM패왕",
+          url: href || buildGmArticleUrl(articleId),
+          createdAt: "",
+          timestamp: 0
+        });
+      }
+
+      return posts.sort((a, b) => Number(b.articleId || 0) - Number(a.articleId || 0));
+    }
+
+    async function fetchLatestGmPostFromCafeArticleList() {
+      const text = await fetchTextWithFallback(GM_CAFE_ARTICLE_LIST_API);
+      const data = JSON.parse(text);
+      const posts = parseGmPostsFromArticleListJson(data);
+      return posts[0] || null;
+    }
+
+    async function fetchLatestGmPostFromMemberPage() {
+      const text = await fetchTextWithFallback(GM_PAEWANG_MEMBER_URL);
+      const posts = parseGmPostsFromHtmlText(text);
+      return posts[0] || null;
+    }
+
+    async function fetchLatestGmPostFromSources() {
+      const errors = [];
+      const sourceFunctions = [
+        fetchLatestGmPostFromApi,
+        fetchLatestGmPostFromCafeArticleList,
+        fetchLatestGmPostFromMemberPage
+      ];
+
+      for (const sourceFunction of sourceFunctions) {
+        try {
+          const item = await sourceFunction();
+          if (item) {
+            return item;
+          }
+        } catch (error) {
+          errors.push(error);
+          console.warn("GM패왕 확인 소스 실패", error);
+        }
+      }
+
+      throw errors[0] || new Error("GM패왕 최신글을 확인하지 못했습니다.");
+    }
+
+    async function fetchLatestGmPostFromApi() {
+      if (!GM_ALERT_API_URL) {
+        return null;
+      }
+
+      const response = await fetch(GM_ALERT_API_URL, {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(`GM 알림 API 실패: HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      const rawItems = Array.isArray(data)
+        ? data
+        : Array.isArray(data.items)
+          ? data.items
+          : data.latest
+            ? [data.latest]
+            : data.item
+              ? [data.item]
+              : [];
+      return rawItems.map(normalizeGmAlertItem).filter(Boolean)[0] || null;
+    }
+
+    async function refreshGmAlert({ manual = false } = {}) {
+      if (gmAlertCheckInProgress) {
+        if (manual) {
+          renderGmAlertStatus("이미 GM패왕 최신글을 확인하는 중입니다.", "확인중", "gm-alert-checking");
+        }
+        return;
+      }
+
+      gmAlertCheckInProgress = true;
+      renderGmAlertStatus("GM패왕 최신글 목록을 확인하는 중입니다.", "확인중", "gm-alert-checking");
+
+      try {
+        const latestItem = await fetchLatestGmPostFromSources();
+
+        if (!latestItem) {
+          const cachedItem = gmAlertLastSuccessItem || getSavedGmAlertItem();
+          if (cachedItem) {
+            renderGmAlert(cachedItem, false, false, "최근 목록에서 새 GM패왕 글을 찾지 못해 이전 확인 결과를 유지합니다.");
+            return;
+          }
+
+          renderGmAlertStatus(
+            `최근 목록에서 GM패왕 글을 찾지 못했습니다.<br />다시 확인하려면 버튼을 눌러주세요.`,
+            "확인 완료"
+          );
+          return;
+        }
+
+        gmAlertLastSuccessItem = latestItem;
+        gmAlertLastSuccessAt = Date.now();
+        gmAlertFailCount = 0;
+        saveGmAlertItem(latestItem);
+
+        const lastSeenId = getSavedGmAlertId();
+        const isInitial = !lastSeenId;
+        const isNew = Boolean(lastSeenId && latestItem.id && latestItem.id !== lastSeenId);
+
+        renderGmAlert(latestItem, isNew, isInitial);
+        saveGmAlertId(latestItem.id);
+
+        if (isNew) {
+          showBrowserGmNotification(latestItem);
+          if (navigator.vibrate) {
+            navigator.vibrate([140, 70, 140]);
+          }
+        }
+      } catch (error) {
+        gmAlertFailCount += 1;
+        console.warn("GM 알림 확인 재시도 대기", error);
+
+        const cachedItem = gmAlertLastSuccessItem || getSavedGmAlertItem();
+        if (cachedItem) {
+          const checkedAt = formatGmCheckTime(gmAlertLastSuccessAt);
+          renderGmAlert(
+            cachedItem,
+            false,
+            false,
+            `네이버가 브라우저 직접 확인을 제한해 저장된 최근 글을 유지합니다.${checkedAt ? ` 마지막 정상 확인: ${escapeHtml(checkedAt)}` : ""} 다시 확인하려면 버튼을 눌러주세요.`
+          );
+          setGmAlertBadge("최근 글", "");
+          return;
+        }
+
+        renderGmAlertStatus(
+          `네이버가 브라우저 직접 확인을 제한하고 있습니다.<br />잠시 후 “지금 GM패왕 글 확인” 버튼으로 다시 시도해주세요.`,
+          "연결 제한",
+          "gm-alert-error"
+        );
+      } finally {
+        gmAlertCheckInProgress = false;
+      }
+    }
+
+    function initGmAlertBox() {
+      if (gmAutoCheckButton) {
+        gmAutoCheckButton.addEventListener("click", () => refreshGmAlert({ manual: true }));
+      }
+
+      if (gmPermissionButton) {
+        gmPermissionButton.addEventListener("click", requestGmNotificationPermission);
+      }
+
+      const cachedItem = getSavedGmAlertItem();
+      if (cachedItem) {
+        gmAlertLastSuccessItem = cachedItem;
+        renderGmAlert(cachedItem, false, false, "저장된 최근 글을 먼저 표시합니다. 접속 시 한 번 확인하고, 이후에는 버튼을 누를 때만 다시 확인합니다.");
+      }
+
+      refreshGmAlert();
     }
 
     function normalizeText(text) {
@@ -3644,6 +4385,7 @@
 
     initVisitorCounter();
     initPopularKeywordSync();
+    initGmAlertBox();
     render();
   </script>
 </body>
