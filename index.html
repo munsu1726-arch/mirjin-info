@@ -880,6 +880,153 @@
       line-height: 1.6;
     }
 
+
+
+    .admin-upload-section {
+      max-width: 900px;
+      margin: 0 auto 44px;
+      padding: 0 20px;
+      scroll-margin-top: 16px;
+    }
+
+    .admin-upload-card {
+      background: rgba(31, 41, 55, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.28);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      overflow: hidden;
+    }
+
+    .admin-upload-header {
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(250,204,21,0.14), rgba(37,99,235,0.12)), #111827;
+      border-bottom: 1px solid #374151;
+      text-align: center;
+    }
+
+    .admin-upload-header h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .admin-upload-header p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .admin-upload-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 16px;
+      background: #111827;
+    }
+
+    .admin-upload-form label {
+      display: grid;
+      gap: 6px;
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .admin-upload-form label.full {
+      grid-column: 1 / -1;
+    }
+
+    .admin-upload-input,
+    .admin-upload-textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 10px;
+      border: 1px solid #4b5563;
+      background: #0f172a;
+      color: #ffffff;
+      outline: none;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .admin-upload-textarea {
+      min-height: 118px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .admin-upload-input:focus,
+    .admin-upload-textarea:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 0 3px rgba(250,204,21,0.14);
+    }
+
+    .admin-upload-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .admin-upload-button {
+      min-height: 42px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 999px;
+      background: #facc15;
+      color: #111827;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .admin-upload-button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .admin-upload-button.secondary {
+      background: rgba(255,255,255,0.92);
+      color: #111827;
+    }
+
+    .admin-upload-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .admin-upload-status {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 0 2px 2px;
+      color: #a7f3d0;
+      font-size: 13px;
+      line-height: 1.55;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .admin-upload-note {
+      margin: 0;
+      padding: 0 16px 16px;
+      background: #111827;
+      color: #9ca3af;
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .admin-upload-link-button {
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      color: #111827;
+    }
+
     @keyframes introMove {
       0% {
         filter: blur(0px) brightness(1.1);
@@ -1007,6 +1154,25 @@
         height: 44px;
         padding: 0 10px;
         font-size: 13px;
+      }
+
+
+      .admin-upload-section {
+        padding: 0 14px;
+      }
+
+      .admin-upload-form {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .admin-upload-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .admin-upload-button {
+        width: 100%;
       }
 
 
@@ -1381,6 +1547,13 @@
           실시간 채팅
         </a>
 
+        <a
+          class="openchat-button admin-upload-link-button"
+          href="#adminUpload"
+        >
+          관리자 업로드
+        </a>
+
       </div>
 
     </div>
@@ -1437,6 +1610,60 @@
     </div>
   </section>
 
+
+
+  <section id="adminUpload" class="admin-upload-section">
+    <div class="admin-upload-card">
+      <div class="admin-upload-header">
+        <h2>관리자 정보 업로드</h2>
+        <p>채팅 욕설 필터와 관계없이, 운영자가 확인한 게임 정보를 사이트 검색 데이터에 바로 등록합니다.</p>
+      </div>
+
+      <form id="adminUploadForm" class="admin-upload-form">
+        <label>
+          관리자 코드
+          <input id="adminUploadCode" class="admin-upload-input" type="password" placeholder="관리자 코드 입력" autocomplete="off" />
+        </label>
+        <label>
+          분류
+          <input id="adminUploadCategory" class="admin-upload-input" type="text" maxlength="30" placeholder="예: GM답변, 보스, 사냥터" />
+        </label>
+        <label>
+          제목
+          <input id="adminUploadTitle" class="admin-upload-input" type="text" maxlength="80" placeholder="검색 결과에 보일 제목" />
+        </label>
+        <label>
+          출처
+          <input id="adminUploadSource" class="admin-upload-input" type="text" maxlength="30" value="관리자 업로드" />
+        </label>
+        <label>
+          날짜
+          <input id="adminUploadDate" class="admin-upload-input" type="date" />
+        </label>
+        <label>
+          태그
+          <input id="adminUploadTags" class="admin-upload-input" type="text" maxlength="120" placeholder="쉼표로 구분: 감옥, 무공, 다이아" />
+        </label>
+        <label class="full">
+          원문/참고 링크 선택
+          <input id="adminUploadUrl" class="admin-upload-input" type="url" maxlength="300" placeholder="https:// 로 시작하는 링크가 있으면 입력" />
+        </label>
+        <label class="full">
+          내용
+          <textarea id="adminUploadContent" class="admin-upload-textarea" maxlength="800" placeholder="등록할 정보를 입력하세요. 질문/잡담이 아니라 확인된 정보만 등록하는 용도입니다."></textarea>
+        </label>
+        <div class="admin-upload-actions">
+          <button id="adminUploadSubmit" class="admin-upload-button" type="submit">검색 정보 등록</button>
+          <button id="adminUploadReset" class="admin-upload-button secondary" type="button">입력 초기화</button>
+        </div>
+        <p id="adminUploadStatus" class="admin-upload-status">관리자 코드 입력 후 등록할 수 있습니다.</p>
+      </form>
+
+      <p class="admin-upload-note">
+        기본 관리자 코드는 HTML 안의 <strong>ADMIN_UPLOAD_CODE</strong> 값에서 바꿀 수 있습니다. 정식 보안을 원하면 Firebase Auth와 Database Rules로 관리자 계정만 쓰기 가능하게 제한하세요.
+      </p>
+    </div>
+  </section>
 
 
   <footer class="site-footer-notice">
@@ -3645,8 +3872,21 @@
     const chatText = document.getElementById("chatText");
     const chatStatus = document.getElementById("chatStatus");
     const chatSend = document.getElementById("chatSend");
+    const adminUploadForm = document.getElementById("adminUploadForm");
+    const adminUploadCode = document.getElementById("adminUploadCode");
+    const adminUploadCategory = document.getElementById("adminUploadCategory");
+    const adminUploadTitle = document.getElementById("adminUploadTitle");
+    const adminUploadSource = document.getElementById("adminUploadSource");
+    const adminUploadDate = document.getElementById("adminUploadDate");
+    const adminUploadTags = document.getElementById("adminUploadTags");
+    const adminUploadUrl = document.getElementById("adminUploadUrl");
+    const adminUploadContent = document.getElementById("adminUploadContent");
+    const adminUploadSubmit = document.getElementById("adminUploadSubmit");
+    const adminUploadReset = document.getElementById("adminUploadReset");
+    const adminUploadStatus = document.getElementById("adminUploadStatus");
     const MY_CHAT_ID_KEY = "mirjin_chat_user_id";
     const CHAT_NAME_KEY = "mirjin_chat_name";
+    const ADMIN_UPLOAD_CODE = "ara2026";
 
     /*
       Firebase Console → Build → Realtime Database → Rules 에 아래 내용을 붙여넣고 Publish 하세요.
@@ -3913,20 +4153,28 @@
           const content = String(post.content || "");
           return post.isInfoPost === true || post.searchMode === "info" || category.includes("채팅정보") || source.includes("정보제보") || isSearchableChatInfo(content);
         })
-        .map(([key, post]) => ({
-          title: String(post.title || "채팅 정보").slice(0, 80),
-          category: String(post.category || "채팅정보").slice(0, 30),
-          source: String(post.source || "실시간채팅 정보제보").slice(0, 30),
-          date: String(post.date || formatSearchDate(post.createdAt)).slice(0, 20),
-          content: getSafeChatText(String(getChatSearchInfoText(post.content) || post.content || "").slice(0, 200)),
-          url: "",
-          tags: Array.isArray(post.tags) ? post.tags.map(tag => String(tag || "").slice(0, 30)) : ["정보제보", "문파채팅"],
-          createdAt: Number(post.createdAt || 0),
-          userId: String(post.userId || ""),
-          chatMessageKey: String(post.chatMessageKey || key),
-          searchMode: "info",
-          isInfoPost: true
-        }))
+        .map(([key, post]) => {
+          const source = String(post.source || "실시간채팅 정보제보").slice(0, 30);
+          const isAdminPost = post.uploadedBy === "admin" || source.includes("관리자");
+          const rawContent = String(getChatSearchInfoText(post.content) || post.content || "");
+          const rawUrl = String(post.url || "").trim();
+
+          return {
+            title: String(post.title || (isAdminPost ? "관리자 정보" : "채팅 정보")).slice(0, 80),
+            category: String(post.category || (isAdminPost ? "관리자정보" : "채팅정보")).slice(0, 30),
+            source,
+            date: String(post.date || formatSearchDate(post.createdAt)).slice(0, 20),
+            content: isAdminPost ? rawContent.slice(0, 800) : getSafeChatText(rawContent.slice(0, 200)),
+            url: /^https?:\/\//i.test(rawUrl) ? rawUrl.slice(0, 300) : "",
+            tags: Array.isArray(post.tags) ? post.tags.map(tag => String(tag || "").slice(0, 30)) : (isAdminPost ? ["관리자업로드"] : ["정보제보", "문파채팅"]),
+            createdAt: Number(post.createdAt || 0),
+            userId: String(post.userId || ""),
+            chatMessageKey: String(post.chatMessageKey || key),
+            searchMode: "info",
+            isInfoPost: true,
+            uploadedBy: isAdminPost ? "admin" : String(post.uploadedBy || "")
+          };
+        })
         .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
         .slice(-MAX_SEARCH_POSTS);
     }
@@ -4350,6 +4598,159 @@
       return response.json();
     }
 
+
+    function setAdminUploadStatus(message, isError = false) {
+      if (!adminUploadStatus) {
+        return;
+      }
+
+      adminUploadStatus.textContent = message;
+      adminUploadStatus.style.color = isError ? "#fecaca" : "#a7f3d0";
+    }
+
+    function resetAdminUploadForm(keepCode = true) {
+      if (!adminUploadForm) {
+        return;
+      }
+
+      const savedCode = keepCode && adminUploadCode ? adminUploadCode.value : "";
+      adminUploadForm.reset();
+
+      if (adminUploadSource) {
+        adminUploadSource.value = "관리자 업로드";
+      }
+
+      if (adminUploadDate) {
+        adminUploadDate.value = formatSearchDate(Date.now());
+      }
+
+      if (adminUploadCode) {
+        adminUploadCode.value = savedCode;
+      }
+    }
+
+    function getAdminUploadTags(content, category, rawTags) {
+      const typedTags = String(rawTags || "")
+        .split(/[,#\n]/)
+        .map(tag => tag.trim().replace(/^#/, ""))
+        .filter(tag => tag.length >= 2)
+        .slice(0, 12);
+      const contentTags = extractInfoTags(content, "관리자")
+        .filter(tag => !["정보제보", "문파채팅", "관리자"].includes(tag));
+
+      return Array.from(new Set(["관리자업로드", category || "정보", ...typedTags, ...contentTags]))
+        .filter(Boolean)
+        .slice(0, 18);
+    }
+
+    function buildAdminUploadPost() {
+      const title = String(adminUploadTitle?.value || "").trim().slice(0, 80);
+      const category = String(adminUploadCategory?.value || "관리자정보").trim().slice(0, 30) || "관리자정보";
+      const source = String(adminUploadSource?.value || "관리자 업로드").trim().slice(0, 30) || "관리자 업로드";
+      const date = String(adminUploadDate?.value || formatSearchDate(Date.now())).trim().slice(0, 20);
+      const content = String(adminUploadContent?.value || "").trim().slice(0, 800);
+      const rawUrl = String(adminUploadUrl?.value || "").trim();
+      const url = /^https?:\/\//i.test(rawUrl) ? rawUrl.slice(0, 300) : "";
+
+      if (!title) {
+        throw new Error("제목을 입력해 주세요.");
+      }
+
+      if (content.length < 5) {
+        throw new Error("내용을 5자 이상 입력해 주세요.");
+      }
+
+      if (rawUrl && !url) {
+        throw new Error("링크는 https:// 또는 http:// 로 시작해야 합니다.");
+      }
+
+      const createdAt = Date.now();
+      return {
+        title,
+        category,
+        source,
+        date,
+        content,
+        url,
+        tags: getAdminUploadTags(content, category, adminUploadTags?.value || ""),
+        createdAt,
+        userId: "admin_upload",
+        chatMessageKey: `admin_${createdAt}`,
+        searchMode: "info",
+        isInfoPost: true,
+        uploadedBy: "admin"
+      };
+    }
+
+    async function saveAdminUploadPost(post) {
+      const key = post.chatMessageKey || `admin_${Date.now()}`;
+      const response = await fetch(getSearchPostRestUrl(key), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text().catch(() => "");
+        throw new Error(`관리자 업로드 실패: HTTP ${response.status} ${errorMessage}`);
+      }
+
+      return response.json();
+    }
+
+    function initAdminUploadPanel() {
+      if (!adminUploadForm) {
+        return;
+      }
+
+      resetAdminUploadForm(false);
+
+      if (adminUploadReset) {
+        adminUploadReset.addEventListener("click", () => {
+          resetAdminUploadForm(true);
+          setAdminUploadStatus("입력 내용을 초기화했습니다.");
+        });
+      }
+
+      adminUploadForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (String(adminUploadCode?.value || "").trim() !== ADMIN_UPLOAD_CODE) {
+          setAdminUploadStatus("관리자 코드가 맞지 않습니다.", true);
+          adminUploadCode?.focus();
+          return;
+        }
+
+        if (!hasFirebaseConfig()) {
+          setAdminUploadStatus("Firebase 설정이 없어 관리자 업로드를 사용할 수 없습니다.", true);
+          return;
+        }
+
+        if (adminUploadSubmit) {
+          adminUploadSubmit.disabled = true;
+        }
+
+        setAdminUploadStatus("관리자 정보를 등록하는 중입니다...");
+
+        try {
+          const post = buildAdminUploadPost();
+          await waitWithTimeout(saveAdminUploadPost(post), 10000);
+          setAdminUploadStatus("등록 완료: 검색창에서 바로 검색해 보세요.");
+          resetAdminUploadForm(true);
+          await refreshSearchPosts();
+        } catch (error) {
+          console.error(error);
+          setAdminUploadStatus(error.message || "관리자 업로드 중 오류가 발생했습니다.", true);
+        } finally {
+          if (adminUploadSubmit) {
+            adminUploadSubmit.disabled = false;
+          }
+        }
+      });
+    }
+
     async function refreshSearchPosts() {
       try {
         const searchPosts = await fetchSearchPosts();
@@ -4507,6 +4908,7 @@
     initVisitorCounter();
     initPopularKeywordSync();
     initGmAlertBox();
+    initAdminUploadPanel();
     render();
   </script>
 </body>
