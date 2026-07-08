@@ -591,7 +591,7 @@
       </form>
 
       <p class="chat-note">
-        실시간 전체 채팅으로 사용하려면 Firebase 설정값을 넣어야 합니다. 설정 전에는 내 기기에서만 테스트 채팅으로 표시됩니다.
+        공개 채팅방 모드입니다. Firebase 설정값과 공개 Realtime Database 규칙을 적용하면 모든 방문자가 같이 읽고 쓸 수 있습니다.
       </p>
     </div>
   </section>
@@ -1660,7 +1660,28 @@
     const MY_CHAT_ID_KEY = "mirjin_chat_user_id";
     const CHAT_NAME_KEY = "mirjin_chat_name";
 
+    /*
+      공개 채팅방 Firebase Realtime Database 규칙
+      Firebase Console → Realtime Database → Rules 에 아래 내용을 붙여넣고 Publish 하세요.
+
+      {
+        "rules": {
+          "mirjinAraChat": {
+            "messages": {
+              ".read": true,
+              ".indexOn": ["createdAt"],
+              "$messageId": {
+                ".write": true,
+                ".validate": "newData.hasChildren(['name','text','userId','createdAt']) && newData.child('name').isString() && newData.child('name').val().length <= 12 && newData.child('text').isString() && newData.child('text').val().length <= 200 && newData.child('userId').isString() && newData.child('createdAt').isNumber()"
+              }
+            }
+          }
+        }
+      }
+    */
+
     const firebaseConfig = {
+      // Firebase Console → Project settings → General → Your apps → SDK setup and configuration 값으로 교체하세요.
       apiKey: "",
       authDomain: "",
       databaseURL: "",
@@ -1669,6 +1690,8 @@
       messagingSenderId: "",
       appId: ""
     };
+
+    const CHAT_ROOM_PATH = "mirjinAraChat/messages";
 
     const myChatId = localStorage.getItem(MY_CHAT_ID_KEY) || `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     localStorage.setItem(MY_CHAT_ID_KEY, myChatId);
@@ -1737,8 +1760,8 @@
     }
 
     function startLocalChatMode() {
-      chatStatus.textContent = "테스트 모드: 내 기기에서만 보임";
-      chatMessages.innerHTML = `<div class="chat-empty">Firebase 설정 전입니다.<br>전송 테스트는 가능하지만 다른 사람에게는 보이지 않습니다.</div>`;
+      chatStatus.textContent = "Firebase 설정 필요";
+      chatMessages.innerHTML = `<div class="chat-empty">아직 Firebase 설정값이 없습니다.<br>설정 전에는 내 기기에서만 테스트 채팅으로 표시됩니다.</div>`;
 
       getLocalChatMessages().forEach(addChatMessage);
 
@@ -1773,14 +1796,14 @@
 
         const app = appModule.initializeApp(firebaseConfig);
         const db = databaseModule.getDatabase(app);
-        const messagesRef = databaseModule.ref(db, "mirjinAraChat/messages");
+        const messagesRef = databaseModule.ref(db, CHAT_ROOM_PATH);
         const recentMessagesQuery = databaseModule.query(
           messagesRef,
           databaseModule.orderByChild("createdAt"),
           databaseModule.limitToLast(80)
         );
 
-        chatStatus.textContent = "실시간 연결됨";
+        chatStatus.textContent = "공개 채팅방 연결됨";
         chatMessages.innerHTML = `<div class="chat-empty">아직 채팅이 없습니다.</div>`;
 
         databaseModule.onChildAdded(recentMessagesQuery, snapshot => {
