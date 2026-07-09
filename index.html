@@ -3391,6 +3391,17 @@
       border-radius: 11px;
       border: 1px solid rgba(148, 163, 184, 0.17);
       background: rgba(15, 23, 42, 0.62);
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .market-price-row:hover {
+      transform: translateY(-1px);
+      border-color: rgba(153, 246, 228, 0.62);
+      background: rgba(20, 184, 166, 0.20);
+      text-decoration: none;
     }
 
     .market-price-source {
@@ -3979,7 +3990,7 @@
       </div>
     </div>
     <div id="marketPriceRows" class="market-price-rows" aria-label="최근 거래내역"></div>
-    <div class="market-price-note">계정 제외 · 머니/금전만 · 서버 선택 시 해당 서버만 최저가/평균가를 다시 계산합니다.</div>
+    <div class="market-price-note">계정 제외 · 머니/금전만 · 원하는 거래내역을 누르면 원문으로 바로 이동합니다.</div>
   </div>
 
   </div>
@@ -5580,6 +5591,7 @@
     const MARKET_PRICE_HISTORY_STORAGE_PREFIX = "mirjinMarketPriceHistory_v8_";
     const MARKET_PRICE_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketPriceSelectedServer_v1";
     const MARKET_ALERT_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketAlertSelectedServer_v1";
+    const MARKET_LINE_ORIGINAL_URL_MARKER = " __MIRJIN_ORIGINAL_URL__ ";
     let marketPriceRefreshRunning = false;
     let marketAlertRefreshRunning = false;
     const MARKET_ALERT_CHECK_MS = 30 * 1000;
@@ -6397,6 +6409,52 @@
       return source.fallbackLatest || "최근 매물: 최신 매물 확인 준비중";
     }
 
+    function splitMarketLineOriginalUrl(value) {
+      const text = String(value || "");
+      const markerIndex = text.lastIndexOf(MARKET_LINE_ORIGINAL_URL_MARKER);
+      if (markerIndex < 0) {
+        return { text, url: "" };
+      }
+
+      return {
+        text: text.slice(0, markerIndex).trim(),
+        url: text.slice(markerIndex + MARKET_LINE_ORIGINAL_URL_MARKER.length).trim()
+      };
+    }
+
+    function getMarketLineDisplayText(value) {
+      return splitMarketLineOriginalUrl(value).text;
+    }
+
+    function resolveMarketOriginalUrl(source, url) {
+      const rawUrl = String(url || "").trim();
+      const baseUrl = source && source.url ? source.url : window.location.href;
+      if (!rawUrl) {
+        return source && source.url ? source.url : "";
+      }
+
+      try {
+        const absoluteUrl = new URL(rawUrl, baseUrl).href;
+        return /^https?:\/\//i.test(absoluteUrl) ? absoluteUrl : "";
+      } catch (error) {
+        return source && source.url ? source.url : "";
+      }
+    }
+
+    function getMarketLineOriginalUrl(source, value) {
+      const parsed = splitMarketLineOriginalUrl(value);
+      return resolveMarketOriginalUrl(source, parsed.url || (source && source.url) || "");
+    }
+
+    function attachMarketLineOriginalUrl(source, line, url) {
+      const displayLine = getMarketLineDisplayText(line).trim();
+      const originalUrl = resolveMarketOriginalUrl(source, url);
+      if (!displayLine || !originalUrl) {
+        return displayLine;
+      }
+      return `${displayLine}${MARKET_LINE_ORIGINAL_URL_MARKER}${originalUrl}`;
+    }
+
     function getMarketSavedLatest(source) {
       return localStorage.getItem(getMarketLatestStorageKey(source)) || getDefaultMarketLatest(source);
     }
@@ -6412,10 +6470,12 @@
     function getMarketAlertAllLines(source) {
       const lines = [];
       function add(line) {
+        const originalUrl = getMarketLineOriginalUrl(source, line);
         const raw = cleanMarketListingLine(line);
         const clean = cleanMarketPart(line);
         if (!clean) return;
-        const output = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근") ? clean : `최근 매물: ${clean}`);
+        const outputText = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근") ? clean : `최근 매물: ${clean}`);
+        const output = attachMarketLineOriginalUrl(source, outputText, originalUrl);
         if (!lines.includes(output)) {
           lines.push(output);
         }
@@ -6486,7 +6546,7 @@
               <span class="market-alert-link-title">${escapeHtml(source.label || `${source.name} 알리미`)}</span>
               <span id="${getMarketElementId("marketStatus_", source)}" class="market-alert-status">최근</span>
             </span>
-            <span id="${getMarketElementId("marketLatest_", source)}" class="market-alert-latest">${escapeHtml(savedLatest || "해당 서버 매물/거래 확인 중")}</span>
+            <span id="${getMarketElementId("marketLatest_", source)}" class="market-alert-latest">${escapeHtml(savedLatest ? getMarketLineDisplayText(savedLatest) : "해당 서버 매물/거래 확인 중")}</span>
             <span class="market-alert-more">요약 보기 ↓</span>
           </button>
         `;
@@ -6550,7 +6610,7 @@
       }
 
       if (latest && latestText) {
-        latest.textContent = latestText;
+        latest.textContent = getMarketLineDisplayText(latestText);
       }
     }
 
@@ -6591,7 +6651,13 @@
       }
 
       const validLines = listingLines
-        .map(line => /^최근\s*/.test(cleanMarketListingLine(line)) ? cleanMarketListingLine(line) : `최근 매물: ${line}`)
+        .map(line => {
+          const originalUrl = getMarketLineOriginalUrl(source, line);
+          const raw = cleanMarketListingLine(line);
+          const clean = cleanMarketPart(line);
+          const outputText = /^최근\s*/.test(raw) ? raw : `최근 매물: ${clean}`;
+          return attachMarketLineOriginalUrl(source, outputText, originalUrl);
+        })
         .filter(line => isValidMarketLatestLine(source, line))
         .slice(0, 20);
 
@@ -6612,10 +6678,12 @@
       const combined = [];
 
       function addLine(line) {
+        const originalUrl = getMarketLineOriginalUrl(source, line);
         const raw = cleanMarketListingLine(line);
         const clean = cleanMarketPart(line);
         if (!clean) return;
-        const output = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근 매물:") ? clean : `최근 매물: ${clean}`);
+        const outputText = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근 매물:") ? clean : `최근 매물: ${clean}`);
+        const output = attachMarketLineOriginalUrl(source, outputText, originalUrl);
         if (!combined.includes(output)) {
           combined.push(output);
         }
@@ -6944,12 +7012,14 @@
             return;
           }
 
-          const amount = parseMarketWonAmount(line);
+          const displayLine = getMarketLineDisplayText(line);
+          const originalUrl = getMarketLineOriginalUrl(source, line);
+          const amount = parseMarketWonAmount(displayLine);
           if (!Number.isFinite(amount)) {
             return;
           }
 
-          const key = `${source.id}:${cleanMarketPart(line)}`;
+          const key = `${source.id}:${cleanMarketPart(displayLine)}:${originalUrl}`;
           if (seen.has(key)) {
             return;
           }
@@ -6958,11 +7028,12 @@
           records.push({
             source,
             sourceLabel: getMarketPriceSourceLabel(source),
-            serverLabel: getMarketPriceServerLabel(line),
-            type: getMarketPriceType(source, line),
-            text: getMarketPriceRowText(source, line),
+            serverLabel: getMarketPriceServerLabel(displayLine),
+            type: getMarketPriceType(source, displayLine),
+            text: getMarketPriceRowText(source, displayLine),
             amount,
-            line
+            line: displayLine,
+            originalUrl
           });
         });
       });
@@ -7004,14 +7075,17 @@
       if (elements.avg) elements.avg.textContent = formatMarketWonAmount(averageAmount);
       if (elements.count) elements.count.textContent = selectedServer ? `${records.length}건/${allRecords.length}건` : `${records.length}건`;
 
-      elements.rows.innerHTML = records.slice(0, 8).map(record => `
-        <div class="market-price-row" title="${escapeHtml(cleanMarketPart(record.line))}">
-          <span class="market-price-source">${escapeHtml(record.sourceLabel)}</span>
-          <span class="market-price-server">${escapeHtml(record.serverLabel || "미표기")}</span>
-          <span class="market-price-text">${escapeHtml(record.text)}</span>
-          <span class="market-price-won">${escapeHtml(formatMarketWonAmount(record.amount))}/천만</span>
-        </div>
-      `).join("");
+      elements.rows.innerHTML = records.slice(0, 8).map(record => {
+        const originalUrl = record.originalUrl || (record.source && record.source.url) || "#";
+        return `
+          <a class="market-price-row" href="${escapeHtml(originalUrl)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(`${cleanMarketPart(record.line)} 원문 열기`)}" aria-label="${escapeHtml(`${record.sourceLabel} ${record.serverLabel || "미표기"} 원문 열기`)}">
+            <span class="market-price-source">${escapeHtml(record.sourceLabel)}</span>
+            <span class="market-price-server">${escapeHtml(record.serverLabel || "미표기")}</span>
+            <span class="market-price-text">${escapeHtml(record.text)}</span>
+            <span class="market-price-won">${escapeHtml(formatMarketWonAmount(record.amount))}/천만</span>
+          </a>
+        `;
+      }).join("");
     }
 
 
@@ -7136,7 +7210,7 @@
     }
 
     function cleanMarketListingLine(value) {
-      return decodeMarketEntities(value)
+      return decodeMarketEntities(getMarketLineDisplayText(value))
         .replace(/\s+/g, " ")
         .replace(/바로가기|상세보기|판매중|구매하기|베이톡|Image:?\s*[^ ]*/g, "")
         .replace(/\bpage\b|\bsell\b|\bdisplay\b|\borderby\b|\bsearch_word\b/gi, "")
@@ -7268,10 +7342,14 @@
     function extractBarotemListingLines(source, htmlText, readableLines) {
       const results = [];
 
-      function addSummary(value) {
+      function addSummary(value, originalUrl) {
         const summary = buildBarotemSummaryFromTextBlock(source, value);
-        if (summary && !results.includes(summary)) {
-          results.push(summary);
+        if (!summary) {
+          return;
+        }
+        const output = attachMarketLineOriginalUrl(source, summary, originalUrl);
+        if (output && !results.includes(output)) {
+          results.push(output);
         }
       }
 
@@ -7291,8 +7369,10 @@
         ].join(",");
         documentObject.querySelectorAll(rowSelectors).forEach(node => {
           const text = cleanMarketPart(node.textContent);
+          const linkNode = node.matches && node.matches("a[href]") ? node : node.querySelector && node.querySelector("a[href]");
+          const originalUrl = linkNode ? linkNode.getAttribute("href") : "";
           if (text.length >= 8 && text.length <= 420 && (/\d{1,2}서버/.test(text) || /\d[\d,]*\s*원/.test(text) || /게임머니/.test(text))) {
-            addSummary(text);
+            addSummary(text, originalUrl);
           }
         });
       } catch (error) {
@@ -7335,12 +7415,16 @@
       return parts.length >= 3 ? `최근 매물: ${parts.join(" · ")}` : "";
     }
 
-    function extractItemmaniaListingLines(htmlText, readableLines) {
+    function extractItemmaniaListingLines(source, htmlText, readableLines) {
       const results = [];
-      function addSummary(value) {
+      function addSummary(value, originalUrl) {
         const summary = buildItemmaniaSummaryFromTextBlock(value);
-        if (summary && !results.includes(summary)) {
-          results.push(summary);
+        if (!summary) {
+          return;
+        }
+        const output = attachMarketLineOriginalUrl(source, summary, originalUrl);
+        if (output && !results.includes(output)) {
+          results.push(output);
         }
       }
 
@@ -7348,8 +7432,10 @@
         const documentObject = new DOMParser().parseFromString(String(htmlText || ""), "text/html");
         documentObject.querySelectorAll("a[href*='sell'], a[href*='view'], li, tr, .list-item, .goods, .item").forEach(node => {
           const text = cleanMarketPart(node.textContent);
+          const linkNode = node.matches && node.matches("a[href]") ? node : node.querySelector && node.querySelector("a[href]");
+          const originalUrl = linkNode ? linkNode.getAttribute("href") : "";
           if (text.length >= 8 && text.length <= 420 && (/미르|전설|진|\d[\d,]*\s*원|게임머니|계정/.test(text))) {
-            addSummary(text);
+            addSummary(text, originalUrl);
           }
         });
       } catch (error) {
@@ -7377,7 +7463,7 @@
       }
 
       if (source.type === "itemmania" || source.type === "itembay") {
-        return extractItemmaniaListingLines(htmlText, readableLines);
+        return extractItemmaniaListingLines(source, htmlText, readableLines);
       }
 
       const lines = [];
