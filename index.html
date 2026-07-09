@@ -3893,13 +3893,21 @@
       #liveChat .chat-form {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) 62px !important;
+        grid-template-areas:
+          "name name"
+          "text send";
         gap: 6px !important;
         padding: 8px !important;
         align-items: stretch !important;
       }
 
       #liveChat #chatName {
-        display: none !important;
+        display: block !important;
+        grid-area: name !important;
+      }
+
+      #liveChat #chatText {
+        grid-area: text !important;
       }
 
       #liveChat .chat-input {
@@ -3910,10 +3918,12 @@
       }
 
       #liveChat .chat-send {
+        grid-area: send !important;
         min-height: 38px !important;
         padding: 0 8px !important;
         border-radius: 10px !important;
         font-size: 13px !important;
+        touch-action: manipulation;
       }
 
       #liveChat .chat-note {
@@ -3968,6 +3978,16 @@
         min-height: 220px !important;
       }
     }
+
+
+    /* 모바일 탭 안정화 */
+    #chatFloatingToggle,
+    #chatSend,
+    #chatCloseButton {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
 </style>
 </head>
 
@@ -4203,11 +4223,10 @@
           class="chat-input"
           type="text"
           maxlength="12"
-          placeholder="자동 닉네임"
-          autocomplete="off"
+          placeholder="닉네임 설정"
+          autocomplete="nickname"
           autocapitalize="off"
           spellcheck="false"
-          readonly
         />
         <input
           id="chatText"
@@ -8791,6 +8810,8 @@
     const MY_CHAT_ID_KEY = "mirjin_chat_user_id";
     const CHAT_NAME_KEY = "mirjin_chat_name";
     const CHAT_RANDOM_NAME_KEY = "mirjin_chat_random_name_v2";
+    const CHAT_LAST_SENT_AT_KEY = "mirjin_chat_last_sent_at";
+    const CHAT_SEND_COOLDOWN_MS = 3000;
     const ADMIN_UPLOAD_ENABLED = window.MIRJIN_APP_CONFIG?.adminUploadEnabled === true;
     const ADMIN_UPLOAD_CODE = "";
 
@@ -8871,17 +8892,48 @@
       }
     }
 
-    const assignedChatName = getAssignedChatName();
+    let assignedChatName = getAssignedChatName();
+
+    function normalizeChatNameInput(value) {
+      return String(value || "")
+        .trim()
+        .replace(/\s+/g, "")
+        .slice(0, 12);
+    }
+
+    function saveChatNameFromInput(showStatus = false) {
+      if (!chatName) {
+        return true;
+      }
+
+      const cleanName = normalizeChatNameInput(chatName.value) || assignedChatName || createRandomChatName();
+      chatName.value = cleanName;
+
+      if (!isValidChatName(cleanName)) {
+        setChatStatus("닉네임은 한글/영문/숫자/_ 12자 이내로 입력해 주세요.");
+        return false;
+      }
+
+      assignedChatName = cleanName;
+      localStorage.setItem(CHAT_NAME_KEY, cleanName);
+      localStorage.setItem(CHAT_RANDOM_NAME_KEY, cleanName);
+
+      if (showStatus) {
+        setChatStatus(`닉네임 저장됨: ${cleanName}`);
+      }
+
+      return true;
+    }
 
     if (chatName) {
       chatName.value = assignedChatName;
-      chatName.readOnly = true;
-      chatName.setAttribute("aria-readonly", "true");
-      chatName.setAttribute("title", "자동으로 정해진 닉네임입니다.");
-      chatName.classList.add("chat-name-locked");
-      chatName.addEventListener("input", () => {
-        chatName.value = assignedChatName;
-      });
+      chatName.readOnly = false;
+      chatName.removeAttribute("readonly");
+      chatName.removeAttribute("aria-readonly");
+      chatName.setAttribute("title", "닉네임은 한글/영문/숫자/_ 12자 이내로 설정할 수 있습니다.");
+      chatName.classList.remove("chat-name-locked");
+      chatName.addEventListener("blur", () => saveChatNameFromInput(false));
+      chatName.addEventListener("change", () => saveChatNameFromInput(true));
     }
 
     function hasFirebaseConfig() {
@@ -9259,13 +9311,21 @@
     }
 
     function getCleanChatInput() {
-      const rawName = assignedChatName;
       const rawText = chatText.value.trim();
-      const name = assignedChatName;
+      const rawName = normalizeChatNameInput(chatName ? chatName.value : assignedChatName) || assignedChatName || "익명";
+      const name = rawName.slice(0, 12) || "익명";
       const text = rawText.slice(0, 200);
-      if (chatName && chatName.value !== assignedChatName) {
-        chatName.value = assignedChatName;
+
+      if (chatName && chatName.value !== name) {
+        chatName.value = name;
       }
+
+      if (isValidChatName(name)) {
+        assignedChatName = name;
+        localStorage.setItem(CHAT_NAME_KEY, name);
+        localStorage.setItem(CHAT_RANDOM_NAME_KEY, name);
+      }
+
       return { rawName, rawText, name, text };
     }
 
@@ -9923,52 +9983,65 @@
   </script>
 
   <script>
-    // 실시간 채팅 토글: 아래로 이동하지 않고 화면에서 바로 켜고 끌 수 있게 처리
-    document.addEventListener("DOMContentLoaded", function () {
-      const chatSection = document.getElementById("liveChat");
-      const topButton = document.getElementById("chatToggleTop");
-      const floatingButton = document.getElementById("chatFloatingToggle");
-      const closeButton = document.getElementById("chatCloseButton");
-      const chatText = document.getElementById("chatText");
+    // 실시간 채팅 토글: DOMContentLoaded 이후 삽입/복구 상황에서도 버튼이 먹도록 처리
+    (function () {
+      function initLiveChatToggle() {
+        const chatSection = document.getElementById("liveChat");
+        const topButton = document.getElementById("chatToggleTop");
+        const floatingButton = document.getElementById("chatFloatingToggle");
+        const closeButton = document.getElementById("chatCloseButton");
+        const chatText = document.getElementById("chatText");
 
-      if (!chatSection) return;
+        if (!chatSection) return;
 
-      const toggleButtons = [topButton, floatingButton].filter(Boolean);
+        const toggleButtons = [topButton, floatingButton].filter(Boolean);
 
-      function setChatOpen(isOpen) {
-        chatSection.classList.toggle("chat-open", isOpen);
+        function setChatOpen(isOpen) {
+          chatSection.classList.toggle("chat-open", isOpen);
+
+          toggleButtons.forEach(function (button) {
+            button.setAttribute("aria-expanded", String(isOpen));
+            button.classList.toggle("chat-toggle-active", isOpen);
+            button.textContent = isOpen ? "실시간 채팅 끄기" : "실시간 채팅 켜기";
+          });
+
+          if (isOpen) {
+            setTimeout(function () {
+              const chatMessages = document.getElementById("chatMessages");
+              if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+              }
+              if (chatText && window.innerWidth > 600) {
+                chatText.focus();
+              }
+            }, 80);
+          }
+        }
 
         toggleButtons.forEach(function (button) {
-          button.setAttribute("aria-expanded", String(isOpen));
-          button.classList.toggle("chat-toggle-active", isOpen);
-          button.textContent = isOpen ? "실시간 채팅 끄기" : "실시간 채팅 켜기";
+          if (button.dataset.chatToggleBound === "1") return;
+          button.dataset.chatToggleBound = "1";
+          button.style.touchAction = "manipulation";
+          button.addEventListener("click", function () {
+            setChatOpen(!chatSection.classList.contains("chat-open"));
+          });
         });
 
-        if (isOpen) {
-          setTimeout(function () {
-            const chatMessages = document.getElementById("chatMessages");
-            if (chatMessages) {
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            if (chatText && window.innerWidth > 600) {
-              chatText.focus();
-            }
-          }, 80);
+        if (closeButton && closeButton.dataset.chatCloseBound !== "1") {
+          closeButton.dataset.chatCloseBound = "1";
+          closeButton.style.touchAction = "manipulation";
+          closeButton.addEventListener("click", function () {
+            setChatOpen(false);
+          });
         }
       }
 
-      toggleButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-          setChatOpen(!chatSection.classList.contains("chat-open"));
-        });
-      });
-
-      if (closeButton) {
-        closeButton.addEventListener("click", function () {
-          setChatOpen(false);
-        });
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initLiveChatToggle);
+      } else {
+        initLiveChatToggle();
       }
-    });
+    })();
   </script>
 
 
