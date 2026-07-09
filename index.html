@@ -98,14 +98,48 @@
       text-shadow: 0 0 10px rgba(0,0,0,0.9);
     }
 
+    .search-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
     .search-box {
       width: 100%;
-      padding: 18px 20px;
+      padding: 18px 56px 18px 20px;
       font-size: 18px;
       border-radius: 12px;
       border: none;
       outline: none;
       box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    }
+
+    .search-clear-button {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.68);
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.22);
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .search-clear-button:hover {
+      transform: translateY(-50%) scale(1.04);
+      background: rgba(220,38,38,0.84);
+      color: #ffffff;
+    }
+
+    .search-clear-button[hidden] {
+      display: none;
     }
 
 
@@ -318,8 +352,8 @@
     }
 
     .gm-button {
-      background: rgba(255,255,255,0.92);
-      color: #111827;
+      background: rgba(255,255,255,0.42);
+      color: #ffffff;
     }
 
     .hint {
@@ -487,7 +521,7 @@
       border: 1px solid rgba(147,197,253,0.18);
       border-radius: 13px;
       padding: 10px 11px;
-      background: rgba(15, 23, 42, 0.74);
+      background: rgba(15, 23, 42, 0.32);
       color: #f8fafc;
       text-align: left;
       cursor: pointer;
@@ -533,6 +567,102 @@
       color: #94a3b8;
       font-size: 13px;
       text-align: center;
+    }
+
+    .latest-post-detail {
+      margin: -2px 0 6px;
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(250, 204, 21, 0.34);
+      background: linear-gradient(135deg, rgba(250,204,21,0.12), rgba(37,99,235,0.10)), rgba(15, 23, 42, 0.92);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.24);
+    }
+
+    .latest-post-detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+
+    .latest-post-detail-title {
+      color: #fef3c7;
+      font-size: 14px;
+      font-weight: 1000;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+
+    .latest-post-detail-close {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(255,255,255,0.08);
+      color: #e5e7eb;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .latest-post-detail-close:hover {
+      background: rgba(220, 38, 38, 0.72);
+      color: #ffffff;
+    }
+
+    .latest-post-detail-meta {
+      margin-bottom: 8px;
+      color: #a7f3d0;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .latest-post-detail-body {
+      color: #f8fafc;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: keep-all;
+    }
+
+    .latest-post-detail-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #03c75a;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .latest-post-detail-link:hover {
+      filter: brightness(1.05);
+      text-decoration: none;
+    }
+
+    .latest-post-detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .latest-post-detail-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: rgba(37,99,235,0.55);
+      color: #dbeafe;
+      font-size: 11px;
+      font-weight: 900;
     }
 
     .info-list-toggle-row {
@@ -959,6 +1089,33 @@
       text-decoration: underline;
     }
 
+
+    .search-open-latest-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px 8px 12px 0;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(250, 204, 21, 0.72);
+      color: #111827;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .search-open-latest-button:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+
+    .search-results-area {
+      scroll-margin-top: 16px;
+    }
+
     .tag {
       display: inline-block;
       background: #2563eb;
@@ -1039,7 +1196,7 @@
       flex: 0 0 auto;
       padding: 5px 9px;
       border-radius: 999px;
-      background: #facc15;
+      background: rgba(250, 204, 21, 0.72);
       color: #111827;
       font-size: 12px;
       font-weight: 900;
@@ -1331,7 +1488,7 @@
       padding: 0 18px;
       border: none;
       border-radius: 999px;
-      background: #facc15;
+      background: rgba(250, 204, 21, 0.72);
       color: #111827;
       font-size: 14px;
       font-weight: 900;
@@ -1345,8 +1502,8 @@
     }
 
     .admin-upload-button.secondary {
-      background: rgba(255,255,255,0.92);
-      color: #111827;
+      background: rgba(255,255,255,0.42);
+      color: #ffffff;
     }
 
     .admin-upload-button:disabled {
@@ -1528,6 +1685,48 @@
       color: #fde68a;
     }
 
+    .market-alert-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5px;
+      margin: 6px 0 7px;
+    }
+
+    .market-alert-server-select,
+    .market-alert-refresh {
+      min-height: 25px;
+      border-radius: 999px;
+      border: 1px solid rgba(147, 197, 253, 0.24);
+      background: rgba(2, 6, 23, 0.48);
+      color: #dbeafe;
+      font-family: inherit;
+      font-size: 9.5px;
+      font-weight: 1000;
+      outline: none;
+    }
+
+    .market-alert-server-select {
+      width: 100%;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .market-alert-refresh {
+      padding: 0 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .market-alert-refresh:hover {
+      background: rgba(37, 99, 235, 0.26);
+      border-color: rgba(191, 219, 254, 0.48);
+    }
+
+    .market-alert-refresh:disabled {
+      opacity: 0.56;
+      cursor: not-allowed;
+    }
+
     .market-alert-list {
       display: grid;
       gap: 6px;
@@ -1626,6 +1825,15 @@
       font-size: 9px;
       font-weight: 900;
       text-align: right;
+    }
+
+    .market-alert-empty {
+      padding: 9px 4px;
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.45;
     }
 
 
@@ -1840,7 +2048,14 @@
 
       .search-box {
         font-size: 16px;
-        padding: 15px;
+        padding: 15px 50px 15px 15px;
+      }
+
+      .search-clear-button {
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
       }
 
 
@@ -1978,6 +2193,18 @@
         font-size: 11px;
       }
 
+      .latest-post-detail {
+        padding: 11px;
+      }
+
+      .latest-post-detail-title {
+        font-size: 13px;
+      }
+
+      .latest-post-detail-body {
+        font-size: 12px;
+      }
+
       .info-list-toggle-row {
         margin-top: 9px;
       }
@@ -2082,7 +2309,7 @@
       }
 
       .search-box {
-        padding: 15px 18px;
+        padding: 15px 54px 15px 18px;
       }
 
       .popular-box {
@@ -2601,10 +2828,678 @@
       }
     }
 
+
+
+    /* 전체 목록 보기: 클릭한 정보 바로 아래에서 내용 확인 */
+    .info-post-detail {
+      margin: 0 0 2px;
+      border-color: rgba(134, 239, 172, 0.34);
+      background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(37,99,235,0.10)), rgba(15, 23, 42, 0.94);
+    }
+
+    .info-item-button[aria-expanded="true"] {
+      border-color: rgba(134,239,172,0.62);
+      background: rgba(30, 41, 59, 0.98);
+    }
+
+    /* GM패왕 알리미: 기본은 접힌 버튼, 새 글이 있을 때만 버튼 강조. 매물 알리미 위쪽에 정렬 */
+    .gm-alert-box {
+      position: fixed;
+      right: 12px;
+      left: auto;
+      top: max(18px, calc(50% - 340px));
+      transform: none;
+      z-index: 57;
+      width: 264px;
+      max-height: 238px;
+      overflow-y: auto;
+      margin-top: 0;
+      padding: 10px;
+      border-radius: 15px;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.34);
+      opacity: 0.94;
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .gm-alert-box:hover {
+      opacity: 1;
+      transform: translateX(-2px);
+      border-color: rgba(250, 204, 21, 0.58);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .gm-alert-box.gm-alert-side-new {
+      border-color: rgba(248, 113, 113, 0.78);
+      background: rgba(127, 29, 29, 0.88);
+      animation: gmAlertSidePulse 1.2s ease-in-out 4;
+    }
+
+    .gm-alert-box.gm-alert-closed {
+      display: none;
+    }
+
+    .gm-alert-header {
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 7px;
+    }
+
+    .gm-alert-header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+
+    .gm-alert-title {
+      min-width: 0;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .gm-alert-badge {
+      min-width: 58px;
+      padding: 4px 7px;
+      font-size: 10px;
+    }
+
+    .gm-alert-close {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.62);
+      color: #cbd5e1;
+      font-size: 15px;
+      font-weight: 1000;
+      line-height: 1;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .gm-alert-close:hover {
+      background: rgba(220, 38, 38, 0.68);
+      border-color: rgba(254, 202, 202, 0.72);
+      color: #ffffff;
+    }
+
+    .gm-alert-message {
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .gm-alert-message .post-link {
+      margin: 5px 0 0;
+      font-size: 11px;
+    }
+
+    .gm-alert-buttons {
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .gm-alert-button {
+      min-height: 30px;
+      padding: 7px 9px;
+      font-size: 10.5px;
+    }
+
+    .gm-alert-note,
+    .gm-alert-extra {
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .gm-alert-reopen {
+      position: fixed;
+      right: 12px;
+      left: auto;
+      top: max(18px, calc(50% - 340px));
+      transform: none;
+      z-index: 56;
+      padding: 8px 11px;
+      border: 1px solid rgba(250, 204, 21, 0.42);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #fef3c7;
+      font-size: 11px;
+      font-weight: 1000;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.30);
+      backdrop-filter: blur(6px);
+    }
+
+    .gm-alert-reopen:hover {
+      background: rgba(120, 53, 15, 0.78);
+      color: #ffffff;
+    }
+
+    .gm-alert-reopen.gm-alert-reopen-new {
+      border-color: rgba(248, 113, 113, 0.78);
+      background: rgba(127, 29, 29, 0.88);
+      color: #fecaca;
+      animation: gmAlertSidePulse 1.2s ease-in-out 4;
+    }
+
+    .gm-alert-reopen[hidden] {
+      display: none;
+    }
+
+    @keyframes gmAlertSidePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 26px rgba(0,0,0,0.30); }
+      50% { transform: scale(1.07); box-shadow: 0 0 24px rgba(248,113,113,0.72), 0 10px 26px rgba(0,0,0,0.30); }
+    }
+
+    /* 실시간 채팅 닉네임 자동 고정 */
+    #chatName[readonly],
+    .chat-name-locked {
+      opacity: 0.78;
+      cursor: not-allowed;
+      user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      .gm-alert-box {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 294px;
+        width: auto;
+        max-height: 178px;
+        padding: 8px;
+        transform: none;
+      }
+
+      .gm-alert-box:hover {
+        transform: none;
+      }
+
+      .gm-alert-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .gm-alert-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .gm-alert-button {
+        width: 100%;
+      }
+
+      .gm-alert-reopen {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 294px;
+        transform: none;
+        width: auto;
+      }
+
+      @keyframes gmAlertSidePulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.04); }
+      }
+    }
+
+
+
+    /* 오른쪽 알리미 스택: GM패왕 → 매물 → 실시간 채팅 → 머니/금전 시세 */
+    .side-alert-stack {
+      position: fixed;
+      right: 12px;
+      top: max(18px, calc(50% - 340px));
+      z-index: 86;
+      width: auto;
+      max-height: calc(100vh - 36px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      pointer-events: none;
+    }
+
+    .side-alert-stack .gm-alert-box,
+    .side-alert-stack .market-alert-mini,
+    .side-alert-stack .gm-alert-reopen,
+    .side-alert-stack .market-alert-reopen,
+    .side-alert-stack .chat-floating-toggle,
+    .side-alert-stack .market-price-reopen,
+    .side-alert-stack .market-price-summary {
+      position: static !important;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      bottom: auto !important;
+      margin: 0 !important;
+      transform: none !important;
+      pointer-events: auto;
+    }
+
+    .side-alert-stack .gm-alert-box,
+    .side-alert-stack .market-alert-mini,
+    .side-alert-stack .market-price-summary {
+      width: 264px !important;
+      max-width: calc(100vw - 24px) !important;
+    }
+
+    .side-alert-stack .gm-alert-box,
+    .side-alert-stack .market-alert-mini {
+      max-height: 238px;
+      overflow-y: auto;
+    }
+
+    .side-alert-stack .gm-alert-box.gm-alert-closed,
+    .side-alert-stack .market-alert-mini.market-alert-closed,
+    .side-alert-stack .market-price-summary.market-price-closed,
+    .side-alert-stack .gm-alert-reopen[hidden],
+    .side-alert-stack .market-alert-reopen[hidden],
+    .side-alert-stack .market-price-reopen[hidden] {
+      display: none !important;
+    }
+
+    .side-alert-stack .gm-alert-reopen,
+    .side-alert-stack .market-alert-reopen,
+    .side-alert-stack .chat-floating-toggle,
+    .side-alert-stack .market-price-reopen {
+      width: auto !important;
+      min-width: 0;
+      min-height: 0;
+      padding: 3px 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.2;
+      box-shadow: none;
+      backdrop-filter: blur(4px);
+      white-space: nowrap;
+      opacity: 0.78;
+    }
+
+    .side-alert-stack .gm-alert-reopen,
+    .side-alert-stack .market-alert-reopen,
+    .side-alert-stack .chat-floating-toggle,
+    .side-alert-stack .market-price-reopen {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(15, 23, 42, 0.18);
+      color: rgba(248, 250, 252, 0.88);
+      z-index: auto;
+    }
+
+    .side-alert-stack .chat-floating-toggle.chat-toggle-active {
+      background: rgba(185, 28, 28, 0.20);
+      color: rgba(254, 226, 226, 0.92);
+      border-color: rgba(254, 202, 202, 0.28);
+    }
+
+    .side-alert-stack .market-price-reopen {
+      color: rgba(204, 251, 241, 0.90);
+    }
+
+    .side-alert-stack .gm-alert-reopen.gm-alert-reopen-new {
+      border-color: rgba(248, 113, 113, 0.48);
+      background: rgba(127, 29, 29, 0.28);
+      color: rgba(254, 202, 202, 0.96);
+      opacity: 1;
+    }
+
+    .side-alert-stack .gm-alert-reopen:hover,
+    .side-alert-stack .market-alert-reopen:hover,
+    .side-alert-stack .chat-floating-toggle:hover,
+    .side-alert-stack .market-price-reopen:hover {
+      opacity: 1;
+      background: rgba(15, 23, 42, 0.42);
+      transform: translateX(-1px) !important;
+    }
+
+    .side-alert-stack .gm-alert-box:hover,
+    .side-alert-stack .market-alert-mini:hover,
+    .side-alert-stack .market-price-summary:hover {
+      transform: translateX(-2px) !important;
+    }
+
+    .market-alert-reopen.market-alert-reopen-new {
+      border-color: rgba(250, 204, 21, 0.60);
+      background: rgba(120, 53, 15, 0.34);
+      color: #fef3c7;
+      opacity: 1;
+      animation: sideAlertButtonPulse 1.2s ease-in-out 4;
+    }
+
+    .side-alert-stack .gm-alert-reopen.gm-alert-reopen-new,
+    .side-alert-stack .market-alert-reopen.market-alert-reopen-new,
+    .side-alert-stack .gm-alert-box.gm-alert-side-new,
+    .side-alert-stack .market-alert-mini.market-alert-new {
+      animation: sideAlertButtonPulse 1.2s ease-in-out 4;
+    }
+
+
+
+    /* 오른쪽 스택: 실시간 채팅 버튼 아래 시세 요약 */
+    .market-price-summary {
+      padding: 9px;
+      border-radius: 15px;
+      border: 1px solid rgba(45, 212, 191, 0.34);
+      background: linear-gradient(135deg, rgba(20,184,166,0.13), rgba(59,130,246,0.10)), rgba(15, 23, 42, 0.82);
+      color: #e5e7eb;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.30);
+      backdrop-filter: blur(6px);
+      font-size: 10.5px;
+      font-weight: 900;
+      line-height: 1.35;
+      pointer-events: auto;
+    }
+
+    .market-price-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .market-price-title {
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: -0.02em;
+    }
+
+    .market-price-updated {
+      flex: 0 0 auto;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(45, 212, 191, 0.14);
+      border: 1px solid rgba(94, 234, 212, 0.28);
+      color: #99f6e4;
+      font-size: 9px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-price-close {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.62);
+      color: #cbd5e1;
+      font-size: 15px;
+      font-weight: 1000;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .market-price-close:hover {
+      transform: translateY(-1px);
+      background: rgba(220, 38, 38, 0.68);
+      border-color: rgba(254, 202, 202, 0.72);
+      color: #ffffff;
+    }
+
+    .market-price-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .market-price-server-select,
+    .market-price-refresh {
+      min-height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(94, 234, 212, 0.28);
+      background: rgba(2, 6, 23, 0.56);
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 1000;
+      outline: none;
+    }
+
+    .market-price-server-select {
+      width: 100%;
+      padding: 0 9px;
+      cursor: pointer;
+    }
+
+    .market-price-refresh {
+      padding: 0 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .market-price-refresh:hover {
+      transform: translateY(-1px);
+      border-color: rgba(153, 246, 228, 0.66);
+      background: rgba(20, 184, 166, 0.28);
+    }
+
+    .market-price-refresh:disabled {
+      opacity: 0.56;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .market-price-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-bottom: 7px;
+    }
+
+    .market-price-kpi {
+      min-width: 0;
+      padding: 6px 6px;
+      border-radius: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(2, 6, 23, 0.42);
+      text-align: center;
+    }
+
+    .market-price-kpi-label {
+      display: block;
+      margin-bottom: 2px;
+      color: #94a3b8;
+      font-size: 8.6px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-price-kpi-value {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fef3c7;
+      font-size: 10px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-price-rows {
+      display: grid;
+      gap: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .market-price-row {
+      display: grid;
+      grid-template-columns: 50px 43px 1fr auto;
+      gap: 5px;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 7px;
+      border-radius: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.17);
+      background: rgba(15, 23, 42, 0.62);
+    }
+
+    .market-price-source {
+      color: #a7f3d0;
+      font-size: 9px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-price-server {
+      color: #bfdbfe;
+      font-size: 8.8px;
+      font-weight: 1000;
+      white-space: nowrap;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .market-price-text {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #dbeafe;
+      font-size: 9.2px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .market-price-won {
+      color: #fef3c7;
+      font-size: 9.2px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-price-empty {
+      padding: 9px 6px;
+      border-radius: 11px;
+      background: rgba(15, 23, 42, 0.62);
+      color: #94a3b8;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .market-price-note {
+      margin-top: 6px;
+      color: #94a3b8;
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1.35;
+      text-align: center;
+      word-break: keep-all;
+    }
+
+
+    @keyframes sideAlertButtonPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 26px rgba(0,0,0,0.30); }
+      50% { transform: scale(1.06); box-shadow: 0 0 24px rgba(250,204,21,0.70), 0 10px 26px rgba(0,0,0,0.30); }
+    }
+
+    @media (min-width: 601px) {
+      .chat-section {
+        right: 292px;
+        bottom: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .side-alert-stack {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 12px;
+        width: auto;
+        max-height: calc(100vh - 24px);
+        gap: 7px;
+      }
+
+      .side-alert-stack .gm-alert-box,
+      .side-alert-stack .market-alert-mini {
+        max-height: 178px;
+        padding: 8px;
+      }
+
+      .side-alert-stack .gm-alert-reopen,
+      .side-alert-stack .market-alert-reopen,
+      .side-alert-stack .chat-floating-toggle,
+      .side-alert-stack .market-price-reopen {
+        min-height: 32px;
+        font-size: 10.5px;
+      }
+
+      .side-alert-stack .market-price-summary {
+        padding: 8px;
+        font-size: 10px;
+      }
+
+      .market-price-rows {
+        max-height: 118px;
+      }
+
+      .market-price-row {
+        grid-template-columns: 46px 40px 1fr auto;
+      }
+
+      .chat-section {
+        bottom: 150px;
+      }
+    }
+
+
+
+    @media (max-width: 600px) {
+      .side-alert-stack {
+        right: 10px;
+        left: auto;
+        top: auto;
+        bottom: 64px;
+        align-items: flex-end;
+        max-height: calc(100vh - 84px);
+        gap: 4px;
+      }
+
+      .side-alert-stack .gm-alert-reopen,
+      .side-alert-stack .market-alert-reopen,
+      .side-alert-stack .chat-floating-toggle,
+      .side-alert-stack .market-price-reopen {
+        width: auto !important;
+        min-height: 0;
+        padding: 3px 7px;
+        font-size: 10px;
+        line-height: 1.2;
+      }
+
+      .side-alert-stack .gm-alert-box,
+      .side-alert-stack .market-alert-mini,
+      .side-alert-stack .market-price-summary {
+        width: min(264px, calc(100vw - 20px)) !important;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+
   <section class="hero-search">
     <div class="top-left-links" aria-label="상단 바로가기">
       <a
@@ -2644,13 +3539,25 @@
       <h1><a class="title-refresh-link" href="#" onclick="location.reload(); return false;">미르의전설: 진 정보 검색</a></h1>
       <p>공략, 쿠폰, 보스, 스킬북, 사냥터 정보를 한곳에서 찾아보세요.</p>
 
-      <input
-        id="searchInput"
-        class="search-box"
-        type="text"
-        placeholder="검색어를 입력하세요. 예: 쿠폰, 공성, 장비강화, 선악, 감옥, 보스"
-        autocomplete="off"
-      />
+      <div class="search-input-wrap">
+        <input
+          id="searchInput"
+          class="search-box"
+          type="text"
+          placeholder="검색어를 입력하세요. 예: 쿠폰, 공성, 장비강화, 선악, 감옥, 보스"
+          autocomplete="off"
+        />
+        <button id="searchClearButton" class="search-clear-button" type="button" aria-label="검색어 한 번에 지우기" title="검색어 지우기" hidden>×</button>
+      </div>
+
+      <div class="recent-update-box" aria-label="최근 업데이트">
+        <span class="recent-update-label">최근 업데이트</span>
+        카카오톡 데이터 업로드: 술사 스킬 2개 · 잡템 판매가 · 원소 · 수도사 버프 · 곡괭이 · 봉마령/혼백 정보 추가
+      </div>
+
+
+
+
 
       <div class="naver-board-search" role="search" aria-label="미르의 전설: 진 네이버 카페 검색">
         <div class="naver-board-title">네이버 카페 검색</div>
@@ -2668,115 +3575,52 @@
       </div>
 
 
-      <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
+      <div class="hint">검색어를 입력하면 최근 등록 게시글에서 바로 찾아 표시됩니다.</div>
 
 
-      <div class="latest-posts-box" aria-label="최근 등록 게시글">
-        <div class="latest-posts-header">
-          <div>
-            <div class="latest-posts-title">최근 등록 게시글</div>
-            <div class="latest-posts-subtitle">관리자 업로드와 #정보 제보를 최신순으로 시간까지 요약하며, 아래 페이지 버튼으로 더 볼 수 있습니다.</div>
-          </div>
-          <span id="latestPostsCount" class="latest-posts-count">-</span>
-        </div>
-
-        <div id="latestPostsList" class="latest-posts-list">
-          <div class="latest-posts-empty">최근 게시글을 불러오는 중입니다.</div>
-        </div>
-
-        <div id="latestPostsPagination" class="latest-posts-pagination" aria-label="최근 등록 게시글 페이지"></div>
-
-        <div class="info-list-toggle-row">
-          <button id="infoListToggle" class="info-list-toggle" type="button" aria-expanded="false" aria-controls="infoListPanel">전체 목록 보기</button>
-          <span class="info-list-toggle-sub">카테고리별 전체 정보도 계속 확인할 수 있습니다.</span>
-        </div>
-
-        <div id="infoListPanel" class="info-list-panel" hidden>
-          <div class="info-list-toolbar">
-            <div class="info-list-heading">등록된 정보 목록 <span id="infoListCount" class="info-list-count"></span></div>
-            <input id="infoListFilter" class="info-list-filter" type="text" placeholder="목록 안에서 검색" autocomplete="off" />
-          </div>
-          <div id="infoListContent" class="info-list-content">
-            <div class="info-list-empty">목록을 불러오는 중입니다.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="recent-update-box" aria-label="최근 업데이트">
-        <span class="recent-update-label">최근 업데이트</span>
-        카카오톡 데이터 업로드: 술사 스킬 2개 · 잡템 판매가 · 원소 · 수도사 버프 · 곡괭이 · 봉마령/혼백 정보 추가
-      </div>
-
-
-      <div id="gmAlertBox" class="gm-alert-box" role="region" aria-label="GM패왕 최신글 알림">
-        <div class="gm-alert-header">
-          <div class="gm-alert-title">GM패왕 최신글 알림</div>
-          <div id="gmAlertBadge" class="gm-alert-badge">확인 대기</div>
-        </div>
-        <div id="gmAlertMessage" class="gm-alert-message">
-          처음 접속할 때 한 번만 GM패왕 최신글을 확인합니다. 이후 다시 확인은 아래 버튼을 눌렀을 때만 진행합니다.
-        </div>
-        <div class="gm-alert-buttons">
-          <button id="gmAutoCheckButton" class="gm-alert-button primary" type="button">지금 GM패왕 글 확인</button>
-          <button id="gmPermissionButton" class="gm-alert-button" type="button">브라우저 알림 허용</button>
-        </div>
-        <div class="gm-alert-note">
-          처음 접속 시 가장 최근 GM패왕 글을 저장합니다. 계속 반복 확인하지 않으며, 다시 확인하려면 “지금 GM패왕 글 확인” 버튼을 누르세요.
-        </div>
-      </div>
-
-      <div class="link-buttons">
-        <a
-          class="openchat-button"
-          href="https://open.kakao.com/o/gDdjY6Ci"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          문파 가입 문의
-        </a>
-
-        <a
-          class="openchat-button gm-button"
-          href="https://m.mobileindex.com/mi-chart/realtime-rank"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          모바일 인덱스
-        </a>
-
-
-
-        <button
-          id="chatToggleTop"
-          class="openchat-button chat-jump-button chat-toggle-control"
-          type="button"
-          aria-controls="liveChat"
-          aria-expanded="false"
-        >
-          실시간 채팅 켜기
-        </button>
-
-      </div>
 
     </div>
   </section>
 
-  <div id="marketAlertMini" class="market-alert-mini" role="status" aria-live="polite" title="미르의 전설: 진 거래소 신규 매물 알림">
+  <div class="side-alert-stack" aria-label="알리미와 채팅 빠른 버튼">
+  <div id="gmAlertBox" class="gm-alert-box gm-alert-closed" role="region" aria-label="GM패왕 최신글 알림">
+    <div class="gm-alert-header">
+      <div class="gm-alert-title">GM패왕 최신글 알림</div>
+      <div class="gm-alert-header-actions">
+        <div id="gmAlertBadge" class="gm-alert-badge">확인 대기</div>
+        <button id="gmAlertClose" class="gm-alert-close" type="button" aria-label="GM패왕 알리미 닫기">×</button>
+      </div>
+    </div>
+    <div id="gmAlertMessage" class="gm-alert-message">
+      접속하면 GM패왕 최신글을 확인하고, 이후 5분마다 새 글을 자동 확인합니다.
+    </div>
+    <div class="gm-alert-buttons">
+      <button id="gmAutoCheckButton" class="gm-alert-button primary" type="button">지금 GM패왕 글 확인</button>
+      <button id="gmPermissionButton" class="gm-alert-button" type="button">브라우저 알림 허용</button>
+    </div>
+    <div class="gm-alert-note">
+      새 GM패왕 글이 감지되면 접힌 GM패왕 알리미 버튼만 반짝이고, 브라우저 알림을 허용하면 알림도 표시됩니다.
+    </div>
+  </div>
+  <button id="gmAlertReopen" class="gm-alert-reopen" type="button">GM패왕 알리미</button>
+
+  <div id="marketAlertMini" class="market-alert-mini market-alert-closed" role="status" aria-live="polite" title="미르의 전설: 진 거래소 신규 매물 알림">
     <div class="market-alert-title-row">
       <span class="market-alert-dot" aria-hidden="true"></span>
       <span class="market-alert-title-label">매물 알리미</span>
       <button id="marketAlertClose" class="market-alert-close" type="button" aria-label="매물 알리미 닫기">×</button>
     </div>
-    <span id="marketAlertText" class="market-alert-text">미르의 전설: 진 최근 매물 표시</span>
+    <span id="marketAlertText" class="market-alert-text">미르의 전설: 진 최근 매물/거래 표시</span>
+    <div class="market-alert-controls" aria-label="매물 알리미 서버 필터와 새로고침">
+      <select id="marketAlertServerSelect" class="market-alert-server-select" aria-label="매물 알리미 서버 선택">
+        <option value="">전체 서버</option>
+      </select>
+      <button id="marketAlertRefresh" class="market-alert-refresh" type="button">새로고침</button>
+    </div>
     <div id="marketAlertList" class="market-alert-list" aria-label="거래소 바로가기와 최근 매물"></div>
     <div id="marketAlertDetail" class="market-alert-detail" aria-live="polite"></div>
   </div>
-  <button id="marketAlertReopen" class="market-alert-reopen" type="button" hidden>매물 알리미</button>
-
-  <main>
-    <div id="results"></div>
-  </main>
-
+  <button id="marketAlertReopen" class="market-alert-reopen" type="button">매물 알리미</button>
 
   <button
     id="chatFloatingToggle"
@@ -2788,6 +3632,39 @@
     실시간 채팅 켜기
   </button>
 
+  <button id="marketPriceToggle" class="market-price-reopen" type="button" aria-controls="marketPriceSummary" aria-expanded="false">머니/금전 시세</button>
+
+  <div id="marketPriceSummary" class="market-price-summary market-price-closed" role="region" aria-label="아이템베이 바로템 최근 거래 시세 요약" aria-hidden="true">
+    <div class="market-price-header">
+      <span class="market-price-title">아이템베이·바로템 머니/금전 1,000만당 시세</span>
+      <span id="marketPriceUpdated" class="market-price-updated">대기</span>
+      <button id="marketPriceClose" class="market-price-close" type="button" aria-label="머니/금전 시세 닫기">×</button>
+    </div>
+    <div class="market-price-controls" aria-label="시세 서버 필터와 새로고침">
+      <select id="marketPriceServerSelect" class="market-price-server-select" aria-label="시세를 볼 서버 선택">
+        <option value="">전체 서버</option>
+      </select>
+      <button id="marketPriceRefresh" class="market-price-refresh" type="button">새로고침</button>
+    </div>
+    <div class="market-price-kpis" aria-label="최근 거래 시세 요약">
+      <div class="market-price-kpi">
+        <span class="market-price-kpi-label">최저</span>
+        <span id="marketPriceLow" class="market-price-kpi-value">-</span>
+      </div>
+      <div class="market-price-kpi">
+        <span class="market-price-kpi-label">평균</span>
+        <span id="marketPriceAvg" class="market-price-kpi-value">-</span>
+      </div>
+      <div class="market-price-kpi">
+        <span class="market-price-kpi-label">건수</span>
+        <span id="marketPriceCount" class="market-price-kpi-value">-</span>
+      </div>
+    </div>
+    <div id="marketPriceRows" class="market-price-rows" aria-label="최근 거래내역"></div>
+    <div class="market-price-note">계정 제외 · 머니/금전만 · 서버 선택 시 해당 서버만 최저가/평균가를 다시 계산합니다.</div>
+  </div>
+
+  </div>
   <section id="liveChat" class="chat-section">
     <div class="chat-card">
       <div class="chat-header">
@@ -2817,8 +3694,9 @@
           class="chat-input"
           type="text"
           maxlength="12"
-          placeholder="닉네임"
-          autocomplete="nickname"
+          placeholder="자동 닉네임"
+          autocomplete="off"
+          readonly
         />
         <input
           id="chatText"
@@ -2837,6 +3715,41 @@
     </div>
   </section>
 
+  <main id="searchResultsArea" class="search-results-area" aria-label="검색 결과">
+      <div class="latest-posts-box" aria-label="최근 등록 게시글">
+      <div class="latest-posts-header">
+        <div>
+          <div class="latest-posts-title">최근 등록 게시글</div>
+          <div class="latest-posts-subtitle">관리자 업로드와 #정보 제보를 최신순으로 시간까지 요약하며, 아래 페이지 버튼으로 더 볼 수 있습니다.</div>
+        </div>
+        <span id="latestPostsCount" class="latest-posts-count">-</span>
+      </div>
+
+      <div id="latestPostsList" class="latest-posts-list">
+        <div class="latest-posts-empty">최근 게시글을 불러오는 중입니다.</div>
+      </div>
+
+      <div id="latestPostsPagination" class="latest-posts-pagination" aria-label="최근 등록 게시글 페이지"></div>
+
+      <div class="info-list-toggle-row">
+        <button id="infoListToggle" class="info-list-toggle" type="button" aria-expanded="false" aria-controls="infoListPanel">전체 목록 보기</button>
+        <span class="info-list-toggle-sub">카테고리별 전체 정보도 계속 확인할 수 있습니다.</span>
+      </div>
+
+      <div id="infoListPanel" class="info-list-panel" hidden>
+        <div class="info-list-toolbar">
+          <div class="info-list-heading">등록된 정보 목록 <span id="infoListCount" class="info-list-count"></span></div>
+          <input id="infoListFilter" class="info-list-filter" type="text" placeholder="목록 안에서 검색" autocomplete="off" />
+        </div>
+        <div id="infoListContent" class="info-list-content">
+          <div class="info-list-empty">목록을 불러오는 중입니다.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="results"></div>
+  </main>
 
 
   <section id="adminUpload" class="admin-upload-section">
@@ -4324,6 +5237,7 @@
     ];
 
     const searchInput = document.getElementById("searchInput");
+    const searchClearButton = document.getElementById("searchClearButton");
     const results = document.getElementById("results");
     const popularList = document.getElementById("popularList");
     const topDashboardPopularList = document.getElementById("topDashboardPopularList");
@@ -4331,16 +5245,23 @@
     const totalVisitorCount = document.getElementById("totalVisitorCount");
     const naverBoardSearchInput = document.getElementById("naverBoardSearchInput");
     const naverBoardSearchButton = document.getElementById("naverBoardSearchButton");
+    const latestPostsBox = document.querySelector(".latest-posts-box");
     const latestPostsList = document.getElementById("latestPostsList");
     const latestPostsCount = document.getElementById("latestPostsCount");
+    const latestPostsSubtitle = document.querySelector(".latest-posts-subtitle");
     const latestPostsPagination = document.getElementById("latestPostsPagination");
     const LATEST_POSTS_PER_PAGE = 5;
     let latestPostsCurrentPage = 1;
+    let latestPostsActiveKey = "";
+    let latestPostsSearchKeyword = "";
+    let infoListActiveKey = "";
     const gmAlertBox = document.getElementById("gmAlertBox");
     const gmAlertBadge = document.getElementById("gmAlertBadge");
     const gmAlertMessage = document.getElementById("gmAlertMessage");
     const gmAutoCheckButton = document.getElementById("gmAutoCheckButton");
     const gmPermissionButton = document.getElementById("gmPermissionButton");
+    const gmAlertClose = document.getElementById("gmAlertClose");
+    const gmAlertReopen = document.getElementById("gmAlertReopen");
 
     const NAVER_CAFE_ID = "31717562";
     const NAVER_CAFE_MENU_ID = "13";
@@ -4351,6 +5272,11 @@
 
     const MARKET_ALERT_STORAGE_PREFIX = "mirjinMarketAlertSignature_v7_";
     const MARKET_ALERT_LATEST_STORAGE_PREFIX = "mirjinMarketAlertLatest_v7_";
+    const MARKET_PRICE_HISTORY_STORAGE_PREFIX = "mirjinMarketPriceHistory_v8_";
+    const MARKET_PRICE_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketPriceSelectedServer_v1";
+    const MARKET_ALERT_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketAlertSelectedServer_v1";
+    let marketPriceRefreshRunning = false;
+    let marketAlertRefreshRunning = false;
     const MARKET_ALERT_CHECK_MS = 30 * 1000;
     const MARKET_ALERT_FETCH_TIMEOUT_MS = 1800;
     const MARKET_ALERT_SOURCES = [
@@ -4359,6 +5285,8 @@
         type: "barotem_account",
         name: "바로템 계정",
         label: "바로템 계정 알리미",
+        priceSummary: false,
+        priceSourceLabel: "바로템",
         url: "https://www.barotem.com/product/lists/4025?page=1&sell=sell&display=1&orderby=1",
         fallbackLatest: "최근 매물: 서버 1서버 · 직업 전사 · 70랩 풀전사 풀템 팝니다. · 350,000원 · 07월 09일 11:36"
       },
@@ -4367,14 +5295,46 @@
         type: "barotem_money",
         name: "바로템 게임머니",
         label: "바로템 게임머니 알리미",
+        priceSummary: true,
+        priceSourceLabel: "바로템",
         url: "https://www.barotem.com/product/lists/2382r1004?page=1&sell=sell&display=1&orderby=1",
-        fallbackLatest: "최근 매물: 서버 2서버 · 💕💗💗200%완전사냥 미니팝니다💗💗💗 · 5,000만 게임머니 · 최소 25,000원 · 07월 09일 17:04"
+        fallbackLatest: "최근 매물: 서버 6서버 · 6,000만 게임머니 · 천만 게임머니당 3,500원 · 최소 21,000원",
+        priceFallbackLines: [
+          "최근 매물: 서버 6서버 · 6,000만 게임머니 · 천만 게임머니당 3,500원 · 최소 21,000원",
+          "최근 매물: 서버 12서버 · 5,000만~3억 게임머니 · 천게임머니당 4,500원 · 최소 22,500원",
+          "최근 매물: 서버 12서버 · 5,000만 게임머니 · 천게임머니당 6,000원 · 30,000원",
+          "최근 매물: 서버 1서버 · 1,000만~2억7,000만 게임머니 · 천만 게임머니당 5,000원 · 최소 5,000원",
+          "최근 거래완료: 서버 5서버 · 3,500만 게임머니 팝니다. · 3,500만 게임머니 · 25,000원 · 07월 09일 17:21",
+          "최근 거래완료: 서버 5서버 · 6,000만 게임머니 · 6,000만 게임머니 · 48,000원 · 07월 08일 16:43",
+          "최근 거래완료: 서버 5서버 · 7,000만 게임머니 · 7,000만 게임머니 · 55,000원 · 07월 07일 21:48",
+          "최근 거래완료: 서버 5서버 · 3,000만 게임머니 판매대기중 · 3,000만 게임머니 · 24,000원 · 07월 05일 18:02",
+          "최근 매물: 서버 8서버 · 7,000만 게임머니 · 천만 게임머니당 6,000원 · 최소 42,000원",
+          "최근 매물: 서버 1서버 · 8,000만 게임머니 · 천만 게임머니당 5,000원 · 40,000원"
+        ]
+      },
+      {
+        id: "itembay",
+        type: "itembay",
+        name: "아이템베이",
+        label: "아이템베이 거래 알리미",
+        priceSummary: true,
+        priceSourceLabel: "아이템베이",
+        url: "https://www.itembay.com/item/sell/game-185",
+        fallbackLatest: "최근 매물: 서버 미표기 · 게임머니 · 2,000만 개 · 8,000원(1,000만당) · 16,000원",
+        priceFallbackLines: [
+          "최근 매물: 서버 미표기 · 게임머니 · 3,500만 개 · 7,142원(1,000만당) · 25,000원",
+          "최근 매물: 서버 미표기 · 게임머니 · 2,000만 개 · 8,000원(1,000만당) · 16,000원",
+          "최근 매물: 서버 미표기 · 게임머니 · 9,000만 개 · 7,777원(1,000만당) · 70,000원",
+          "최근 매물: 서버 미표기 · 게임머니 · 2,000만 개 · 7,500원(1,000만당) · 15,000원",
+          "최근 매물: 서버 미표기 · 게임머니 · 5,000만 개 · 9,800원(1,000만당) · 49,000원"
+        ]
       },
       {
         id: "itemmania",
         type: "itemmania",
         name: "아이템매니아",
         label: "아이템매니아 알리미",
+        priceSummary: false,
         url: "https://www.itemmania.com/sell/list.html?search_game=5985",
         fallbackLatest: "최근 매물: 서버 미표기(기타) · 게임쿠폰 · 1개~6개 · 5,000원(1개당) · 최소 5,000원 · 11:14"
       }
@@ -4399,8 +5359,10 @@
 
     const GM_ALERT_STORAGE_KEY = "mirjinGmPaewangAlertLastSeen_v7";
     const GM_ALERT_ITEM_STORAGE_KEY = "mirjinGmPaewangAlertLastItem_v7";
+    const GM_ALERT_UNREAD_STORAGE_KEY = "mirjinGmPaewangAlertUnread_v1";
     const GM_ALERT_API_URL = ""; // 네이버 연결 제한 해결용 JSON API 주소. Cloudflare Worker 배포 URL을 넣으세요. 예: https://gm-paewang-alert.내계정.workers.dev
-        const GM_ALERT_FETCH_TIMEOUT_MS = 12000;
+    const GM_ALERT_FETCH_TIMEOUT_MS = 12000;
+    const GM_ALERT_AUTO_CHECK_MS = 5 * 60 * 1000;
     const GM_PAEWANG_MEMBER_URL = "https://m.cafe.naver.com/ca-fe/web/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8/articles";
     const GM_ALERT_WRITERS = ["GM패왕"];
     const GM_CAFE_ARTICLE_LIST_API = `https://apis.naver.com/cafe-web/cafe2/ArticleListV2dot1.json?search.queryType=lastArticle&search.clubid=${NAVER_CAFE_ID}&search.page=1&search.perPage=50&ad=false&adUnit=MW_CAFE_ARTICLE_LIST_RS`;
@@ -4432,6 +5394,7 @@
     let gmAlertLastSuccessItem = null;
     let gmAlertLastSuccessAt = 0;
     let gmAlertFailCount = 0;
+    let gmAlertRefreshTimer = null;
 
     function getDefaultPopularStats() {
       const stats = {};
@@ -4732,8 +5695,30 @@
       }, 900);
     }
 
+    function updateSearchClearButton() {
+      if (!searchClearButton || !searchInput) {
+        return;
+      }
+
+      searchClearButton.hidden = searchInput.value.length === 0;
+    }
+
+    function clearSearchInput() {
+      if (!searchInput) {
+        return;
+      }
+
+      searchInput.value = "";
+      clearTimeout(searchRecordTimer);
+      lastRecordedKeyword = "";
+      render();
+      updateSearchClearButton();
+      searchInput.focus();
+    }
+
     function searchKeyword(keyword) {
       searchInput.value = keyword;
+      updateSearchClearButton();
       recordSearchKeyword(keyword);
       lastRecordedKeyword = keyword;
       render();
@@ -4855,13 +5840,110 @@
       latestPostsPagination.innerHTML = buttons;
     }
 
+    function getLatestPostKey(post) {
+      return [
+        post && post.title || "",
+        post && post.category || "",
+        post && post.source || "",
+        post && post.date || "",
+        post && post.createdAt || "",
+        String(post && post.content || "").slice(0, 100)
+      ].join("|");
+    }
+
+    function openSearchResultInLatestPosts(postKey) {
+      const recentPosts = getRecentPosts();
+      const targetIndex = recentPosts.findIndex(post => getLatestPostKey(post) === postKey);
+
+      if (targetIndex < 0) {
+        return;
+      }
+
+      latestPostsCurrentPage = Math.floor(targetIndex / LATEST_POSTS_PER_PAGE) + 1;
+      latestPostsActiveKey = postKey;
+      renderLatestPosts();
+
+      if (latestPostsBox) {
+        latestPostsBox.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+
+      window.setTimeout(() => {
+        const openedCard = latestPostsList ? latestPostsList.querySelector('[aria-expanded="true"]') : null;
+        if (openedCard) {
+          openedCard.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+        }
+      }, 80);
+    }
+
+    function toggleLatestPostDetail(postKey) {
+      latestPostsActiveKey = latestPostsActiveKey === postKey ? "" : postKey;
+      renderLatestPosts();
+    }
+
+    function closeLatestPostDetail(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      latestPostsActiveKey = "";
+      renderLatestPosts();
+    }
+
+    function renderLatestPostDetail(post) {
+      const title = post.title || "제목 없음";
+      const meta = [
+        formatPostDateTime(post),
+        post.category || "기타",
+        post.source || "출처 없음"
+      ].filter(Boolean).join(" · ");
+      const content = String(post.content || "내용이 없습니다.").trim() || "내용이 없습니다.";
+      const safeUrl = getSafePostUrl(post.url);
+      const tags = getPostTags(post);
+
+      return `
+        <div class="latest-post-detail" role="region" aria-label="${escapeHtml(title)} 내용 보기">
+          <div class="latest-post-detail-header">
+            <div class="latest-post-detail-title">${escapeHtml(title)}</div>
+            <button class="latest-post-detail-close" type="button" onclick="closeLatestPostDetail(event)" aria-label="최근 게시글 내용 닫기">닫기</button>
+          </div>
+          <div class="latest-post-detail-meta">${escapeHtml(meta)}</div>
+          <div class="latest-post-detail-body">${escapeHtml(content)}</div>
+          ${safeUrl ? `<a class="latest-post-detail-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
+          ${tags.length ? `<div class="latest-post-detail-tags">${tags.map(tag => `<span class="latest-post-detail-tag">#${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
+        </div>
+      `;
+    }
+
     function renderLatestPosts() {
       if (!latestPostsList) {
         return;
       }
 
+      const keyword = String(latestPostsSearchKeyword || "").trim();
+      const normalizedKeyword = normalizeText(keyword);
       const recentPosts = getRecentPosts();
-      const totalPosts = recentPosts.length;
+      const visiblePosts = normalizedKeyword
+        ? recentPosts.filter(post => {
+            const targetText = [
+              post.title,
+              post.category,
+              post.source,
+              post.date,
+              post.content,
+              post.url || "",
+              getPostTags(post).join(" ")
+            ].join(" ");
+
+            return normalizeText(targetText).includes(normalizedKeyword);
+          })
+        : recentPosts;
+      const totalPosts = visiblePosts.length;
       const totalPages = Math.max(1, Math.ceil(totalPosts / LATEST_POSTS_PER_PAGE));
 
       if (latestPostsCurrentPage > totalPages) {
@@ -4869,14 +5951,24 @@
       }
 
       const startIndex = (latestPostsCurrentPage - 1) * LATEST_POSTS_PER_PAGE;
-      const pagePosts = recentPosts.slice(startIndex, startIndex + LATEST_POSTS_PER_PAGE);
+      const pagePosts = visiblePosts.slice(startIndex, startIndex + LATEST_POSTS_PER_PAGE);
+
+      if (latestPostsSubtitle) {
+        latestPostsSubtitle.textContent = keyword
+          ? `검색어 “${keyword}”와 일치하는 최근 등록 게시글만 보여줍니다. 글을 누르면 바로 펼쳐집니다.`
+          : "관리자 업로드와 #정보 제보를 최신순으로 시간까지 요약하며, 아래 페이지 버튼으로 더 볼 수 있습니다.";
+      }
 
       if (latestPostsCount) {
-        latestPostsCount.textContent = totalPosts ? `전체 ${totalPosts}개 · ${latestPostsCurrentPage}/${totalPages}쪽` : "0개";
+        latestPostsCount.textContent = keyword
+          ? (totalPosts ? `검색 ${totalPosts}개 · ${latestPostsCurrentPage}/${totalPages}쪽` : "검색 0개")
+          : (totalPosts ? `전체 ${totalPosts}개 · ${latestPostsCurrentPage}/${totalPages}쪽` : "0개");
       }
 
       if (totalPosts === 0) {
-        latestPostsList.innerHTML = `<div class="latest-posts-empty">아직 표시할 게시글이 없습니다.</div>`;
+        latestPostsList.innerHTML = keyword
+          ? `<div class="latest-posts-empty">최근 등록 게시글에서 “${escapeHtml(keyword)}” 검색 결과가 없습니다.</div>`
+          : `<div class="latest-posts-empty">아직 표시할 게시글이 없습니다.</div>`;
         renderLatestPostsPagination(1);
         return;
       }
@@ -4888,17 +5980,59 @@
           post.category || "기타",
           post.source || "출처 없음"
         ].filter(Boolean).join(" · ");
+        const postKey = getLatestPostKey(post);
+        const isOpen = latestPostsActiveKey === postKey;
 
         return `
-          <button class="latest-post-card" type="button" onclick="searchKeyword('${escapeJsString(title)}')" aria-label="${escapeHtml(title)} 검색하기">
+          <button class="latest-post-card" type="button" onclick="toggleLatestPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
             <span class="latest-post-card-title">${escapeHtml(title)}</span>
             <span class="latest-post-card-meta">${escapeHtml(meta)}</span>
             <span class="latest-post-card-summary">${escapeHtml(summarizePostContent(post.content))}</span>
           </button>
+          ${isOpen ? renderLatestPostDetail(post) : ""}
         `;
       }).join("");
 
       renderLatestPostsPagination(totalPages);
+    }
+
+    function toggleInfoPostDetail(postKey) {
+      infoListActiveKey = infoListActiveKey === postKey ? "" : postKey;
+      renderInfoList();
+    }
+
+    function closeInfoPostDetail(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      infoListActiveKey = "";
+      renderInfoList();
+    }
+
+    function renderInfoPostDetail(post) {
+      const title = post.title || "제목 없음";
+      const meta = [
+        formatPostDateTime(post),
+        post.category || "기타",
+        post.source || "출처 없음"
+      ].filter(Boolean).join(" · ");
+      const content = String(post.content || "내용이 없습니다.").trim() || "내용이 없습니다.";
+      const safeUrl = getSafePostUrl(post.url);
+      const tags = getPostTags(post);
+
+      return `
+        <div class="latest-post-detail info-post-detail" role="region" aria-label="${escapeHtml(title)} 내용 보기">
+          <div class="latest-post-detail-header">
+            <div class="latest-post-detail-title">${escapeHtml(title)}</div>
+            <button class="latest-post-detail-close" type="button" onclick="closeInfoPostDetail(event)" aria-label="전체 목록 내용 닫기">닫기</button>
+          </div>
+          <div class="latest-post-detail-meta">${escapeHtml(meta)}</div>
+          <div class="latest-post-detail-body">${escapeHtml(content)}</div>
+          ${safeUrl ? `<a class="latest-post-detail-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
+          ${tags.length ? `<div class="latest-post-detail-tags">${tags.map(tag => `<span class="latest-post-detail-tag">#${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
+        </div>
+      `;
     }
 
 
@@ -4909,8 +6043,25 @@
         list: document.getElementById("marketAlertList"),
         detail: document.getElementById("marketAlertDetail"),
         closeButton: document.getElementById("marketAlertClose"),
-        reopenButton: document.getElementById("marketAlertReopen")
+        reopenButton: document.getElementById("marketAlertReopen"),
+        serverSelect: document.getElementById("marketAlertServerSelect"),
+        refreshButton: document.getElementById("marketAlertRefresh")
       };
+    }
+
+    function updateMarketAlertReopenButton(state) {
+      const elements = getMarketAlertElements();
+      if (!elements.reopenButton || !elements.box) {
+        return;
+      }
+
+      const hasNew = typeof state === "string"
+        ? state === "new"
+        : elements.box.classList.contains("market-alert-new");
+      const isClosed = elements.box.classList.contains("market-alert-closed");
+      elements.reopenButton.textContent = hasNew ? "매물 새 글" : "매물 알리미";
+      elements.reopenButton.classList.toggle("market-alert-reopen-new", Boolean(hasNew));
+      elements.reopenButton.hidden = !isClosed;
     }
 
     function setMarketAlertMini(state, message) {
@@ -4922,6 +6073,7 @@
       elements.box.classList.toggle("market-alert-new", state === "new");
       elements.box.classList.remove("market-alert-hidden");
       elements.text.textContent = message;
+      updateMarketAlertReopenButton(state);
     }
 
     function getMarketStorageKey(source) {
@@ -4944,25 +6096,137 @@
       return localStorage.getItem(getMarketLatestStorageKey(source)) || getDefaultMarketLatest(source);
     }
 
+    function getSavedMarketAlertServerFilter() {
+      try {
+        return normalizeMarketPriceServerValue(localStorage.getItem(MARKET_ALERT_SELECTED_SERVER_STORAGE_KEY) || "");
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function getMarketAlertAllLines(source) {
+      const lines = [];
+      function add(line) {
+        const raw = cleanMarketListingLine(line);
+        const clean = cleanMarketPart(line);
+        if (!clean) return;
+        const output = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근") ? clean : `최근 매물: ${clean}`);
+        if (!lines.includes(output)) {
+          lines.push(output);
+        }
+      }
+
+      getMarketListingHistory(source).forEach(add);
+      add(getMarketSavedLatest(source));
+      return lines;
+    }
+
+    function getMarketAlertLineForServer(source, selectedServer) {
+      const server = normalizeMarketPriceServerValue(selectedServer || "");
+      const lines = getMarketAlertAllLines(source).filter(line => isValidMarketLatestLine(source, line));
+      if (!server) {
+        return lines[0] || getMarketSavedLatest(source);
+      }
+      return lines.find(line => normalizeMarketPriceServerValue(getMarketPriceServerLabel(line)) === server) || "";
+    }
+
+    function updateMarketAlertServerOptions() {
+      const elements = getMarketAlertElements();
+      const select = elements.serverSelect;
+      if (!select) {
+        return "";
+      }
+
+      const savedServer = getSavedMarketAlertServerFilter();
+      const currentServer = normalizeMarketPriceServerValue(select.value || savedServer || "");
+      const serverValues = Array.from(new Set(MARKET_ALERT_SOURCES.flatMap(source =>
+        getMarketAlertAllLines(source)
+          .map(line => normalizeMarketPriceServerValue(getMarketPriceServerLabel(line)))
+          .filter(Boolean)
+      ))).sort(compareMarketServerLabels);
+
+      if (currentServer && !serverValues.includes(currentServer)) {
+        serverValues.push(currentServer);
+      }
+
+      const optionValues = ["", ...serverValues];
+      const nextHtml = optionValues.map(value => {
+        const label = value ? value : "전체 서버";
+        return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+      }).join("");
+
+      if (select.innerHTML !== nextHtml) {
+        select.innerHTML = nextHtml;
+      }
+
+      select.value = optionValues.includes(currentServer) ? currentServer : "";
+      return select.value;
+    }
+
     function renderMarketAlertItems() {
       const elements = getMarketAlertElements();
       if (!elements.list) {
         return;
       }
 
-      elements.list.innerHTML = MARKET_ALERT_SOURCES.map(source => {
-        const savedLatest = getMarketSavedLatest(source);
+      const selectedServer = updateMarketAlertServerOptions();
+      const cards = MARKET_ALERT_SOURCES.map(source => {
+        const savedLatest = getMarketAlertLineForServer(source, selectedServer);
+        if (selectedServer && !savedLatest) {
+          return "";
+        }
         return `
           <button id="${getMarketElementId("marketCard_", source)}" class="market-alert-card" type="button" onclick="showMarketListingDetail('${escapeJsString(source.id)}')" aria-label="${escapeHtml(source.label || `${source.name} 알리미`)} 요약 보기">
             <span class="market-alert-card-top">
               <span class="market-alert-link-title">${escapeHtml(source.label || `${source.name} 알리미`)}</span>
               <span id="${getMarketElementId("marketStatus_", source)}" class="market-alert-status">최근</span>
             </span>
-            <span id="${getMarketElementId("marketLatest_", source)}" class="market-alert-latest">${escapeHtml(savedLatest)}</span>
+            <span id="${getMarketElementId("marketLatest_", source)}" class="market-alert-latest">${escapeHtml(savedLatest || "해당 서버 매물/거래 확인 중")}</span>
             <span class="market-alert-more">요약 보기 ↓</span>
           </button>
         `;
-      }).join("");
+      }).filter(Boolean);
+
+      elements.list.innerHTML = cards.length
+        ? cards.join("")
+        : `<div class="market-alert-empty">${escapeHtml(selectedServer)} 매물/거래가 없습니다. 새로고침을 눌러 다시 확인하세요.</div>`;
+    }
+
+    function setupMarketAlertControls() {
+      const elements = getMarketAlertElements();
+
+      if (elements.serverSelect && !elements.serverSelect.dataset.bound) {
+        elements.serverSelect.dataset.bound = "1";
+        elements.serverSelect.addEventListener("change", () => {
+          const selectedServer = normalizeMarketPriceServerValue(elements.serverSelect.value || "");
+          try {
+            localStorage.setItem(MARKET_ALERT_SELECTED_SERVER_STORAGE_KEY, selectedServer);
+          } catch (error) {
+            console.warn("매물 알리미 서버 선택 저장 실패", error);
+          }
+          renderMarketAlertItems();
+        });
+      }
+
+      if (elements.refreshButton && !elements.refreshButton.dataset.bound) {
+        elements.refreshButton.dataset.bound = "1";
+        elements.refreshButton.addEventListener("click", async () => {
+          if (marketAlertRefreshRunning) {
+            return;
+          }
+          marketAlertRefreshRunning = true;
+          elements.refreshButton.disabled = true;
+          elements.refreshButton.textContent = "갱신중";
+          try {
+            await checkMarketListings(false);
+          } finally {
+            marketAlertRefreshRunning = false;
+            elements.refreshButton.disabled = false;
+            elements.refreshButton.textContent = "새로고침";
+            renderMarketAlertItems();
+          }
+        });
+      }
     }
 
     function setMarketSourceState(source, state, statusText, latestText) {
@@ -4983,6 +6247,466 @@
       if (latest && latestText) {
         latest.textContent = latestText;
       }
+    }
+
+    function getMarketHistoryStorageKey(source) {
+      return `${MARKET_PRICE_HISTORY_STORAGE_PREFIX}${source.id}`;
+    }
+
+    function getMarketPriceSummaryElements() {
+      return {
+        box: document.getElementById("marketPriceSummary"),
+        updated: document.getElementById("marketPriceUpdated"),
+        low: document.getElementById("marketPriceLow"),
+        avg: document.getElementById("marketPriceAvg"),
+        count: document.getElementById("marketPriceCount"),
+        rows: document.getElementById("marketPriceRows"),
+        serverSelect: document.getElementById("marketPriceServerSelect"),
+        refreshButton: document.getElementById("marketPriceRefresh"),
+        toggleButton: document.getElementById("marketPriceToggle"),
+        closeButton: document.getElementById("marketPriceClose")
+      };
+    }
+
+    function getMarketPriceSources() {
+      return MARKET_ALERT_SOURCES.filter(source => source.priceSummary === true);
+    }
+
+    function isMoneyOrGoldMarketPriceLine(source, line) {
+      const text = String(line || "");
+      if (!source) return false;
+      if (source.type === "barotem_account") return false;
+      if (/(계정|캐릭|캐릭터|풀템|장비|무기|방어구|반지|목걸이|보주|스킬|쿠폰|아이템)/.test(text)) return false;
+      return /(게임머니|머니|금전|금화|은화|만\s*개|만\s*게임머니|천\s*만|천만)/.test(text);
+    }
+
+    function saveMarketListingHistory(source, listingLines) {
+      if (!source || !Array.isArray(listingLines)) {
+        return;
+      }
+
+      const validLines = listingLines
+        .map(line => /^최근\s*/.test(cleanMarketListingLine(line)) ? cleanMarketListingLine(line) : `최근 매물: ${line}`)
+        .filter(line => isValidMarketLatestLine(source, line))
+        .slice(0, 20);
+
+      if (validLines.length === 0) {
+        return;
+      }
+
+      try {
+        localStorage.setItem(getMarketHistoryStorageKey(source), JSON.stringify(validLines));
+      } catch (error) {
+        console.warn("시세 히스토리 저장 실패", error);
+      }
+    }
+
+    function getMarketListingHistory(source) {
+      const fallbackLine = getMarketSavedLatest(source);
+      const fallbackLines = Array.isArray(source && source.priceFallbackLines) ? source.priceFallbackLines : [];
+      const combined = [];
+
+      function addLine(line) {
+        const raw = cleanMarketListingLine(line);
+        const clean = cleanMarketPart(line);
+        if (!clean) return;
+        const output = /^최근\s*/.test(raw) ? raw : (clean.startsWith("최근 매물:") ? clean : `최근 매물: ${clean}`);
+        if (!combined.includes(output)) {
+          combined.push(output);
+        }
+      }
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(getMarketHistoryStorageKey(source)) || "[]");
+        if (Array.isArray(saved)) {
+          saved.filter(Boolean).forEach(addLine);
+        }
+      } catch (error) {
+        console.warn("시세 히스토리 읽기 실패", error);
+      }
+
+      fallbackLines.forEach(addLine);
+      if (fallbackLine) addLine(fallbackLine);
+      return combined;
+    }
+
+    function parseKoreanMarketMoneyQuantityInMan(value) {
+      const text = String(value || "")
+        .replace(/\([^)]*(?:당|1000만|1,000만|천만)[^)]*\)/g, " ")
+        .replace(/\d[\d,]*\s*원/g, " ");
+      const quantities = [];
+
+      Array.from(text.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*억\s*(?:(\d[\d,]*(?:\.\d+)?)\s*만)?/g)).forEach(match => {
+        const eok = Number(String(match[1] || "").replace(/,/g, ""));
+        const man = match[2] ? Number(String(match[2]).replace(/,/g, "")) : 0;
+        const totalMan = eok * 10000 + man;
+        if (Number.isFinite(totalMan) && totalMan > 0) quantities.push(totalMan);
+      });
+
+      Array.from(text.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*만\s*(?:게임머니|머니|금전|금화|은화|개)?/g)).forEach(match => {
+        const man = Number(String(match[1] || "").replace(/,/g, ""));
+        if (Number.isFinite(man) && man > 0) quantities.push(man);
+      });
+
+      Array.from(text.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*천\s*만/g)).forEach(match => {
+        const man = Number(String(match[1] || "").replace(/,/g, "")) * 1000;
+        if (Number.isFinite(man) && man > 0) quantities.push(man);
+      });
+
+      Array.from(text.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*천\s*(?:게임머니|머니|금전|금화|은화)/g)).forEach(match => {
+        const man = Number(String(match[1] || "").replace(/,/g, "")) * 1000;
+        if (Number.isFinite(man) && man > 0) quantities.push(man);
+      });
+
+      return quantities;
+    }
+
+    function getMarketDirectUnitPrices(value) {
+      const text = String(value || "");
+      const unitPrices = [];
+      const patterns = [
+        /(\d[\d,]*)\s*원\s*\(\s*(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*\)/g,
+        /(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*(\d[\d,]*)\s*원/g,
+        /천\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*(\d[\d,]*)\s*원/g,
+        /천만\s*(?:게임머니|머니|금전)?\s*당\s*(\d[\d,]*)\s*원/g,
+        /(\d[\d,]*)\s*원\s*\/\s*(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?/g
+      ];
+
+      patterns.forEach(pattern => {
+        Array.from(text.matchAll(pattern)).forEach(match => {
+          const amount = Number(String(match[1] || "").replace(/,/g, ""));
+          if (Number.isFinite(amount) && amount > 0) {
+            unitPrices.push(amount);
+          }
+        });
+      });
+
+      return unitPrices;
+    }
+
+    function getMarketDirectUnitPriceText(value) {
+      const text = cleanMarketPart(value);
+      const patterns = [
+        /\d[\d,]*\s*원\s*\(\s*(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*\)/,
+        /(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*\d[\d,]*\s*원/,
+        /천\s*(?:만)?\s*(?:게임머니|머니|금전)?\s*당\s*\d[\d,]*\s*원/,
+        /천만\s*(?:게임머니|머니|금전)?\s*당\s*\d[\d,]*\s*원/,
+        /\d[\d,]*\s*원\s*\/\s*(?:1,?000|1000|천)\s*(?:만)?\s*(?:게임머니|머니|금전)?/
+      ];
+      const matched = patterns.map(pattern => text.match(pattern)).find(Boolean);
+      return matched ? matched[0].replace(/\s+/g, " ").trim() : "";
+    }
+
+    function parseMarketWonAmount(value) {
+      const text = String(value || "");
+      const directUnitPrices = getMarketDirectUnitPrices(text);
+
+      if (directUnitPrices.length > 0) {
+        return Math.min(...directUnitPrices);
+      }
+
+      const wonAmounts = Array.from(text.matchAll(/(?:최소\s*)?(\d[\d,]*)\s*원/g))
+        .map(match => Number(String(match[1] || "").replace(/,/g, "")))
+        .filter(amount => Number.isFinite(amount) && amount > 0);
+
+      if (wonAmounts.length === 0) {
+        return null;
+      }
+
+      const quantitiesInMan = parseKoreanMarketMoneyQuantityInMan(text)
+        .filter(man => Number.isFinite(man) && man >= 100);
+
+      if (quantitiesInMan.length > 0) {
+        const largestQuantityInMan = Math.max(...quantitiesInMan);
+        const likelyTotalWon = Math.max(...wonAmounts);
+        const unitPrice = likelyTotalWon / (largestQuantityInMan / 1000);
+        if (Number.isFinite(unitPrice) && unitPrice > 0) {
+          return unitPrice;
+        }
+      }
+
+      return Math.min(...wonAmounts);
+    }
+
+    function formatMarketWonAmount(amount) {
+      if (!Number.isFinite(amount) || amount <= 0) {
+        return "-";
+      }
+      return `${Math.round(amount).toLocaleString("ko-KR")}원`;
+    }
+
+    function getMarketPriceType(source, line) {
+      const text = String(line || "");
+      if (/금전/.test(text)) return "금전";
+      if (/게임머니|머니|금화|은화/.test(text) || source.type === "barotem_money") return "게임머니";
+      if (/계정|캐릭|캐릭터|전사|술사|도사|랩|렙|풀템/.test(text) || source.type === "barotem_account") return "계정";
+      if (/아이템|쿠폰|장비|무기|검|도|갑|반지|보주|주문/.test(text)) return "아이템";
+      return "기타";
+    }
+
+    function getMarketPriceSourceLabel(source) {
+      return source.priceSourceLabel || source.name || "거래소";
+    }
+
+    function getMarketPriceServerLabel(line) {
+      const text = cleanMarketPart(line);
+      const explicitServer = text.match(/서버\s*((?:\d{1,2}\s*)?서버|미표기(?:\([^)]*\))?|기타)/);
+      if (explicitServer && explicitServer[1]) {
+        const label = explicitServer[1].replace(/\s+/g, "");
+        return label === "서버" ? "미표기" : label;
+      }
+
+      const numberServer = text.match(/(?:^|[\s·|\[\]()])([1-9]\d?)\s*서버/);
+      if (numberServer && numberServer[1]) {
+        return `${numberServer[1]}서버`;
+      }
+
+      if (/서버\s*미표기|미표기/.test(text)) {
+        return "미표기";
+      }
+
+      return "미표기";
+    }
+
+    function getMarketPriceRowText(source, line) {
+      const clean = cleanMarketPart(line)
+        .replace(/^최근\s*(?:매물|거래)\s*[:：]?\s*/g, "")
+        .replace(/\s*·\s*/g, " · ");
+      const parts = splitMarketLatestParts(clean)
+        .map(part => part.replace(/^\s*(?:서버\s*)?[1-9]\d?\s*서버\s*/g, "").trim())
+        .filter(part => part && !/^서버\s*/.test(part))
+        .filter(part => !/^최소\s*\d[\d,]*\s*원/.test(part))
+        .filter(part => !/^\d[\d,]*\s*원/.test(part))
+        .filter(part => !/(?:천\s*(?:만)?|1,?000\s*만|1000\s*만)\s*(?:게임머니|머니|금전)?\s*당\s*\d[\d,]*\s*원/.test(part));
+      const type = getMarketPriceType(source, clean);
+      const label = parts.slice(0, 2).join(" · ") || type;
+      return `${type} · ${label}`;
+    }
+
+    function normalizeMarketPriceServerValue(serverLabel) {
+      const text = cleanMarketPart(serverLabel);
+      if (!text) {
+        return "";
+      }
+      if (/미표기|기타/.test(text)) {
+        return "미표기";
+      }
+      const match = text.match(/([1-9]\d?)\s*서버/);
+      return match && match[1] ? `${match[1]}서버` : text;
+    }
+
+    function compareMarketServerLabels(a, b) {
+      const aNum = Number((String(a || "").match(/([1-9]\d?)\s*서버/) || [])[1]);
+      const bNum = Number((String(b || "").match(/([1-9]\d?)\s*서버/) || [])[1]);
+      if (Number.isFinite(aNum) && Number.isFinite(bNum)) return aNum - bNum;
+      if (Number.isFinite(aNum)) return -1;
+      if (Number.isFinite(bNum)) return 1;
+      return String(a || "").localeCompare(String(b || ""), "ko-KR");
+    }
+
+    function getSavedMarketPriceServerFilter() {
+      try {
+        return normalizeMarketPriceServerValue(localStorage.getItem(MARKET_PRICE_SELECTED_SERVER_STORAGE_KEY) || "");
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function updateMarketPriceServerOptions(records) {
+      const elements = getMarketPriceSummaryElements();
+      const select = elements.serverSelect;
+      if (!select) {
+        return "";
+      }
+
+      const savedServer = getSavedMarketPriceServerFilter();
+      const currentServer = normalizeMarketPriceServerValue(select.value || savedServer || "");
+      const serverValues = Array.from(new Set(records
+        .map(record => normalizeMarketPriceServerValue(record.serverLabel))
+        .filter(Boolean)))
+        .sort(compareMarketServerLabels);
+
+      if (currentServer && !serverValues.includes(currentServer)) {
+        serverValues.push(currentServer);
+      }
+
+      const optionValues = ["", ...serverValues];
+      const nextHtml = optionValues.map(value => {
+        const label = value ? value : "전체 서버";
+        return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+      }).join("");
+
+      if (select.innerHTML !== nextHtml) {
+        select.innerHTML = nextHtml;
+      }
+
+      select.value = optionValues.includes(currentServer) ? currentServer : "";
+      return select.value;
+    }
+
+    function getFilteredMarketPriceRecords(records, selectedServer) {
+      const server = normalizeMarketPriceServerValue(selectedServer || "");
+      if (!server) {
+        return records;
+      }
+      return records.filter(record => normalizeMarketPriceServerValue(record.serverLabel) === server);
+    }
+
+    function closeMarketPriceSummary() {
+      const elements = getMarketPriceSummaryElements();
+      if (elements.box) {
+        elements.box.classList.add("market-price-closed");
+        elements.box.setAttribute("aria-hidden", "true");
+      }
+      if (elements.toggleButton) {
+        elements.toggleButton.hidden = false;
+        elements.toggleButton.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    function openMarketPriceSummary() {
+      const elements = getMarketPriceSummaryElements();
+      if (elements.box) {
+        elements.box.classList.remove("market-price-closed");
+        elements.box.setAttribute("aria-hidden", "false");
+      }
+      if (elements.toggleButton) {
+        elements.toggleButton.hidden = true;
+        elements.toggleButton.setAttribute("aria-expanded", "true");
+      }
+      renderMarketPriceSummary();
+    }
+
+    function setupMarketPriceControls() {
+      const elements = getMarketPriceSummaryElements();
+
+      if (elements.toggleButton && !elements.toggleButton.dataset.bound) {
+        elements.toggleButton.dataset.bound = "1";
+        elements.toggleButton.addEventListener("click", openMarketPriceSummary);
+      }
+
+      if (elements.closeButton && !elements.closeButton.dataset.bound) {
+        elements.closeButton.dataset.bound = "1";
+        elements.closeButton.addEventListener("click", closeMarketPriceSummary);
+      }
+
+      if (elements.box && elements.toggleButton && !elements.box.dataset.initializedClosed) {
+        elements.box.dataset.initializedClosed = "1";
+        closeMarketPriceSummary();
+      }
+
+      if (elements.serverSelect && !elements.serverSelect.dataset.bound) {
+        elements.serverSelect.dataset.bound = "1";
+        elements.serverSelect.addEventListener("change", () => {
+          const selectedServer = normalizeMarketPriceServerValue(elements.serverSelect.value || "");
+          try {
+            localStorage.setItem(MARKET_PRICE_SELECTED_SERVER_STORAGE_KEY, selectedServer);
+          } catch (error) {
+            console.warn("시세 서버 선택 저장 실패", error);
+          }
+          renderMarketPriceSummary();
+        });
+      }
+
+      if (elements.refreshButton && !elements.refreshButton.dataset.bound) {
+        elements.refreshButton.dataset.bound = "1";
+        elements.refreshButton.addEventListener("click", async () => {
+          if (marketPriceRefreshRunning) {
+            return;
+          }
+          marketPriceRefreshRunning = true;
+          elements.refreshButton.disabled = true;
+          elements.refreshButton.textContent = "갱신중";
+          try {
+            await checkMarketListings(false);
+          } finally {
+            marketPriceRefreshRunning = false;
+            elements.refreshButton.disabled = false;
+            elements.refreshButton.textContent = "새로고침";
+            renderMarketPriceSummary();
+          }
+        });
+      }
+    }
+
+    function getMarketPriceRecords() {
+      const seen = new Set();
+      const records = [];
+
+      getMarketPriceSources().forEach(source => {
+        getMarketListingHistory(source).forEach(line => {
+          if (!isMoneyOrGoldMarketPriceLine(source, line)) {
+            return;
+          }
+
+          const amount = parseMarketWonAmount(line);
+          if (!Number.isFinite(amount)) {
+            return;
+          }
+
+          const key = `${source.id}:${cleanMarketPart(line)}`;
+          if (seen.has(key)) {
+            return;
+          }
+          seen.add(key);
+
+          records.push({
+            source,
+            sourceLabel: getMarketPriceSourceLabel(source),
+            serverLabel: getMarketPriceServerLabel(line),
+            type: getMarketPriceType(source, line),
+            text: getMarketPriceRowText(source, line),
+            amount,
+            line
+          });
+        });
+      });
+
+      return records.sort((a, b) => a.amount - b.amount);
+    }
+
+    function renderMarketPriceSummary() {
+      const elements = getMarketPriceSummaryElements();
+      if (!elements.box || !elements.rows) {
+        return;
+      }
+
+      const allRecords = getMarketPriceRecords();
+      const selectedServer = updateMarketPriceServerOptions(allRecords);
+      const records = getFilteredMarketPriceRecords(allRecords, selectedServer);
+      if (elements.updated) {
+        elements.updated.textContent = formatMarketAlertTime();
+      }
+
+      if (records.length === 0) {
+        if (elements.low) elements.low.textContent = "-";
+        if (elements.avg) elements.avg.textContent = "-";
+        if (elements.count) elements.count.textContent = "0건";
+        const emptyText = selectedServer
+          ? `${selectedServer} 머니/금전 시세가 없습니다. 새로고침을 눌러 다시 확인하세요.`
+          : "바로템·아이템베이 머니/금전 정보를 불러오는 중입니다.";
+        elements.rows.innerHTML = `<div class="market-price-empty">${escapeHtml(emptyText)}</div>`;
+        return;
+      }
+
+      const amounts = records.map(record => record.amount);
+      const lowAmount = Math.min(...amounts);
+      const averageAmount = amounts.reduce((sum, amount) => sum + amount, 0) / amounts.length;
+
+      const lowRecord = records.find(record => record.amount === lowAmount);
+      const lowServerLabel = lowRecord && lowRecord.serverLabel && lowRecord.serverLabel !== "미표기" ? ` · ${lowRecord.serverLabel}` : "";
+      if (elements.low) elements.low.textContent = `${formatMarketWonAmount(lowAmount)}${lowServerLabel}`;
+      if (elements.avg) elements.avg.textContent = formatMarketWonAmount(averageAmount);
+      if (elements.count) elements.count.textContent = selectedServer ? `${records.length}건/${allRecords.length}건` : `${records.length}건`;
+
+      elements.rows.innerHTML = records.slice(0, 8).map(record => `
+        <div class="market-price-row" title="${escapeHtml(cleanMarketPart(record.line))}">
+          <span class="market-price-source">${escapeHtml(record.sourceLabel)}</span>
+          <span class="market-price-server">${escapeHtml(record.serverLabel || "미표기")}</span>
+          <span class="market-price-text">${escapeHtml(record.text)}</span>
+          <span class="market-price-won">${escapeHtml(formatMarketWonAmount(record.amount))}/천만</span>
+        </div>
+      `).join("");
     }
 
 
@@ -5013,7 +6737,7 @@
         return true;
       });
       const quantity = parts.find(part => /^\d+\s*개\s*[~\-]\s*\d+\s*개$/.test(part)) || "";
-      const title = titleCandidates[0] || (source.type === "barotem_money" ? "게임머니 매물" : source.type === "itemmania" ? "아이템매니아 매물" : "계정 매물");
+      const title = titleCandidates[0] || (source.type === "barotem_money" ? "게임머니 매물" : source.type === "itemmania" ? "아이템매니아 매물" : source.type === "itembay" ? "아이템베이 매물" : "계정 매물");
       const price = priceParts.join(" / ") || "가격 미표기";
       const contentParts = uniqMarketParts([job, title, money, quantity]).filter(Boolean);
       const content = contentParts.join(" · ") || title;
@@ -5037,7 +6761,8 @@
       }
 
       const latestNode = document.getElementById(getMarketElementId("marketLatest_", source));
-      const latestText = (latestNode && latestNode.textContent) || getMarketSavedLatest(source);
+      const selectedServer = getSavedMarketAlertServerFilter();
+      const latestText = (latestNode && latestNode.textContent) || getMarketAlertLineForServer(source, selectedServer) || getMarketSavedLatest(source);
       const detail = buildMarketListingDetail(source, latestText);
 
       elements.detail.innerHTML = `
@@ -5065,19 +6790,19 @@
       if (elements.box) {
         elements.box.classList.add("market-alert-closed");
       }
-      if (elements.reopenButton) {
-        elements.reopenButton.hidden = false;
-      }
+      updateMarketAlertReopenButton();
     }
 
     function openMarketAlertMini() {
       const elements = getMarketAlertElements();
       if (elements.box) {
         elements.box.classList.remove("market-alert-closed");
+        elements.box.classList.remove("market-alert-new");
       }
       if (elements.reopenButton) {
-        elements.reopenButton.hidden = true;
+        elements.reopenButton.classList.remove("market-alert-reopen-new");
       }
+      updateMarketAlertReopenButton("idle");
     }
 
     function hashMarketText(value) {
@@ -5151,7 +6876,7 @@
 
     function cleanMarketPart(value) {
       return cleanMarketListingLine(value)
-        .replace(/^최근\s*매물\s*[:：]?\s*/g, "")
+        .replace(/^최근\s*(?:매물|거래|거래완료)\s*[:：]?\s*/g, "")
         .replace(/\s+/g, " ")
         .trim();
     }
@@ -5193,14 +6918,15 @@
       const serverNumberMatch = compact.match(/(\d{1,2})\s*서버/);
       const jobMatch = compact.match(/(?:\d{1,2}\s*서버\s*)?(전사|술사|도사|기타)/);
       const priceMatches = compact.match(/(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?/g) || [];
-      const moneyMatches = compact.match(/(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:만|억)?\s*게임머니/g) || [];
+      const unitPriceText = getMarketDirectUnitPriceText(compact);
+      const moneyMatches = compact.match(/(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:억\s*\d[\d,]*(?:\.\d+)?\s*만|억|천\s*만?|만)?\s*(?:게임머니|머니|금전|금화|은화)/g) || [];
       const dateMatch = compact.match(/\d{1,2}\s*월\s*\d{1,2}\s*일\s*\d{1,2}:\d{2}|\d+\s*(?:분|시간|일)전|방금|오늘\s*\d{1,2}:\d{2}|어제\s*\d{1,2}:\d{2}|\b\d{1,2}:\d{2}\b/);
       const serverLabel = serverNumberMatch ? `서버 ${serverNumberMatch[1]}서버` : "";
       const jobLabel = jobMatch && source.type === "barotem_account" ? `직업 ${jobMatch[1]}` : "";
 
       const titleCandidates = blockLines.filter(line => {
         if (/^\d{1,2}\s*서버\s*(?:전사|술사|도사|기타)?$/.test(line)) return false;
-        if (/^(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:만|억)?\s*게임머니$/.test(line)) return false;
+        if (/^(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:억\s*\d[\d,]*(?:\.\d+)?\s*만|억|천\s*만?|만)?\s*(?:게임머니|머니|금전|금화|은화)$/.test(line)) return false;
         if (/^(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?$/.test(line)) return false;
         if (/\d{1,2}\s*월\s*\d{1,2}\s*일\s*\d{1,2}:\d{2}|\d+\s*(?:분|시간|일)전|방금|^\d{1,2}:\d{2}$/.test(line)) return false;
         if (/바로거래이력|거래이력|최근|최소|최대/.test(line) && line.length < 20) return false;
@@ -5209,11 +6935,16 @@
       const title = titleCandidates.sort((a, b) => b.length - a.length)[0] || "";
 
       if (source.type === "barotem_money") {
+        const minMoney = moneyMatches.find(item => /^\s*최소/.test(item)) || moneyMatches[0] || "";
+        const maxMoney = moneyMatches.find(item => /^\s*최대/.test(item)) || moneyMatches[1] || "";
+        const moneyRange = minMoney && maxMoney && minMoney !== maxMoney ? `${minMoney}~${maxMoney}` : (minMoney || maxMoney);
+        const minimumTotal = priceMatches.find(item => item.includes("최소")) || "";
         const parts = uniqMarketParts([
           serverLabel,
           title,
-          moneyMatches[0],
-          priceMatches.find(item => item.includes("최소")) || priceMatches[0],
+          moneyRange,
+          unitPriceText || priceMatches[0],
+          minimumTotal,
           dateMatch && dateMatch[0]
         ]);
         return parts.length >= 3 ? `최근 매물: ${parts.join(" · ")}` : "";
@@ -5273,7 +7004,7 @@
         addSummary(readableLines.slice(start, end).join("\n"));
       });
 
-      return results.slice(0, 8);
+      return results.slice(0, 20);
     }
 
     function buildItemmaniaSummaryFromTextBlock(value) {
@@ -5330,7 +7061,7 @@
         addSummary(readableLines.slice(start, end).join("\n"));
       });
 
-      return results.slice(0, 8);
+      return results.slice(0, 20);
     }
 
     function extractMarketListingLines(source, htmlText) {
@@ -5340,7 +7071,7 @@
         return extractBarotemListingLines(source, htmlText, readableLines);
       }
 
-      if (source.type === "itemmania") {
+      if (source.type === "itemmania" || source.type === "itembay") {
         return extractItemmaniaListingLines(htmlText, readableLines);
       }
 
@@ -5377,9 +7108,9 @@
           && /\d[\d,]*\s*원/.test(line);
       }
 
-      if (source.type === "itemmania") {
+      if (source.type === "itemmania" || source.type === "itembay") {
         return /\d[\d,]*\s*원/.test(line)
-          && /(게임쿠폰|쿠폰|게임머니|계정|아이템|다이아|금화|은화|미르|전설|진)/.test(line);
+          && /(게임쿠폰|쿠폰|게임머니|계정|아이템|다이아|금화|은화|미르|전설|진|비천|몽촌|사북)/.test(line);
       }
 
       return marketLineLooksLikeListing(line);
@@ -5446,6 +7177,7 @@
       try {
         const htmlText = await fetchMarketText(source);
         const listingLines = extractMarketListingLines(source, htmlText);
+        saveMarketListingHistory(source, listingLines);
         const latestLine = chooseValidMarketLatestLine(source, listingLines);
 
         if (!latestLine) {
@@ -5478,23 +7210,32 @@
 
       const timeText = formatMarketAlertTime();
       setMarketAlertMini("idle", isInitialCheck ? `최근 매물 바로 표시 · ${timeText}` : `최근 매물 갱신중 · ${timeText}`);
+      renderMarketPriceSummary();
 
       const results = await Promise.all(MARKET_ALERT_SOURCES.map(source => checkSingleMarketSource(source)));
+      renderMarketAlertItems();
+      results.forEach(result => {
+        const selectedLatest = getMarketAlertLineForServer(result.source, getSavedMarketAlertServerFilter()) || result.latestLine;
+        setMarketSourceState(result.source, result.isNewListing ? "new" : "idle", result.isNewListing ? "신규" : "최근", selectedLatest);
+      });
       const newSources = results.filter(result => result.isNewListing).map(result => result.source.name);
       const checkedSources = results.filter(result => result.state === "checked").map(result => result.source.name);
       const finishTimeText = formatMarketAlertTime();
 
       if (newSources.length > 0) {
         setMarketAlertMini("new", `신규 매물 · ${newSources.join("/")}`);
+        renderMarketPriceSummary();
         return;
       }
 
       if (checkedSources.length > 0) {
         setMarketAlertMini("idle", `최근 매물 갱신 · ${finishTimeText}`);
+        renderMarketPriceSummary();
         return;
       }
 
       setMarketAlertMini("idle", `최근 매물 표시 · ${finishTimeText}`);
+      renderMarketPriceSummary();
     }
 
     function initMarketAlertMini() {
@@ -5504,6 +7245,12 @@
       }
 
       renderMarketAlertItems();
+      setupMarketAlertControls();
+      setupMarketPriceControls();
+      renderMarketPriceSummary();
+      if (elements.box) {
+        elements.box.classList.add("market-alert-closed");
+      }
       if (elements.closeButton) {
         elements.closeButton.addEventListener("click", closeMarketAlertMini);
       }
@@ -5511,6 +7258,7 @@
         elements.reopenButton.addEventListener("click", openMarketAlertMini);
       }
       setMarketAlertMini("idle", `최근 매물 바로 표시 · ${formatMarketAlertTime()}`);
+      closeMarketAlertMini();
       setTimeout(() => checkMarketListings(true), 10);
       setInterval(() => checkMarketListings(false), MARKET_ALERT_CHECK_MS);
       document.addEventListener("visibilitychange", () => {
@@ -5586,12 +7334,14 @@
             <div class="info-item-list">
               ${items.map(post => {
                 const title = post.title || "제목 없음";
-                const searchTerm = title;
+                const postKey = getLatestPostKey(post);
+                const isOpen = infoListActiveKey === postKey;
                 return `
-                  <button class="info-item-button" type="button" onclick="searchKeyword('${escapeJsString(searchTerm)}')">
+                  <button class="info-item-button" type="button" onclick="toggleInfoPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
                     <span class="info-item-title">${escapeHtml(title)}</span>
                     <span class="info-item-meta">${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(formatPostDateTime(post))}</span>
                   </button>
+                  ${isOpen ? renderInfoPostDetail(post) : ""}
                 `;
               }).join("")}
             </div>
@@ -5675,6 +7425,52 @@
       window.open(buildGmPaewangAuthorSearchUrl(), "_blank", "noopener,noreferrer");
     }
 
+    function updateGmAlertReopenButton() {
+      if (!gmAlertReopen) {
+        return;
+      }
+
+      const hasNew = gmAlertBox && gmAlertBox.classList.contains("gm-alert-side-new");
+      gmAlertReopen.textContent = hasNew ? "GM패왕 새 글" : "GM패왕 알리미";
+      gmAlertReopen.classList.toggle("gm-alert-reopen-new", Boolean(hasNew));
+    }
+
+    function closeGmAlertMini() {
+      if (gmAlertBox) {
+        gmAlertBox.classList.add("gm-alert-closed");
+      }
+
+      if (gmAlertReopen) {
+        updateGmAlertReopenButton();
+        gmAlertReopen.hidden = false;
+      }
+    }
+
+    function openGmAlertMini() {
+      clearSavedGmAlertUnreadId();
+
+      if (gmAlertBox) {
+        gmAlertBox.classList.remove("gm-alert-closed");
+        gmAlertBox.classList.remove("gm-alert-side-new");
+      }
+
+      if (gmAlertReopen) {
+        gmAlertReopen.hidden = true;
+        gmAlertReopen.classList.remove("gm-alert-reopen-new");
+      }
+    }
+
+    function setGmAlertPanelNewState(isNew) {
+      if (gmAlertBox) {
+        gmAlertBox.classList.toggle("gm-alert-side-new", Boolean(isNew));
+      }
+
+      if (gmAlertReopen) {
+        updateGmAlertReopenButton();
+        gmAlertReopen.hidden = !(gmAlertBox && gmAlertBox.classList.contains("gm-alert-closed"));
+      }
+    }
+
     function getSavedGmAlertId() {
       try {
         return localStorage.getItem(GM_ALERT_STORAGE_KEY) || "";
@@ -5709,6 +7505,30 @@
         localStorage.setItem(GM_ALERT_ITEM_STORAGE_KEY, JSON.stringify(item));
       } catch (error) {
         console.warn("GM 최신글 저장값을 기록하지 못했습니다.", error);
+      }
+    }
+
+    function getSavedGmAlertUnreadId() {
+      try {
+        return localStorage.getItem(GM_ALERT_UNREAD_STORAGE_KEY) || "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function saveGmAlertUnreadId(alertId) {
+      try {
+        localStorage.setItem(GM_ALERT_UNREAD_STORAGE_KEY, String(alertId || ""));
+      } catch (error) {
+        console.warn("GM 새 글 알림 상태를 저장하지 못했습니다.", error);
+      }
+    }
+
+    function clearSavedGmAlertUnreadId() {
+      try {
+        localStorage.removeItem(GM_ALERT_UNREAD_STORAGE_KEY);
+      } catch (error) {
+        console.warn("GM 새 글 알림 상태를 해제하지 못했습니다.", error);
       }
     }
 
@@ -5763,6 +7583,7 @@
 
     function renderGmAlertStatus(message, badgeText = "확인 대기", badgeClass = "") {
       setGmAlertBadge(badgeText, badgeClass);
+      setGmAlertPanelNewState(Boolean(getSavedGmAlertUnreadId()));
 
       if (gmAlertMessage) {
         gmAlertMessage.innerHTML = message;
@@ -5784,6 +7605,7 @@
 
       const badgeText = isNew ? "새 글" : isInitial ? "최근 저장" : "최근 글";
       setGmAlertBadge(badgeText, isNew ? "gm-alert-new" : "");
+      setGmAlertPanelNewState(isNew);
 
       const statusText = isNew
         ? "새 글이 올라왔습니다."
@@ -6171,7 +7993,7 @@
         if (!latestItem) {
           const cachedItem = gmAlertLastSuccessItem || getSavedGmAlertItem();
           if (cachedItem) {
-            renderGmAlert(cachedItem, false, false, "최근 목록에서 새 GM패왕 글을 찾지 못해 이전 확인 결과를 유지합니다.");
+            renderGmAlert(cachedItem, Boolean(cachedItem.id && getSavedGmAlertUnreadId() === cachedItem.id), false, "최근 목록에서 새 GM패왕 글을 찾지 못해 이전 확인 결과를 유지합니다.");
             return;
           }
 
@@ -6191,7 +8013,13 @@
         const isInitial = !lastSeenId;
         const isNew = Boolean(lastSeenId && latestItem.id && latestItem.id !== lastSeenId);
 
-        renderGmAlert(latestItem, isNew, isInitial);
+        if (isNew) {
+          saveGmAlertUnreadId(latestItem.id);
+        }
+
+        const unreadId = getSavedGmAlertUnreadId();
+        const shouldHighlight = Boolean(latestItem.id && unreadId && latestItem.id === unreadId);
+        renderGmAlert(latestItem, isNew || shouldHighlight, isInitial);
         saveGmAlertId(latestItem.id);
 
         if (isNew) {
@@ -6209,7 +8037,7 @@
           const checkedAt = formatGmCheckTime(gmAlertLastSuccessAt);
           renderGmAlert(
             cachedItem,
-            false,
+            Boolean(cachedItem.id && getSavedGmAlertUnreadId() === cachedItem.id),
             false,
             `네이버가 브라우저 직접 확인을 제한해 저장된 최근 글을 유지합니다.${checkedAt ? ` 마지막 정상 확인: ${escapeHtml(checkedAt)}` : ""} 다시 확인하려면 버튼을 눌러주세요.`
           );
@@ -6228,6 +8056,15 @@
     }
 
     function initGmAlertBox() {
+      if (gmAlertBox) {
+        gmAlertBox.classList.add("gm-alert-closed");
+      }
+
+      if (gmAlertReopen) {
+        updateGmAlertReopenButton();
+        gmAlertReopen.hidden = false;
+      }
+
       if (gmAutoCheckButton) {
         gmAutoCheckButton.addEventListener("click", () => refreshGmAlert({ manual: true }));
       }
@@ -6236,13 +8073,37 @@
         gmPermissionButton.addEventListener("click", requestGmNotificationPermission);
       }
 
+      if (gmAlertClose) {
+        gmAlertClose.addEventListener("click", closeGmAlertMini);
+      }
+
+      if (gmAlertReopen) {
+        gmAlertReopen.addEventListener("click", openGmAlertMini);
+      }
+
       const cachedItem = getSavedGmAlertItem();
       if (cachedItem) {
         gmAlertLastSuccessItem = cachedItem;
-        renderGmAlert(cachedItem, false, false, "저장된 최근 글을 먼저 표시합니다. 접속 시 한 번 확인하고, 이후에는 버튼을 누를 때만 다시 확인합니다.");
+        renderGmAlert(
+          cachedItem,
+          Boolean(cachedItem.id && getSavedGmAlertUnreadId() === cachedItem.id),
+          false,
+          "저장된 최근 글을 먼저 표시합니다. 접속 후 자동으로 한 번 확인하고, 이후 5분마다 새 글을 확인합니다."
+        );
       }
 
       refreshGmAlert();
+
+      if (gmAlertRefreshTimer) {
+        clearInterval(gmAlertRefreshTimer);
+      }
+      gmAlertRefreshTimer = setInterval(() => refreshGmAlert({ manual: false }), GM_ALERT_AUTO_CHECK_MS);
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          refreshGmAlert({ manual: false });
+        }
+      });
     }
 
     function normalizeText(text) {
@@ -6263,71 +8124,26 @@
 
     function render() {
       const keyword = searchInput.value.trim();
-      const normalizedKeyword = normalizeText(keyword);
 
-      if (keyword === "") {
+      latestPostsSearchKeyword = keyword;
+      latestPostsCurrentPage = 1;
+      latestPostsActiveKey = "";
+      renderLatestPosts();
+
+      if (results) {
         results.innerHTML = "";
-        return;
       }
 
-      const searchablePosts = posts.concat(firebaseSearchPosts);
-      const filtered = searchablePosts.filter(post => {
-        const targetText = [
-          post.title,
-          post.category,
-          post.source,
-          post.date,
-          post.content,
-          post.url || "",
-          getPostTags(post).join(" ")
-        ].join(" ");
-
-        return normalizeText(targetText).includes(normalizedKeyword);
-      });
-
-      const naverCafeSearchUrl = buildNaverCafeBoardUrl(keyword);
-      const cafeSearchButton = `<a class="naver-inline-search" href="${escapeHtml(naverCafeSearchUrl)}" target="_blank" rel="noopener noreferrer">네이버 카페에서도 검색</a>`;
-
-      if (filtered.length === 0) {
-        results.innerHTML = `
-          <div class="empty">사이트 내 검색 결과가 없습니다.</div>
-          <article class="card naver-result-card">
-            <h2>네이버 카페 글 검색</h2>
-            <p>입력한 검색어 <strong>${escapeHtml(keyword)}</strong>로 미르의 전설: 진 네이버 카페 게시글을 바로 검색하거나, 필요한 정보를 제보할 수 있습니다.</p>
-            <a class="post-link" href="${escapeHtml(naverCafeSearchUrl)}" target="_blank" rel="noopener noreferrer">네이버 카페에서 검색 결과 열기</a>
-            <a class="post-link" href="https://open.kakao.com/o/gDdjY6Ci" target="_blank" rel="noopener noreferrer">정보 제보하기</a>
-          </article>
-        `;
-        return;
+      if (keyword !== "" && latestPostsBox) {
+        latestPostsBox.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
       }
-
-      results.innerHTML = `
-        <div class="result-summary">총 ${filtered.length}개의 사이트 내 검색 결과 ${cafeSearchButton}</div>
-        ${filtered.map(post => {
-          const tags = getPostTags(post);
-          const safeUrl = getSafePostUrl(post.url);
-
-          return `
-            <article class="card">
-              <h2>${escapeHtml(post.title || "제목 없음")}</h2>
-              <div class="meta">${escapeHtml(post.category || "기타")} · ${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(formatPostDateTime(post))}</div>
-              <p>${escapeHtml(post.content || "")}</p>
-              ${safeUrl ? `<a class="post-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
-              <div>
-                ${tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join("")}
-              </div>
-            </article>
-          `;
-        }).join("")}
-      `;
-
-      results.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
     }
 
     searchInput.addEventListener("input", () => {
+      updateSearchClearButton();
       render();
       scheduleSearchRecord();
     });
@@ -6342,6 +8158,12 @@
         }
       }
     });
+
+    if (searchClearButton) {
+      searchClearButton.addEventListener("click", clearSearchInput);
+    }
+
+    updateSearchClearButton();
 
     if (naverBoardSearchButton) {
       naverBoardSearchButton.addEventListener("click", openNaverCafeBoardSearch);
@@ -6378,6 +8200,7 @@
     const adminUploadStatus = document.getElementById("adminUploadStatus");
     const MY_CHAT_ID_KEY = "mirjin_chat_user_id";
     const CHAT_NAME_KEY = "mirjin_chat_name";
+    const CHAT_RANDOM_NAME_KEY = "mirjin_chat_random_name_v2";
     const ADMIN_UPLOAD_CODE = "ara2026";
 
     /*
@@ -6431,7 +8254,44 @@
 
     const myChatId = localStorage.getItem(MY_CHAT_ID_KEY) || `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     localStorage.setItem(MY_CHAT_ID_KEY, myChatId);
-    chatName.value = localStorage.getItem(CHAT_NAME_KEY) || "";
+
+    function createRandomChatName() {
+      const adjectives = ["푸른", "붉은", "검은", "하얀", "달빛", "별빛", "바람", "불꽃", "천둥", "은하", "비룡", "청룡", "백호", "현무", "주작"];
+      const nouns = ["검객", "술사", "도사", "전사", "수호자", "방랑자", "현자", "무사", "협객", "도객", "비룡", "영웅", "달님", "별님", "구름"];
+      const adjective = adjectives[Math.floor(Math.random() * adjectives.length)] || "미르";
+      const noun = nouns[Math.floor(Math.random() * nouns.length)] || "용사";
+      return `${adjective}${noun}`.replace(/[^가-힣]/g, "").slice(0, 12) || "미르용사";
+    }
+
+    function getAssignedChatName() {
+      try {
+        const saved = String(localStorage.getItem(CHAT_RANDOM_NAME_KEY) || "").trim();
+        if (/^[가-힣]{2,12}$/.test(saved)) {
+          localStorage.setItem(CHAT_NAME_KEY, saved);
+          return saved;
+        }
+
+        const randomName = createRandomChatName();
+        localStorage.setItem(CHAT_RANDOM_NAME_KEY, randomName);
+        localStorage.setItem(CHAT_NAME_KEY, randomName);
+        return randomName;
+      } catch (error) {
+        return createRandomChatName();
+      }
+    }
+
+    const assignedChatName = getAssignedChatName();
+
+    if (chatName) {
+      chatName.value = assignedChatName;
+      chatName.readOnly = true;
+      chatName.setAttribute("aria-readonly", "true");
+      chatName.setAttribute("title", "자동으로 정해진 닉네임입니다.");
+      chatName.classList.add("chat-name-locked");
+      chatName.addEventListener("input", () => {
+        chatName.value = assignedChatName;
+      });
+    }
 
     function hasFirebaseConfig() {
       return Boolean(
@@ -6783,10 +8643,13 @@
     }
 
     function getCleanChatInput() {
-      const rawName = chatName.value.trim();
+      const rawName = assignedChatName;
       const rawText = chatText.value.trim();
-      const name = (rawName || "익명").slice(0, 12);
+      const name = assignedChatName;
       const text = rawText.slice(0, 200);
+      if (chatName && chatName.value !== assignedChatName) {
+        chatName.value = assignedChatName;
+      }
       return { rawName, rawText, name, text };
     }
 
@@ -7434,9 +9297,15 @@
           button.textContent = isOpen ? "실시간 채팅 끄기" : "실시간 채팅 켜기";
         });
 
-        if (isOpen && chatText && window.innerWidth > 600) {
+        if (isOpen) {
           setTimeout(function () {
-            chatText.focus();
+            const chatMessages = document.getElementById("chatMessages");
+            if (chatMessages) {
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            if (chatText && window.innerWidth > 600) {
+              chatText.focus();
+            }
           }, 80);
         }
       }
