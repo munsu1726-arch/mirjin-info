@@ -1381,6 +1381,413 @@
       color: #111827;
     }
 
+
+
+    /* 거래소 신규 매물 알림: 화면 여백에 항상 작게 표시 */
+    .market-alert-mini {
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 55;
+      width: 264px;
+      max-height: calc(100vh - 96px);
+      overflow-y: auto;
+      padding: 9px;
+      border-radius: 15px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.76);
+      color: #dbeafe;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.25;
+      text-align: left;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.34);
+      backdrop-filter: blur(6px);
+      opacity: 0.92;
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .market-alert-mini.market-alert-hidden {
+      display: block;
+      opacity: 0.92;
+      pointer-events: auto;
+    }
+
+    .market-alert-mini:hover {
+      opacity: 1;
+      transform: translateY(-50%) translateX(-2px);
+      border-color: rgba(191, 219, 254, 0.58);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .market-alert-mini.market-alert-new {
+      border-color: rgba(250, 204, 21, 0.66);
+      background: rgba(120, 53, 15, 0.86);
+      color: #fef3c7;
+      animation: marketAlertPulse 1.2s ease-in-out 4;
+    }
+
+    .market-alert-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: -0.02em;
+    }
+
+    .market-alert-title-label {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .market-alert-close {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.62);
+      color: #cbd5e1;
+      font-size: 15px;
+      font-weight: 1000;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .market-alert-close:hover {
+      transform: translateY(-1px);
+      background: rgba(220, 38, 38, 0.68);
+      border-color: rgba(254, 202, 202, 0.72);
+      color: #ffffff;
+    }
+
+    .market-alert-mini.market-alert-closed {
+      display: none;
+    }
+
+    .market-alert-reopen {
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 54;
+      padding: 8px 11px;
+      border: 1px solid rgba(147, 197, 253, 0.42);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #dbeafe;
+      font-size: 11px;
+      font-weight: 1000;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.30);
+      backdrop-filter: blur(6px);
+    }
+
+    .market-alert-reopen:hover {
+      background: rgba(37, 99, 235, 0.56);
+      color: #ffffff;
+    }
+
+    .market-alert-reopen[hidden] {
+      display: none;
+    }
+
+    .market-alert-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #93c5fd;
+      box-shadow: 0 0 10px rgba(147,197,253,0.8);
+      flex: 0 0 auto;
+    }
+
+    .market-alert-new .market-alert-dot {
+      background: #facc15;
+      box-shadow: 0 0 12px rgba(250,204,21,0.9);
+    }
+
+    .market-alert-text {
+      display: block;
+      margin-bottom: 7px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #cbd5e1;
+      font-size: 10.5px;
+    }
+
+    .market-alert-mini.market-alert-new .market-alert-text {
+      color: #fde68a;
+    }
+
+    .market-alert-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .market-alert-card {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+      min-height: 74px;
+      padding: 7px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.20);
+      background: rgba(15, 23, 42, 0.56);
+      color: #bfdbfe;
+      font-family: inherit;
+      font-size: 10.5px;
+      font-weight: 900;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .market-alert-card:hover {
+      color: #ffffff;
+      border-color: rgba(191, 219, 254, 0.58);
+      background: rgba(37, 99, 235, 0.28);
+      text-decoration: none;
+    }
+
+    .market-alert-card.market-source-new {
+      border-color: rgba(250, 204, 21, 0.68);
+      background: rgba(120, 53, 15, 0.54);
+    }
+
+    .market-alert-card.market-source-checking {
+      border-color: rgba(147, 197, 253, 0.42);
+    }
+
+    .market-alert-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .market-alert-link-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #dbeafe;
+    }
+
+    .market-alert-status {
+      flex: 0 0 auto;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.16);
+      color: #cbd5e1;
+      font-size: 9px;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .market-source-new .market-alert-status {
+      background: rgba(250, 204, 21, 0.24);
+      color: #fde68a;
+    }
+
+    .market-source-checking .market-alert-status {
+      background: rgba(59, 130, 246, 0.22);
+      color: #bfdbfe;
+    }
+
+    .market-alert-latest {
+      display: block;
+      color: #a7f3d0;
+      font-size: 9.9px;
+      font-weight: 800;
+      line-height: 1.38;
+      word-break: keep-all;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+
+    .market-alert-card.market-source-manual .market-alert-latest {
+      color: #cbd5e1;
+    }
+
+    .market-alert-more {
+      color: #94a3b8;
+      font-size: 9px;
+      font-weight: 900;
+      text-align: right;
+    }
+
+
+    .market-alert-detail {
+      display: none;
+      margin-top: 7px;
+      padding: 9px;
+      border-radius: 13px;
+      border: 1px solid rgba(250, 204, 21, 0.30);
+      background: rgba(2, 6, 23, 0.66);
+      color: #e5e7eb;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    }
+
+    .market-alert-detail.market-alert-detail-open {
+      display: block;
+    }
+
+    .market-detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .market-detail-title {
+      min-width: 0;
+      color: #fef3c7;
+      font-size: 11px;
+      font-weight: 1000;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .market-detail-close {
+      flex: 0 0 auto;
+      border: none;
+      border-radius: 999px;
+      padding: 3px 7px;
+      background: rgba(148, 163, 184, 0.18);
+      color: #cbd5e1;
+      font-size: 9px;
+      font-weight: 1000;
+      cursor: pointer;
+    }
+
+    .market-detail-close:hover {
+      background: rgba(220, 38, 38, 0.58);
+      color: #ffffff;
+    }
+
+    .market-detail-body {
+      display: grid;
+      gap: 4px;
+      color: #dbeafe;
+      font-size: 9.8px;
+      font-weight: 800;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .market-detail-row strong {
+      color: #a7f3d0;
+      font-weight: 1000;
+    }
+
+    .market-detail-summary {
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(148, 163, 184, 0.20);
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .market-detail-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      width: 100%;
+      min-height: 30px;
+      border-radius: 999px;
+      background: #03c75a;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 1000;
+      text-decoration: none;
+    }
+
+    .market-detail-link:hover {
+      filter: brightness(1.05);
+      text-decoration: none;
+    }
+
+    @keyframes marketAlertPulse {
+      0%, 100% { transform: translateY(-50%) scale(1); }
+      50% { transform: translateY(-50%) scale(1.04); }
+    }
+
+    @media (max-width: 600px) {
+      .market-alert-mini {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 64px;
+        width: auto;
+        max-height: 220px;
+        padding: 8px;
+        font-size: 10px;
+        transform: none;
+      }
+
+      .market-alert-mini:hover {
+        transform: none;
+      }
+
+      .market-alert-title-row {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+
+      .market-alert-text {
+        font-size: 9.5px;
+      }
+
+      .market-alert-list {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .market-alert-card {
+        min-height: 58px;
+        padding: 6px 7px;
+        font-size: 9.5px;
+      }
+
+      .market-alert-latest {
+        font-size: 9px;
+      }
+
+
+      .market-alert-reopen {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 64px;
+        transform: none;
+        width: auto;
+      }
+
+      .market-detail-body {
+        font-size: 9px;
+      }
+
+      @keyframes marketAlertPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.04); }
+      }
+    }
+
+
     @keyframes introMove {
       0% {
         filter: blur(0px) brightness(1.1);
@@ -2354,6 +2761,18 @@
     </div>
   </section>
 
+  <div id="marketAlertMini" class="market-alert-mini" role="status" aria-live="polite" title="미르의 전설: 진 거래소 신규 매물 알림">
+    <div class="market-alert-title-row">
+      <span class="market-alert-dot" aria-hidden="true"></span>
+      <span class="market-alert-title-label">매물 알리미</span>
+      <button id="marketAlertClose" class="market-alert-close" type="button" aria-label="매물 알리미 닫기">×</button>
+    </div>
+    <span id="marketAlertText" class="market-alert-text">미르의 전설: 진 최근 매물 표시</span>
+    <div id="marketAlertList" class="market-alert-list" aria-label="거래소 바로가기와 최근 매물"></div>
+    <div id="marketAlertDetail" class="market-alert-detail" aria-live="polite"></div>
+  </div>
+  <button id="marketAlertReopen" class="market-alert-reopen" type="button" hidden>매물 알리미</button>
+
   <main>
     <div id="results"></div>
   </main>
@@ -2484,7 +2903,7 @@
     <div class="footer-ad-notice">
       광고 문의: <a href="mailto:cowboyjms1@naver.com">cowboyjms1@naver.com</a><br />
       문파 홍보 / 게임 관련 커뮤니티 홍보 / 앱플레이어 홍보 가능<br />
-      계정 거래, 아이템 현금거래, 불법 프로그램, 대리 육성 광고는 제외합니다.
+      불법 프로그램, 대리 육성 광고는 제외합니다.
     </div>
     <div class="footer-policy-notice">
       본 사이트는 네이버 카페 글을 직접 복사·저장하지 않고 공개 링크 및 검색 연결 방식으로 운영되며,
@@ -3613,8 +4032,57 @@
     const NAVER_CAFE_SEARCH_BASE_URL = "https://m.cafe.naver.com/ArticleSearchList.nhn";
     const NAVER_CAFE_BOARD_BASE_URL = "https://m.cafe.naver.com/ArticleList.nhn";
 
-    const GM_ALERT_STORAGE_KEY = "mirjinGmPaewangAlertLastSeen_v6";
-    const GM_ALERT_ITEM_STORAGE_KEY = "mirjinGmPaewangAlertLastItem_v6";
+
+    const MARKET_ALERT_STORAGE_PREFIX = "mirjinMarketAlertSignature_v7_";
+    const MARKET_ALERT_LATEST_STORAGE_PREFIX = "mirjinMarketAlertLatest_v7_";
+    const MARKET_ALERT_CHECK_MS = 30 * 1000;
+    const MARKET_ALERT_FETCH_TIMEOUT_MS = 1800;
+    const MARKET_ALERT_SOURCES = [
+      {
+        id: "barotem_account",
+        type: "barotem_account",
+        name: "바로템 계정",
+        label: "바로템 계정 알리미",
+        url: "https://www.barotem.com/product/lists/4025?page=1&sell=sell&display=1&orderby=1",
+        fallbackLatest: "최근 매물: 서버 1서버 · 직업 전사 · 70랩 풀전사 풀템 팝니다. · 350,000원 · 07월 09일 11:36"
+      },
+      {
+        id: "barotem_money",
+        type: "barotem_money",
+        name: "바로템 게임머니",
+        label: "바로템 게임머니 알리미",
+        url: "https://www.barotem.com/product/lists/2382r1004?page=1&sell=sell&display=1&orderby=1",
+        fallbackLatest: "최근 매물: 서버 2서버 · 💕💗💗200%완전사냥 미니팝니다💗💗💗 · 5,000만 게임머니 · 최소 25,000원 · 07월 09일 17:04"
+      },
+      {
+        id: "itemmania",
+        type: "itemmania",
+        name: "아이템매니아",
+        label: "아이템매니아 알리미",
+        url: "https://www.itemmania.com/sell/list.html?search_game=5985",
+        fallbackLatest: "최근 매물: 서버 미표기(기타) · 게임쿠폰 · 1개~6개 · 5,000원(1개당) · 최소 5,000원 · 11:14"
+      }
+    ];
+    const MARKET_ALERT_FETCH_ROUTES = [
+      {
+        name: "direct",
+        buildUrl: url => url,
+        parseText: async response => response.text()
+      },
+      {
+        name: "allorigins_raw",
+        buildUrl: url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        parseText: async response => response.text()
+      },
+      {
+        name: "jina_reader",
+        buildUrl: url => `https://r.jina.ai/${url}`,
+        parseText: async response => response.text()
+      }
+    ];
+
+    const GM_ALERT_STORAGE_KEY = "mirjinGmPaewangAlertLastSeen_v7";
+    const GM_ALERT_ITEM_STORAGE_KEY = "mirjinGmPaewangAlertLastItem_v7";
     const GM_ALERT_API_URL = ""; // 네이버 연결 제한 해결용 JSON API 주소. Cloudflare Worker 배포 URL을 넣으세요. 예: https://gm-paewang-alert.내계정.workers.dev
         const GM_ALERT_FETCH_TIMEOUT_MS = 12000;
     const GM_PAEWANG_MEMBER_URL = "https://m.cafe.naver.com/ca-fe/web/cafes/31717562/members/hMeWCUWpcNAtde0GOF1WXQcU5rph0SiJU2rhFxqTPH8/articles";
@@ -4115,6 +4583,625 @@
       }).join("");
 
       renderLatestPostsPagination(totalPages);
+    }
+
+
+    function getMarketAlertElements() {
+      return {
+        box: document.getElementById("marketAlertMini"),
+        text: document.getElementById("marketAlertText"),
+        list: document.getElementById("marketAlertList"),
+        detail: document.getElementById("marketAlertDetail"),
+        closeButton: document.getElementById("marketAlertClose"),
+        reopenButton: document.getElementById("marketAlertReopen")
+      };
+    }
+
+    function setMarketAlertMini(state, message) {
+      const elements = getMarketAlertElements();
+      if (!elements.box || !elements.text) {
+        return;
+      }
+
+      elements.box.classList.toggle("market-alert-new", state === "new");
+      elements.box.classList.remove("market-alert-hidden");
+      elements.text.textContent = message;
+    }
+
+    function getMarketStorageKey(source) {
+      return `${MARKET_ALERT_STORAGE_PREFIX}${source.id}`;
+    }
+
+    function getMarketLatestStorageKey(source) {
+      return `${MARKET_ALERT_LATEST_STORAGE_PREFIX}${source.id}`;
+    }
+
+    function getMarketElementId(prefix, source) {
+      return `${prefix}${source.id.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+    }
+
+    function getDefaultMarketLatest(source) {
+      return source.fallbackLatest || "최근 매물: 최신 매물 확인 준비중";
+    }
+
+    function getMarketSavedLatest(source) {
+      return localStorage.getItem(getMarketLatestStorageKey(source)) || getDefaultMarketLatest(source);
+    }
+
+    function renderMarketAlertItems() {
+      const elements = getMarketAlertElements();
+      if (!elements.list) {
+        return;
+      }
+
+      elements.list.innerHTML = MARKET_ALERT_SOURCES.map(source => {
+        const savedLatest = getMarketSavedLatest(source);
+        return `
+          <button id="${getMarketElementId("marketCard_", source)}" class="market-alert-card" type="button" onclick="showMarketListingDetail('${escapeJsString(source.id)}')" aria-label="${escapeHtml(source.label || `${source.name} 알리미`)} 요약 보기">
+            <span class="market-alert-card-top">
+              <span class="market-alert-link-title">${escapeHtml(source.label || `${source.name} 알리미`)}</span>
+              <span id="${getMarketElementId("marketStatus_", source)}" class="market-alert-status">최근</span>
+            </span>
+            <span id="${getMarketElementId("marketLatest_", source)}" class="market-alert-latest">${escapeHtml(savedLatest)}</span>
+            <span class="market-alert-more">요약 보기 ↓</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function setMarketSourceState(source, state, statusText, latestText) {
+      const card = document.getElementById(getMarketElementId("marketCard_", source));
+      const status = document.getElementById(getMarketElementId("marketStatus_", source));
+      const latest = document.getElementById(getMarketElementId("marketLatest_", source));
+
+      if (card) {
+        card.classList.toggle("market-source-new", state === "new");
+        card.classList.toggle("market-source-checking", state === "checking");
+        card.classList.toggle("market-source-manual", state === "manual");
+      }
+
+      if (status) {
+        status.textContent = statusText;
+      }
+
+      if (latest && latestText) {
+        latest.textContent = latestText;
+      }
+    }
+
+
+    function getMarketSourceById(sourceId) {
+      return MARKET_ALERT_SOURCES.find(source => source.id === sourceId) || null;
+    }
+
+    function splitMarketLatestParts(latestText) {
+      const clean = cleanMarketPart(latestText);
+      return clean
+        .split(/\s*·\s*/)
+        .map(part => cleanMarketPart(part))
+        .filter(Boolean);
+    }
+
+    function buildMarketListingDetail(source, latestText) {
+      const parts = splitMarketLatestParts(latestText);
+      const server = parts.find(part => /^서버\s*/.test(part)) || "서버 미표기";
+      const job = parts.find(part => /^직업\s*/.test(part)) || "";
+      const money = parts.find(part => /게임머니/.test(part)) || "";
+      const priceParts = parts.filter(part => /\d[\d,]*\s*원/.test(part));
+      const time = parts.find(part => /\d{1,2}\s*월\s*\d{1,2}\s*일|\d{1,2}:\d{2}|\d+\s*(?:분|시간|일)전|방금|오늘|어제/.test(part)) || "시간 미표기";
+      const titleCandidates = parts.filter(part => {
+        if (part === server || part === job || part === money || part === time) return false;
+        if (/\d[\d,]*\s*원/.test(part)) return false;
+        if (/^\d+\s*개\s*[~\-]\s*\d+\s*개$/.test(part)) return false;
+        if (/^(최소|최대)/.test(part)) return false;
+        return true;
+      });
+      const quantity = parts.find(part => /^\d+\s*개\s*[~\-]\s*\d+\s*개$/.test(part)) || "";
+      const title = titleCandidates[0] || (source.type === "barotem_money" ? "게임머니 매물" : source.type === "itemmania" ? "아이템매니아 매물" : "계정 매물");
+      const price = priceParts.join(" / ") || "가격 미표기";
+      const contentParts = uniqMarketParts([job, title, money, quantity]).filter(Boolean);
+      const content = contentParts.join(" · ") || title;
+      const summary = `${source.name} 최근 매물입니다. ${server}${job ? `, ${job}` : ""} 기준이며, 내용은 ${content}, 가격은 ${price}, 등록 시각은 ${time}입니다.`;
+
+      return { server, content, price, time, summary };
+    }
+
+    function hideMarketListingDetail() {
+      const elements = getMarketAlertElements();
+      if (!elements.detail) return;
+      elements.detail.classList.remove("market-alert-detail-open");
+      elements.detail.innerHTML = "";
+    }
+
+    function showMarketListingDetail(sourceId) {
+      const source = getMarketSourceById(sourceId);
+      const elements = getMarketAlertElements();
+      if (!source || !elements.detail) {
+        return;
+      }
+
+      const latestNode = document.getElementById(getMarketElementId("marketLatest_", source));
+      const latestText = (latestNode && latestNode.textContent) || getMarketSavedLatest(source);
+      const detail = buildMarketListingDetail(source, latestText);
+
+      elements.detail.innerHTML = `
+        <div class="market-detail-header">
+          <div class="market-detail-title">${escapeHtml(source.label || source.name)} 최근 매물 요약</div>
+          <button class="market-detail-close" type="button" onclick="hideMarketListingDetail()">요약 닫기</button>
+        </div>
+        <div class="market-detail-body">
+          <div class="market-detail-row"><strong>서버</strong> ${escapeHtml(detail.server)}</div>
+          <div class="market-detail-row"><strong>내용</strong> ${escapeHtml(detail.content)}</div>
+          <div class="market-detail-row"><strong>가격</strong> ${escapeHtml(detail.price)}</div>
+          <div class="market-detail-row"><strong>시간</strong> ${escapeHtml(detail.time)}</div>
+          <div class="market-detail-summary">${escapeHtml(detail.summary)}</div>
+        </div>
+        <a class="market-detail-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer">원문 열기</a>
+      `;
+      elements.detail.classList.add("market-alert-detail-open");
+      requestAnimationFrame(() => {
+        elements.detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    }
+
+    function closeMarketAlertMini() {
+      const elements = getMarketAlertElements();
+      if (elements.box) {
+        elements.box.classList.add("market-alert-closed");
+      }
+      if (elements.reopenButton) {
+        elements.reopenButton.hidden = false;
+      }
+    }
+
+    function openMarketAlertMini() {
+      const elements = getMarketAlertElements();
+      if (elements.box) {
+        elements.box.classList.remove("market-alert-closed");
+      }
+      if (elements.reopenButton) {
+        elements.reopenButton.hidden = true;
+      }
+    }
+
+    function hashMarketText(value) {
+      let hash = 0;
+      const text = String(value || "");
+      for (let index = 0; index < text.length; index += 1) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(index);
+        hash |= 0;
+      }
+      return String(hash);
+    }
+
+    function decodeMarketEntities(value) {
+      const textarea = document.createElement("textarea");
+      textarea.innerHTML = String(value || "");
+      return textarea.value;
+    }
+
+    function normalizeMarketText(value) {
+      return decodeMarketEntities(value)
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function cleanMarketListingLine(value) {
+      return decodeMarketEntities(value)
+        .replace(/\s+/g, " ")
+        .replace(/바로가기|상세보기|판매중|구매하기|베이톡|Image:?\s*[^ ]*/g, "")
+        .replace(/\bpage\b|\bsell\b|\bdisplay\b|\borderby\b|\bsearch_word\b/gi, "")
+        .replace(/\s*·\s*/g, " · ")
+        .trim();
+    }
+
+    function getReadableMarketLines(value) {
+      return String(value || "")
+        .replace(/<script[\s\S]*?<\/script>/gi, "\n")
+        .replace(/<style[\s\S]*?<\/style>/gi, "\n")
+        .replace(/<br\s*\/?\s*>/gi, "\n")
+        .replace(/<\/(li|tr|td|th|div|p|a|span|section|article|h1|h2|h3|h4)>/gi, "\n")
+        .replace(/<[^>]+>/g, " ")
+        .split(/\n+/)
+        .map(cleanMarketListingLine)
+        .filter(Boolean);
+    }
+
+    function marketLineLooksLikeListing(value) {
+      const line = cleanMarketListingLine(value);
+      const blockedWords = [
+        "로그인", "회원가입", "고객센터", "공지사항", "이용약관", "개인정보", "검색저장", "판매등록", "구매등록", "충전", "마이페이지", "이벤트", "전체메뉴", "찜한물품", "결제 비밀번호", "사업자등록번호", "청소년 보호정책", "초기화", "프리미엄물품", "물품리스트", "최신등록순", "높은가격순", "낮은가격순", "전체물품", "거래가능물품", "거래완료물품", "분류 전체", "구분 팝니다", "찾으시는 게임", "문자수신", "에스크로", "COPYRIGHT"
+      ];
+      const hasPrice = /(?:\d[\d,]*\s*원|\d+(?:\.\d+)?\s*(?:만|억)|가격\s*[:：]?|상담|제시)/.test(line);
+      const hasGameWords = /(미르|전설|진|계정|게임머니|서버|전사|술사|도사|레벨|Lv|LV|렙|랩|캐릭|캐릭터|장비|무기|아이템|다이아|금화|은화|비천|문파|풀템)/.test(line);
+
+      if (line.length < 4 || line.length > 220) {
+        return false;
+      }
+
+      if (blockedWords.some(word => line.includes(word))) {
+        return false;
+      }
+
+      if (/^(전체|계정|게임머니|아이템|기타|상품권|팝니다|삽니다|서버|가격|검색|확인|취소|온라인|오프라인|최소|최대)$/.test(line)) {
+        return false;
+      }
+
+      return hasPrice || hasGameWords;
+    }
+
+    function cleanMarketPart(value) {
+      return cleanMarketListingLine(value)
+        .replace(/^최근\s*매물\s*[:：]?\s*/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function isMarketNoiseLine(line) {
+      const clean = cleanMarketPart(line);
+      if (!clean) return true;
+      if (clean.length < 2 || clean.length > 120) return true;
+      if (/^(전체|계정|게임머니|아이템|기타|상품권|팝니다|삽니다|서버|가격|검색|수량|구매하기|베이톡|온라인|오프라인|최소|최대|취소|확인)$/.test(clean)) return true;
+      if (/(로그인|회원가입|고객센터|공지사항|이용약관|개인정보|판매등록|구매등록|마이페이지|전체메뉴|결제 비밀번호|프리미엄물품|물품리스트|현재 총|검색되었습니다|최신등록순|높은가격순|낮은가격순|COPYRIGHT|사업자|에스크로)/.test(clean)) return true;
+      return false;
+    }
+
+    function uniqMarketParts(parts) {
+      const output = [];
+      parts.forEach(part => {
+        const clean = cleanMarketPart(part);
+        if (clean && !output.includes(clean)) {
+          output.push(clean);
+        }
+      });
+      return output;
+    }
+
+    function findMarketPart(lines, test) {
+      return lines.find(line => !isMarketNoiseLine(line) && test(cleanMarketPart(line))) || "";
+    }
+
+    function buildBarotemSummaryFromTextBlock(source, value) {
+      const blockLines = getReadableMarketLines(value)
+        .map(cleanMarketPart)
+        .filter(line => !isMarketNoiseLine(line));
+      const compact = cleanMarketPart(blockLines.join(" "));
+
+      if (!compact || compact.length < 8) {
+        return "";
+      }
+
+      const serverNumberMatch = compact.match(/(\d{1,2})\s*서버/);
+      const jobMatch = compact.match(/(?:\d{1,2}\s*서버\s*)?(전사|술사|도사|기타)/);
+      const priceMatches = compact.match(/(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?/g) || [];
+      const moneyMatches = compact.match(/(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:만|억)?\s*게임머니/g) || [];
+      const dateMatch = compact.match(/\d{1,2}\s*월\s*\d{1,2}\s*일\s*\d{1,2}:\d{2}|\d+\s*(?:분|시간|일)전|방금|오늘\s*\d{1,2}:\d{2}|어제\s*\d{1,2}:\d{2}|\b\d{1,2}:\d{2}\b/);
+      const serverLabel = serverNumberMatch ? `서버 ${serverNumberMatch[1]}서버` : "";
+      const jobLabel = jobMatch && source.type === "barotem_account" ? `직업 ${jobMatch[1]}` : "";
+
+      const titleCandidates = blockLines.filter(line => {
+        if (/^\d{1,2}\s*서버\s*(?:전사|술사|도사|기타)?$/.test(line)) return false;
+        if (/^(?:최소|최대)?\s*\d[\d,]*(?:\.\d+)?\s*(?:만|억)?\s*게임머니$/.test(line)) return false;
+        if (/^(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?$/.test(line)) return false;
+        if (/\d{1,2}\s*월\s*\d{1,2}\s*일\s*\d{1,2}:\d{2}|\d+\s*(?:분|시간|일)전|방금|^\d{1,2}:\d{2}$/.test(line)) return false;
+        if (/바로거래이력|거래이력|최근|최소|최대/.test(line) && line.length < 20) return false;
+        return /[가-힣A-Za-z0-9]/.test(line) && marketLineLooksLikeListing(line);
+      });
+      const title = titleCandidates.sort((a, b) => b.length - a.length)[0] || "";
+
+      if (source.type === "barotem_money") {
+        const parts = uniqMarketParts([
+          serverLabel,
+          title,
+          moneyMatches[0],
+          priceMatches.find(item => item.includes("최소")) || priceMatches[0],
+          dateMatch && dateMatch[0]
+        ]);
+        return parts.length >= 3 ? `최근 매물: ${parts.join(" · ")}` : "";
+      }
+
+      const parts = uniqMarketParts([
+        serverLabel,
+        jobLabel,
+        title,
+        priceMatches[0],
+        dateMatch && dateMatch[0]
+      ]);
+      return parts.length >= 4 ? `최근 매물: ${parts.join(" · ")}` : "";
+    }
+
+    function extractBarotemListingLines(source, htmlText, readableLines) {
+      const results = [];
+
+      function addSummary(value) {
+        const summary = buildBarotemSummaryFromTextBlock(source, value);
+        if (summary && !results.includes(summary)) {
+          results.push(summary);
+        }
+      }
+
+      try {
+        const documentObject = new DOMParser().parseFromString(String(htmlText || ""), "text/html");
+        const rowSelectors = [
+          "a[href*='/product/']",
+          "a[href*='product']",
+          "li",
+          "tr",
+          ".product",
+          ".product-item",
+          ".goods",
+          ".goods-list",
+          ".item",
+          ".list-item"
+        ].join(",");
+        documentObject.querySelectorAll(rowSelectors).forEach(node => {
+          const text = cleanMarketPart(node.textContent);
+          if (text.length >= 8 && text.length <= 420 && (/\d{1,2}서버/.test(text) || /\d[\d,]*\s*원/.test(text) || /게임머니/.test(text))) {
+            addSummary(text);
+          }
+        });
+      } catch (error) {
+        console.warn("바로템 매물 DOM 분석 실패", error);
+      }
+
+      readableLines.forEach((line, index) => {
+        const clean = cleanMarketPart(line);
+        if (!/\d{1,2}서버|\d[\d,]*\s*원|게임머니|\d{1,2}월\s*\d{1,2}일/.test(clean)) {
+          return;
+        }
+        const start = Math.max(0, index - 5);
+        const end = Math.min(readableLines.length, index + 7);
+        addSummary(readableLines.slice(start, end).join("\n"));
+      });
+
+      return results.slice(0, 8);
+    }
+
+    function buildItemmaniaSummaryFromTextBlock(value) {
+      const blockLines = getReadableMarketLines(value)
+        .map(cleanMarketPart)
+        .filter(line => !isMarketNoiseLine(line));
+      const compact = cleanMarketPart(blockLines.join(" "));
+      const categoryLine = blockLines.find(line => /미르의?전설\s*:?\s*진|미르의전설:진/.test(line)) || "";
+      const serverMatch = compact.match(/(\d{1,2})\s*서버/);
+      const serverLabel = serverMatch ? `서버 ${serverMatch[1]}서버` : "서버 미표기(기타)";
+      const quantity = findMarketPart(blockLines, line => /\d+\s*개\s*[~\-]\s*\d+\s*개/.test(line));
+      const date = findMarketPart(blockLines, line => /\d+\s*(?:분|시간|일)전|\d{1,2}\s*월\s*\d{1,2}\s*일|오늘|어제|^\d{1,2}:\d{2}$/.test(line));
+      const priceMatches = compact.match(/(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?/g) || [];
+      const title = blockLines.find(line => {
+        if (line === quantity || line === date || line === categoryLine) return false;
+        if (/^(?:최소\s*)?\d[\d,]*\s*원(?:\([^)]*\))?$/.test(line)) return false;
+        if (/^\d+\s*개\s*[~\-]\s*\d+\s*개$/.test(line)) return false;
+        return /(게임쿠폰|게임머니|계정|쿠폰|다이아|금화|은화|아이템|캐릭|캐릭터|팝니다|판매)/.test(line);
+      }) || "";
+      const primaryPrice = priceMatches.find(item => !item.includes("최소")) || priceMatches[0] || "";
+      const minPrice = priceMatches.find(item => item.includes("최소")) || "";
+      const parts = uniqMarketParts([serverLabel, title, quantity, primaryPrice, minPrice, date]);
+      return parts.length >= 3 ? `최근 매물: ${parts.join(" · ")}` : "";
+    }
+
+    function extractItemmaniaListingLines(htmlText, readableLines) {
+      const results = [];
+      function addSummary(value) {
+        const summary = buildItemmaniaSummaryFromTextBlock(value);
+        if (summary && !results.includes(summary)) {
+          results.push(summary);
+        }
+      }
+
+      try {
+        const documentObject = new DOMParser().parseFromString(String(htmlText || ""), "text/html");
+        documentObject.querySelectorAll("a[href*='sell'], a[href*='view'], li, tr, .list-item, .goods, .item").forEach(node => {
+          const text = cleanMarketPart(node.textContent);
+          if (text.length >= 8 && text.length <= 420 && (/미르|전설|진|\d[\d,]*\s*원|게임머니|계정/.test(text))) {
+            addSummary(text);
+          }
+        });
+      } catch (error) {
+        console.warn("아이템매니아 매물 DOM 분석 실패", error);
+      }
+
+      readableLines.forEach((line, index) => {
+        const clean = cleanMarketPart(line);
+        if (!/미르|전설|진|\d[\d,]*\s*원|게임머니|계정/.test(clean)) {
+          return;
+        }
+        const start = Math.max(0, index - 5);
+        const end = Math.min(readableLines.length, index + 7);
+        addSummary(readableLines.slice(start, end).join("\n"));
+      });
+
+      return results.slice(0, 8);
+    }
+
+    function extractMarketListingLines(source, htmlText) {
+      const readableLines = getReadableMarketLines(htmlText);
+
+      if (source.type === "barotem_account" || source.type === "barotem_money") {
+        return extractBarotemListingLines(source, htmlText, readableLines);
+      }
+
+      if (source.type === "itemmania") {
+        return extractItemmaniaListingLines(htmlText, readableLines);
+      }
+
+      const lines = [];
+      function addLine(value) {
+        const line = cleanMarketListingLine(value);
+        if (!marketLineLooksLikeListing(line)) {
+          return;
+        }
+        const output = line.startsWith("최근 매물:") ? line : `최근 매물: ${line}`;
+        if (!lines.includes(output)) {
+          lines.push(output);
+        }
+      }
+
+      readableLines.forEach(line => addLine(line));
+      return lines.slice(0, 8);
+    }
+
+    function isValidMarketLatestLine(source, value) {
+      const line = cleanMarketPart(value);
+      if (!line) return false;
+      if (/(로그인|회원가입|고객센터|상품등록|상품리스트|검색되었습니다|낮은가격순|높은가격순|최신등록순|전체메뉴|마이룸|원문 열기|버튼으로)/.test(line)) return false;
+
+      if (source.type === "barotem_account") {
+        return /서버\s*\d{1,2}서버/.test(line)
+          && /\d[\d,]*\s*원/.test(line)
+          && /(직업\s*)?(전사|술사|도사|기타)|랩|렙|풀템|계정/.test(line);
+      }
+
+      if (source.type === "barotem_money") {
+        return /서버\s*\d{1,2}서버/.test(line)
+          && /게임머니/.test(line)
+          && /\d[\d,]*\s*원/.test(line);
+      }
+
+      if (source.type === "itemmania") {
+        return /\d[\d,]*\s*원/.test(line)
+          && /(게임쿠폰|쿠폰|게임머니|계정|아이템|다이아|금화|은화|미르|전설|진)/.test(line);
+      }
+
+      return marketLineLooksLikeListing(line);
+    }
+
+    function chooseValidMarketLatestLine(source, listingLines) {
+      return (listingLines || []).find(line => isValidMarketLatestLine(source, line)) || "";
+    }
+
+    function makeMarketSignatureFromLines(source, listingLines, htmlText) {
+      const signatureBase = listingLines.length > 0
+        ? listingLines.join(" | ")
+        : normalizeMarketText(htmlText).slice(0, 12000);
+      return hashMarketText(`${source.id}:${signatureBase}`);
+    }
+
+    async function fetchMarketText(source) {
+      let lastError = null;
+
+      for (const route of MARKET_ALERT_FETCH_ROUTES) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), MARKET_ALERT_FETCH_TIMEOUT_MS);
+        const requestUrl = route.buildUrl(source.url);
+
+        try {
+          const response = await fetch(requestUrl, {
+            signal: controller.signal,
+            cache: "no-store",
+            headers: { "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" }
+          });
+
+          clearTimeout(timer);
+
+          if (!response.ok) {
+            throw new Error(`${route.name} HTTP ${response.status}`);
+          }
+
+          const text = await route.parseText(response);
+          if (text && text.length > 120) {
+            return text;
+          }
+
+          throw new Error(`${route.name} 응답 내용이 너무 짧습니다.`);
+        } catch (error) {
+          clearTimeout(timer);
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error("거래소 페이지를 불러오지 못했습니다.");
+    }
+
+    function formatMarketAlertTime() {
+      return new Date().toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    async function checkSingleMarketSource(source) {
+      const savedLatest = getMarketSavedLatest(source);
+      setMarketSourceState(source, "checking", "갱신중", savedLatest);
+
+      try {
+        const htmlText = await fetchMarketText(source);
+        const listingLines = extractMarketListingLines(source, htmlText);
+        const latestLine = chooseValidMarketLatestLine(source, listingLines);
+
+        if (!latestLine) {
+          setMarketSourceState(source, "idle", "최근", savedLatest);
+          return { source, state: "kept", latestLine: savedLatest, isNewListing: false };
+        }
+
+        const signature = makeMarketSignatureFromLines(source, listingLines, htmlText);
+        const storageKey = getMarketStorageKey(source);
+        const previousSignature = localStorage.getItem(storageKey);
+        const isNewListing = Boolean(previousSignature && previousSignature !== signature);
+
+        localStorage.setItem(storageKey, signature);
+        localStorage.setItem(getMarketLatestStorageKey(source), latestLine);
+        setMarketSourceState(source, isNewListing ? "new" : "idle", isNewListing ? "신규" : "최근", latestLine);
+
+        return { source, state: "checked", latestLine, isNewListing };
+      } catch (error) {
+        setMarketSourceState(source, "idle", "최근", savedLatest);
+        console.warn(`${source.name} 매물 내용 갱신 보류`, error);
+        return { source, state: "kept", latestLine: savedLatest, isNewListing: false, error };
+      }
+    }
+
+    async function checkMarketListings(isInitialCheck = false) {
+      const elements = getMarketAlertElements();
+      if (!elements.box) {
+        return;
+      }
+
+      const timeText = formatMarketAlertTime();
+      setMarketAlertMini("idle", isInitialCheck ? `최근 매물 바로 표시 · ${timeText}` : `최근 매물 갱신중 · ${timeText}`);
+
+      const results = await Promise.all(MARKET_ALERT_SOURCES.map(source => checkSingleMarketSource(source)));
+      const newSources = results.filter(result => result.isNewListing).map(result => result.source.name);
+      const checkedSources = results.filter(result => result.state === "checked").map(result => result.source.name);
+      const finishTimeText = formatMarketAlertTime();
+
+      if (newSources.length > 0) {
+        setMarketAlertMini("new", `신규 매물 · ${newSources.join("/")}`);
+        return;
+      }
+
+      if (checkedSources.length > 0) {
+        setMarketAlertMini("idle", `최근 매물 갱신 · ${finishTimeText}`);
+        return;
+      }
+
+      setMarketAlertMini("idle", `최근 매물 표시 · ${finishTimeText}`);
+    }
+
+    function initMarketAlertMini() {
+      const elements = getMarketAlertElements();
+      if (!elements.box) {
+        return;
+      }
+
+      renderMarketAlertItems();
+      if (elements.closeButton) {
+        elements.closeButton.addEventListener("click", closeMarketAlertMini);
+      }
+      if (elements.reopenButton) {
+        elements.reopenButton.addEventListener("click", openMarketAlertMini);
+      }
+      setMarketAlertMini("idle", `최근 매물 바로 표시 · ${formatMarketAlertTime()}`);
+      setTimeout(() => checkMarketListings(true), 10);
+      setInterval(() => checkMarketListings(false), MARKET_ALERT_CHECK_MS);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          checkMarketListings(false);
+        }
+      });
     }
 
     function getInfoCategoryOrder(category) {
@@ -6004,6 +7091,7 @@
     initGmAlertBox();
     initAdminUploadPanel();
     initInfoListPanel();
+    initMarketAlertMini();
     renderLatestPosts();
     render();
   </script>
