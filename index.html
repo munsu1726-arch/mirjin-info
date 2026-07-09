@@ -224,6 +224,19 @@
       filter: brightness(1.04);
     }
 
+    .naver-board-button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      min-height: 30px;
+    }
+
+    .suggestion-board-button {
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: #ffffff;
+    }
+
     .naver-inline-search {
       display: inline-flex;
       align-items: center;
@@ -357,6 +370,169 @@
       transform: translateY(-1px);
       background: rgba(37,99,235,0.78);
       border-color: rgba(191,219,254,0.9);
+    }
+
+    .latest-posts-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.68);
+      border: 1px solid rgba(134, 239, 172, 0.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.24);
+      text-align: left;
+    }
+
+    .latest-posts-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .latest-posts-title {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.35;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+
+    .latest-posts-subtitle {
+      margin-top: 3px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .latest-posts-count {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(134, 239, 172, 0.34);
+      color: #bbf7d0;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .latest-posts-list {
+      display: grid;
+      gap: 8px;
+      max-height: 430px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scroll-behavior: smooth;
+    }
+
+    .latest-posts-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .latest-posts-list::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.5);
+    }
+
+    .latest-posts-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .latest-posts-page-button {
+      min-width: 30px;
+      height: 30px;
+      padding: 0 9px;
+      border: 1px solid rgba(147,197,253,0.26);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      color: #dbeafe;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .latest-posts-page-button:hover {
+      transform: translateY(-1px);
+      background: rgba(37, 99, 235, 0.66);
+      border-color: rgba(191,219,254,0.78);
+      color: #ffffff;
+    }
+
+    .latest-posts-page-button.active {
+      background: #facc15;
+      border-color: rgba(250, 204, 21, 0.9);
+      color: #111827;
+      cursor: default;
+    }
+
+    .latest-posts-page-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .latest-post-card {
+      width: 100%;
+      border: 1px solid rgba(147,197,253,0.18);
+      border-radius: 13px;
+      padding: 10px 11px;
+      background: rgba(15, 23, 42, 0.74);
+      color: #f8fafc;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .latest-post-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(134,239,172,0.48);
+      background: rgba(30, 41, 59, 0.94);
+    }
+
+    .latest-post-card-title {
+      display: block;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .latest-post-card-meta {
+      display: block;
+      margin-top: 4px;
+      color: #a7f3d0;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .latest-post-card-summary {
+      display: block;
+      margin-top: 5px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .latest-posts-empty {
+      padding: 12px 6px;
+      color: #94a3b8;
+      font-size: 13px;
+      text-align: center;
     }
 
     .info-list-toggle-row {
@@ -1363,6 +1539,38 @@
         font-size: 12px;
       }
 
+      .latest-posts-box {
+        padding: 12px;
+      }
+
+      .latest-posts-list {
+        max-height: 340px;
+      }
+
+      .latest-posts-page-button {
+        min-width: 28px;
+        height: 28px;
+        padding: 0 8px;
+        font-size: 11px;
+      }
+
+      .latest-posts-header {
+        flex-direction: column;
+        gap: 7px;
+      }
+
+      .latest-post-card {
+        padding: 9px 10px;
+      }
+
+      .latest-post-card-title {
+        font-size: 12px;
+      }
+
+      .latest-post-card-summary {
+        font-size: 11px;
+      }
+
       .info-list-toggle-row {
         margin-top: 9px;
       }
@@ -1792,7 +2000,9 @@
     .naver-board-form-single {
       display: flex;
       grid-template-columns: none;
-      gap: 0;
+      gap: 7px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .naver-board-button {
@@ -2039,36 +2249,39 @@
         <div class="naver-board-title">네이버 카페 검색</div>
         <div class="naver-board-form naver-board-form-single">
           <button id="naverBoardSearchButton" class="naver-board-button" type="button">현재 검색어로 카페 글 검색</button>
+          <a
+            id="suggestionBoardButton"
+            class="naver-board-button naver-board-button-link suggestion-board-button"
+            href="https://cafe.naver.com/f-e/cafes/31717562/menus/42?viewType=L"
+            target="_blank"
+            rel="noopener noreferrer"
+          >건의사항 게시판</a>
         </div>
-        <div class="naver-board-hint">검색어가 없으면 카페 게시판이 열립니다.</div>
+        <div class="naver-board-hint">검색어가 없으면 카페 게시판이 열립니다. 건의사항은 별도 게시판으로 바로 이동합니다.</div>
       </div>
 
 
       <div class="hint">검색어를 입력하면 아래에 결과가 표시됩니다.</div>
 
 
-      <div class="quick-search-box" aria-label="주요 정보 바로가기">
-        <div class="quick-search-title">주요 정보 바로가기</div>
-        <div class="quick-search-list">
-          <button class="quick-search-button" type="button" onclick="searchKeyword('쿠폰')">쿠폰</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('공성')">공성</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('보스')">보스</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('스킬북')">스킬북</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('원소')">원소</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('사냥터')">사냥터</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('쌍두2층')">쌍두2층</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('봉마록')">봉마록</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('감옥')">감옥</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('전직')">전직</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('장비강화')">장비강화</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('선악')">선악</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('스킬설정')">스킬설정</button>
-          <button class="quick-search-button" type="button" onclick="searchKeyword('GM답변')">GM답변</button>
+      <div class="latest-posts-box" aria-label="최근 등록 게시글">
+        <div class="latest-posts-header">
+          <div>
+            <div class="latest-posts-title">최근 등록 게시글</div>
+            <div class="latest-posts-subtitle">관리자 업로드와 #정보 제보를 최신순으로 시간까지 요약하며, 아래 페이지 버튼으로 더 볼 수 있습니다.</div>
+          </div>
+          <span id="latestPostsCount" class="latest-posts-count">-</span>
         </div>
+
+        <div id="latestPostsList" class="latest-posts-list">
+          <div class="latest-posts-empty">최근 게시글을 불러오는 중입니다.</div>
+        </div>
+
+        <div id="latestPostsPagination" class="latest-posts-pagination" aria-label="최근 등록 게시글 페이지"></div>
 
         <div class="info-list-toggle-row">
           <button id="infoListToggle" class="info-list-toggle" type="button" aria-expanded="false" aria-controls="infoListPanel">전체 목록 보기</button>
-          <span class="info-list-toggle-sub">카테고리별로 등록된 정보를 한눈에 볼 수 있습니다.</span>
+          <span class="info-list-toggle-sub">카테고리별 전체 정보도 계속 확인할 수 있습니다.</span>
         </div>
 
         <div id="infoListPanel" class="info-list-panel" hidden>
@@ -3383,6 +3596,11 @@
     const totalVisitorCount = document.getElementById("totalVisitorCount");
     const naverBoardSearchInput = document.getElementById("naverBoardSearchInput");
     const naverBoardSearchButton = document.getElementById("naverBoardSearchButton");
+    const latestPostsList = document.getElementById("latestPostsList");
+    const latestPostsCount = document.getElementById("latestPostsCount");
+    const latestPostsPagination = document.getElementById("latestPostsPagination");
+    const LATEST_POSTS_PER_PAGE = 5;
+    let latestPostsCurrentPage = 1;
     const gmAlertBox = document.getElementById("gmAlertBox");
     const gmAlertBadge = document.getElementById("gmAlertBadge");
     const gmAlertMessage = document.getElementById("gmAlertMessage");
@@ -3391,6 +3609,7 @@
 
     const NAVER_CAFE_ID = "31717562";
     const NAVER_CAFE_MENU_ID = "13";
+    const NAVER_SUGGESTION_BOARD_URL = "https://cafe.naver.com/f-e/cafes/31717562/menus/42?viewType=L";
     const NAVER_CAFE_SEARCH_BASE_URL = "https://m.cafe.naver.com/ArticleSearchList.nhn";
     const NAVER_CAFE_BOARD_BASE_URL = "https://m.cafe.naver.com/ArticleList.nhn";
 
@@ -3749,6 +3968,155 @@
         });
     }
 
+    function getPostTimestamp(post) {
+      if (!post) {
+        return 0;
+      }
+
+      const createdAt = Number(post.createdAt || 0);
+      if (createdAt > 0) {
+        return createdAt;
+      }
+
+      const rawDate = String(post.date || "").trim();
+      if (!rawDate) {
+        return 0;
+      }
+
+      const normalizedDate = rawDate.includes("T") || /\d{1,2}:\d{2}/.test(rawDate)
+        ? rawDate.replace(" ", "T")
+        : `${rawDate}T00:00:00+09:00`;
+      const parsed = Date.parse(normalizedDate);
+      return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
+    function formatPostDateTime(post) {
+      const timestamp = getPostTimestamp(post);
+      const hasTime = Number(post && post.createdAt) > 0 || /\d{1,2}:\d{2}/.test(String(post && post.date || ""));
+
+      if (timestamp > 0) {
+        const date = new Date(timestamp);
+        const formatted = date.toLocaleString("ko-KR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+        return hasTime ? formatted : `${String(post.date || formatted).slice(0, 10)} · 시간 미등록`;
+      }
+
+      return post && post.date ? `${post.date} · 시간 미등록` : "날짜 없음";
+    }
+
+    function summarizePostContent(content, maxLength = 74) {
+      const cleanContent = String(content || "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!cleanContent) {
+        return "요약할 내용이 없습니다.";
+      }
+
+      return cleanContent.length > maxLength ? `${cleanContent.slice(0, maxLength)}…` : cleanContent;
+    }
+
+    function getRecentPosts() {
+      return getInfoListPosts()
+        .slice()
+        .sort((a, b) => {
+          const timeDiff = getPostTimestamp(b) - getPostTimestamp(a);
+          if (timeDiff !== 0) return timeDiff;
+          const dateDiff = String(b.date || "").localeCompare(String(a.date || ""));
+          if (dateDiff !== 0) return dateDiff;
+          return String(b.title || "").localeCompare(String(a.title || ""), "ko");
+        });
+    }
+
+    function setLatestPostsPage(page) {
+      const recentPosts = getRecentPosts();
+      const totalPages = Math.max(1, Math.ceil(recentPosts.length / LATEST_POSTS_PER_PAGE));
+      latestPostsCurrentPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+      renderLatestPosts();
+
+      if (latestPostsList) {
+        latestPostsList.scrollTop = 0;
+      }
+    }
+
+    function renderLatestPostsPagination(totalPages) {
+      if (!latestPostsPagination) {
+        return;
+      }
+
+      if (totalPages <= 1) {
+        latestPostsPagination.innerHTML = "";
+        return;
+      }
+
+      let buttons = `
+        <button class="latest-posts-page-button" type="button" onclick="setLatestPostsPage(${latestPostsCurrentPage - 1})" ${latestPostsCurrentPage === 1 ? "disabled" : ""} aria-label="이전 페이지">‹</button>
+      `;
+
+      for (let page = 1; page <= totalPages; page += 1) {
+        buttons += `
+          <button class="latest-posts-page-button ${page === latestPostsCurrentPage ? "active" : ""}" type="button" onclick="setLatestPostsPage(${page})" ${page === latestPostsCurrentPage ? 'aria-current="page"' : ""}>${page}</button>
+        `;
+      }
+
+      buttons += `
+        <button class="latest-posts-page-button" type="button" onclick="setLatestPostsPage(${latestPostsCurrentPage + 1})" ${latestPostsCurrentPage === totalPages ? "disabled" : ""} aria-label="다음 페이지">›</button>
+      `;
+
+      latestPostsPagination.innerHTML = buttons;
+    }
+
+    function renderLatestPosts() {
+      if (!latestPostsList) {
+        return;
+      }
+
+      const recentPosts = getRecentPosts();
+      const totalPosts = recentPosts.length;
+      const totalPages = Math.max(1, Math.ceil(totalPosts / LATEST_POSTS_PER_PAGE));
+
+      if (latestPostsCurrentPage > totalPages) {
+        latestPostsCurrentPage = totalPages;
+      }
+
+      const startIndex = (latestPostsCurrentPage - 1) * LATEST_POSTS_PER_PAGE;
+      const pagePosts = recentPosts.slice(startIndex, startIndex + LATEST_POSTS_PER_PAGE);
+
+      if (latestPostsCount) {
+        latestPostsCount.textContent = totalPosts ? `전체 ${totalPosts}개 · ${latestPostsCurrentPage}/${totalPages}쪽` : "0개";
+      }
+
+      if (totalPosts === 0) {
+        latestPostsList.innerHTML = `<div class="latest-posts-empty">아직 표시할 게시글이 없습니다.</div>`;
+        renderLatestPostsPagination(1);
+        return;
+      }
+
+      latestPostsList.innerHTML = pagePosts.map(post => {
+        const title = post.title || "제목 없음";
+        const meta = [
+          formatPostDateTime(post),
+          post.category || "기타",
+          post.source || "출처 없음"
+        ].filter(Boolean).join(" · ");
+
+        return `
+          <button class="latest-post-card" type="button" onclick="searchKeyword('${escapeJsString(title)}')" aria-label="${escapeHtml(title)} 검색하기">
+            <span class="latest-post-card-title">${escapeHtml(title)}</span>
+            <span class="latest-post-card-meta">${escapeHtml(meta)}</span>
+            <span class="latest-post-card-summary">${escapeHtml(summarizePostContent(post.content))}</span>
+          </button>
+        `;
+      }).join("");
+
+      renderLatestPostsPagination(totalPages);
+    }
+
     function getInfoCategoryOrder(category) {
       const order = ["GM답변", "쿠폰", "공성", "보스", "사냥터", "스킬북", "원소", "감옥", "전직", "문파공지", "제보", "기타"];
       const index = order.indexOf(category || "기타");
@@ -3819,7 +4187,7 @@
                 return `
                   <button class="info-item-button" type="button" onclick="searchKeyword('${escapeJsString(searchTerm)}')">
                     <span class="info-item-title">${escapeHtml(title)}</span>
-                    <span class="info-item-meta">${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(post.date || "날짜 없음")}</span>
+                    <span class="info-item-meta">${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(formatPostDateTime(post))}</span>
                   </button>
                 `;
               }).join("")}
@@ -3859,6 +4227,7 @@
       }
 
       renderInfoList();
+      renderLatestPosts();
     }
 
 
@@ -4538,7 +4907,7 @@
           return `
             <article class="card">
               <h2>${escapeHtml(post.title || "제목 없음")}</h2>
-              <div class="meta">${escapeHtml(post.category || "기타")} · ${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(post.date || "날짜 없음")}</div>
+              <div class="meta">${escapeHtml(post.category || "기타")} · ${escapeHtml(post.source || "출처 없음")} · ${escapeHtml(formatPostDateTime(post))}</div>
               <p>${escapeHtml(post.content || "")}</p>
               ${safeUrl ? `<a class="post-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">원문/바로가기 열기</a>` : ""}
               <div>
@@ -4905,6 +5274,7 @@
         .filter(Boolean);
 
       renderInfoList();
+      renderLatestPosts();
 
       if (searchInput.value.trim()) {
         render();
@@ -5482,6 +5852,7 @@
           lastRenderedSearchPostsSignature = signature;
           firebaseSearchPosts = searchPosts;
           renderInfoList();
+          renderLatestPosts();
 
           if (searchInput.value.trim()) {
             render();
@@ -5633,6 +6004,7 @@
     initGmAlertBox();
     initAdminUploadPanel();
     initInfoListPanel();
+    renderLatestPosts();
     render();
   </script>
 
