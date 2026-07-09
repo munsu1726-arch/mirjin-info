@@ -3788,7 +3788,187 @@
         font-size: 11px;
       }
     }
-  </style>
+
+
+    /* 2026-07-09 모바일 실시간 채팅 소형화: 전송 버튼 항상 보이게 */
+    @media (max-width: 600px) {
+      #liveChat.chat-section {
+        left: 10px !important;
+        right: 10px !important;
+        top: auto !important;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+        width: auto !important;
+        max-height: 66dvh !important;
+        z-index: 140 !important;
+      }
+
+      #liveChat .chat-card {
+        max-height: 66dvh !important;
+        border-radius: 15px !important;
+        overflow: hidden !important;
+      }
+
+      #liveChat .chat-header {
+        padding: 9px 12px !important;
+        gap: 3px !important;
+      }
+
+      #liveChat .chat-header-row {
+        gap: 8px !important;
+      }
+
+      #liveChat .chat-header-row h2 {
+        font-size: 16px !important;
+        line-height: 1.2 !important;
+      }
+
+      #liveChat .chat-close-button {
+        padding: 5px 9px !important;
+        font-size: 11px !important;
+        line-height: 1.1 !important;
+      }
+
+      #liveChat .chat-status {
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+      }
+
+      #liveChat .chat-search-tip {
+        margin: 7px 9px 0 !important;
+        padding: 7px 9px !important;
+        gap: 7px !important;
+        border-radius: 12px !important;
+        box-shadow: none !important;
+      }
+
+      #liveChat .chat-search-tip-badge {
+        padding: 4px 7px !important;
+        font-size: 10px !important;
+      }
+
+      #liveChat .chat-search-tip-text {
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden !important;
+      }
+
+      #liveChat .chat-search-tip-link {
+        display: none !important;
+      }
+
+      #liveChat.chat-open .chat-messages,
+      #liveChat .chat-messages {
+        flex: 1 1 auto !important;
+        height: auto !important;
+        min-height: 110px !important;
+        max-height: 30dvh !important;
+        padding: 8px !important;
+      }
+
+      #liveChat .chat-empty {
+        margin-top: 44px !important;
+        font-size: 12px !important;
+      }
+
+      #liveChat .chat-message {
+        margin-bottom: 7px !important;
+        padding: 8px 9px !important;
+        border-radius: 11px !important;
+      }
+
+      #liveChat .chat-meta {
+        margin-bottom: 4px !important;
+        gap: 6px !important;
+        font-size: 10.5px !important;
+      }
+
+      #liveChat .chat-text {
+        font-size: 13px !important;
+        line-height: 1.42 !important;
+      }
+
+      #liveChat .chat-form {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 62px !important;
+        gap: 6px !important;
+        padding: 8px !important;
+        align-items: stretch !important;
+      }
+
+      #liveChat #chatName {
+        display: none !important;
+      }
+
+      #liveChat .chat-input {
+        min-height: 38px !important;
+        padding: 8px 10px !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+      }
+
+      #liveChat .chat-send {
+        min-height: 38px !important;
+        padding: 0 8px !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+      }
+
+      #liveChat .chat-note {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 380px) {
+      #liveChat.chat-section,
+      #liveChat .chat-card {
+        max-height: 62dvh !important;
+      }
+
+      #liveChat.chat-open .chat-messages,
+      #liveChat .chat-messages {
+        min-height: 92px !important;
+        max-height: 27dvh !important;
+      }
+
+      #liveChat .chat-header-row h2 {
+        font-size: 15px !important;
+      }
+
+      #liveChat .chat-search-tip-text {
+        -webkit-line-clamp: 1;
+      }
+    }
+
+  
+
+    /* 2026-07-09 PC 실시간 채팅 중앙 정렬: 오른쪽 쏠림 제거 */
+    @media (min-width: 601px) {
+      #liveChat.chat-section {
+        left: 50% !important;
+        right: auto !important;
+        top: 50% !important;
+        bottom: auto !important;
+        width: min(520px, calc(100vw - 64px)) !important;
+        max-width: none !important;
+        margin: 0 !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 140 !important;
+      }
+
+      #liveChat .chat-card {
+        max-height: min(720px, calc(100vh - 80px)) !important;
+      }
+
+      #liveChat.chat-open .chat-messages,
+      #liveChat .chat-messages {
+        height: min(330px, 40vh) !important;
+        min-height: 220px !important;
+      }
+    }
+</style>
 </head>
 
 <body>
@@ -5591,6 +5771,7 @@
     const MARKET_PRICE_HISTORY_STORAGE_PREFIX = "mirjinMarketPriceHistory_v8_";
     const MARKET_PRICE_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketPriceSelectedServer_v1";
     const MARKET_ALERT_SELECTED_SERVER_STORAGE_KEY = "mirjinMarketAlertSelectedServer_v1";
+    const MARKET_ALL_SERVER_OPTIONS = Array.from({ length: 13 }, (_, index) => `${index + 1}서버`);
     const MARKET_LINE_ORIGINAL_URL_MARKER = " __MIRJIN_ORIGINAL_URL__ ";
     let marketPriceRefreshRunning = false;
     let marketAlertRefreshRunning = false;
@@ -5617,6 +5798,17 @@
         url: "https://www.barotem.com/product/lists/2382r1004?page=1&sell=sell&display=1&orderby=1",
         fallbackLatest: "최근 매물: 서버 6서버 · 6,000만 게임머니 · 천만 게임머니당 3,500원 · 최소 21,000원",
         priceFallbackLines: [
+          "최근 매물: 서버 2서버 · 200%완전상납 떠나보내다 · 5,000만~2억5,000만 게임머니 · 천만 게임머니당 5,000원 · 최소 25,000원",
+          "최근 거래완료: 서버 2서버 · 2억 게임머니 · 천만 게임머니당 5,000원 · 100,000원",
+          "최근 거래완료: 서버 2서버 · 5,000만 게임머니 · 천만 게임머니당 5,000원 · 25,000원",
+          "최근 매물: 서버 3서버 · 5,000만~1억3,000만 게임머니 팝니다. · 천만 게임머니당 6,000원 · 최소 30,000원",
+          "최근 매물: 서버 3서버 · 200%완전상납 떠나보내다 · 5,000만~9억 게임머니 · 천만 게임머니당 5,000원 · 최소 25,000원",
+          "최근 매물: 서버 3서버 · 2억 게임머니 팝니다. · 2억 게임머니 · 천만 게임머니당 4,000원 · 80,000원",
+          "최근 매물: 서버 4서버 · 3,000만 게임머니 팝니다. · 3,000만 게임머니 · 28,000원",
+          "최근 거래완료: 서버 4서버 · 4서버 예약 · 1,000만 게임머니 · 10,000원",
+          "최근 거래완료: 서버 4서버 · 5,000만 게임머니 팝니다. · 5,000만 게임머니 · 45,000원",
+          "최근 매물: 서버 4서버 · 7,000만 게임머니 팝니다. · 7,000만 게임머니 · 66,000원",
+          "최근 거래완료: 서버 4서버 · 6,000만 게임머니 팝니다. · 천만 게임머니당 10,000원 · 60,000원",
           "최근 매물: 서버 6서버 · 6,000만 게임머니 · 천만 게임머니당 3,500원 · 최소 21,000원",
           "최근 매물: 서버 12서버 · 5,000만~3억 게임머니 · 천게임머니당 4,500원 · 최소 22,500원",
           "최근 매물: 서버 12서버 · 5,000만 게임머니 · 천게임머니당 6,000원 · 30,000원",
@@ -6504,11 +6696,15 @@
 
       const savedServer = getSavedMarketAlertServerFilter();
       const currentServer = normalizeMarketPriceServerValue(select.value || savedServer || "");
-      const serverValues = Array.from(new Set(MARKET_ALERT_SOURCES.flatMap(source =>
+      const detectedServerValues = MARKET_ALERT_SOURCES.flatMap(source =>
         getMarketAlertAllLines(source)
           .map(line => normalizeMarketPriceServerValue(getMarketPriceServerLabel(line)))
           .filter(Boolean)
-      ))).sort(compareMarketServerLabels);
+      );
+      const serverValues = Array.from(new Set([
+        ...MARKET_ALL_SERVER_OPTIONS,
+        ...detectedServerValues
+      ])).sort(compareMarketServerLabels);
 
       if (currentServer && !serverValues.includes(currentServer)) {
         serverValues.push(currentServer);
@@ -6894,10 +7090,13 @@
 
       const savedServer = getSavedMarketPriceServerFilter();
       const currentServer = normalizeMarketPriceServerValue(select.value || savedServer || "");
-      const serverValues = Array.from(new Set(records
+      const detectedServerValues = records
         .map(record => normalizeMarketPriceServerValue(record.serverLabel))
-        .filter(Boolean)))
-        .sort(compareMarketServerLabels);
+        .filter(Boolean);
+      const serverValues = Array.from(new Set([
+        ...MARKET_ALL_SERVER_OPTIONS,
+        ...detectedServerValues
+      ])).sort(compareMarketServerLabels);
 
       if (currentServer && !serverValues.includes(currentServer)) {
         serverValues.push(currentServer);
