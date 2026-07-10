@@ -4347,6 +4347,131 @@
     }
   </style>
 
+
+  <style id="mobile-visitor-dashboard-fix">
+    @media (max-width: 600px) {
+      /* 공식홈페이지/톱니 버튼 아래에 방문자 수를 정상 배치 */
+      .hero-search {
+        padding-top: 72px !important;
+      }
+
+      .hero-box {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      .top-dashboard {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        margin: 0 0 12px !important;
+        padding: 0 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 14px !important;
+        text-align: center !important;
+        transform: none !important;
+        overflow: visible !important;
+        z-index: 4 !important;
+      }
+
+      .top-stat-card {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 5px !important;
+        min-width: 0 !important;
+        white-space: nowrap !important;
+      }
+
+      .top-stat-label {
+        font-size: 12px !important;
+      }
+
+      .top-stat-value {
+        font-size: 13px !important;
+      }
+
+      .guild-slogan {
+        margin-top: 0 !important;
+      }
+    }
+  </style>
+
+
+  <style id="side-alert-collapsible-style">
+    .side-alert-stack {
+      --side-alert-width: 290px;
+      transition: transform .28s ease, opacity .28s ease !important;
+      will-change: transform;
+    }
+
+    .side-alert-toggle {
+      position: absolute !important;
+      left: -34px !important;
+      top: 50% !important;
+      width: 34px !important;
+      height: 58px !important;
+      transform: translateY(-50%) !important;
+      border: 1px solid rgba(147,197,253,.46) !important;
+      border-right: none !important;
+      border-radius: 14px 0 0 14px !important;
+      background: rgba(15,23,42,.94) !important;
+      color: #dbeafe !important;
+      font-size: 24px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      z-index: 3 !important;
+      box-shadow: -7px 8px 18px rgba(0,0,0,.28) !important;
+      touch-action: manipulation !important;
+    }
+
+    .side-alert-toggle:hover {
+      background: rgba(37,99,235,.72) !important;
+      color: #fff !important;
+    }
+
+    .side-alert-stack.side-alert-collapsed {
+      transform: translate(calc(100% + 10px), -50%) !important;
+    }
+
+    .side-alert-stack.side-alert-collapsed .side-alert-toggle {
+      left: -46px !important;
+    }
+
+    .side-alert-stack.side-alert-collapsed .side-alert-toggle {
+      color: #bbf7d0 !important;
+      border-color: rgba(134,239,172,.58) !important;
+    }
+
+    @media (max-width: 600px) {
+      .side-alert-stack {
+        --side-alert-width: 250px;
+      }
+
+      .side-alert-toggle {
+        left: -31px !important;
+        width: 31px !important;
+        height: 52px !important;
+        font-size: 22px !important;
+      }
+
+      .side-alert-stack.side-alert-collapsed {
+        transform: translate(calc(100% + 8px), -50%) !important;
+      }
+
+      .side-alert-stack.side-alert-collapsed .side-alert-toggle {
+        left: -43px !important;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -4480,6 +4605,7 @@
     <div id="bossAlertList" class="boss-alert-list"></div>
   </div>
   <div class="side-alert-stack" aria-label="알리미와 채팅 빠른 버튼">
+  <button id="sideAlertToggle" class="side-alert-toggle" type="button" aria-expanded="true" aria-label="알리미 메뉴 접기">›</button>
   <button id="bossAlertReopen" class="boss-alert-reopen boss-alert-stack-button" type="button" aria-controls="bossLiveAlert" aria-expanded="false">보스 알리미</button>
   <div id="gmAlertBox" class="gm-alert-box gm-alert-closed" role="region" aria-label="GM패왕 최신글 알림">
     <div class="gm-alert-header">
@@ -11777,6 +11903,34 @@
       refreshBossAlerts();
       setInterval(refreshBossAlerts,3000);
     })();
+  </script>
+
+
+  <script id="side-alert-collapsible-script">
+    document.addEventListener('DOMContentLoaded', function () {
+      const stack = document.querySelector('.side-alert-stack');
+      const toggle = document.getElementById('sideAlertToggle');
+      if (!stack || !toggle) return;
+
+      const storageKey = 'mirjinSideAlertCollapsed';
+      const applyState = (collapsed) => {
+        stack.classList.toggle('side-alert-collapsed', collapsed);
+        toggle.textContent = collapsed ? '‹' : '›';
+        toggle.setAttribute('aria-expanded', String(!collapsed));
+        toggle.setAttribute('aria-label', collapsed ? '알리미 메뉴 펼치기' : '알리미 메뉴 접기');
+        try { localStorage.setItem(storageKey, collapsed ? '1' : '0'); } catch (e) {}
+      };
+
+      let collapsed = false;
+      try { collapsed = localStorage.getItem(storageKey) === '1'; } catch (e) {}
+      applyState(collapsed);
+
+      toggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        applyState(!stack.classList.contains('side-alert-collapsed'));
+      });
+    });
   </script>
 
 </body>
