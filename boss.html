@@ -7365,6 +7365,8 @@
 
   <script id="boss-only-mode-head">
     document.documentElement.classList.add("boss-only-mode");
+    window.__BOSS_DIRECT_NO_PASSWORD__ = true;
+    try { sessionStorage.setItem("mirProtectedMenuUnlocked_v1", "1"); } catch (_) {}
   </script>
   <style id="boss-only-mode-style">
     html.boss-only-mode,
@@ -7392,6 +7394,400 @@
       display: block !important;
       position: fixed !important;
       z-index: 99999 !important;
+    }
+  </style>
+
+
+  <style id="boss-status-color-accent">
+    /* 보스 상태 색상 강조: 반투명 파랑(출현 중) / 반투명 빨강(처치됨) */
+    #bossLiveAlert .boss-alert-guide-item.alive {
+      border-color: rgba(96, 165, 250, .62) !important;
+      background: rgba(37, 99, 235, .16) !important;
+      color: #bfdbfe !important;
+      box-shadow: inset 0 0 0 1px rgba(96, 165, 250, .08), 0 7px 20px rgba(37, 99, 235, .08) !important;
+    }
+
+    #bossLiveAlert .boss-alert-guide-item.waiting {
+      border-color: rgba(248, 113, 113, .58) !important;
+      background: rgba(220, 38, 38, .14) !important;
+      color: #fecaca !important;
+      box-shadow: inset 0 0 0 1px rgba(248, 113, 113, .07), 0 7px 20px rgba(220, 38, 38, .07) !important;
+    }
+
+    #bossLiveAlert .boss-alert-guide-item.alive:hover,
+    #bossLiveAlert .boss-alert-guide-item.alive:focus-visible {
+      background: rgba(37, 99, 235, .25) !important;
+      border-color: rgba(147, 197, 253, .85) !important;
+    }
+
+    #bossLiveAlert .boss-alert-guide-item.waiting:hover,
+    #bossLiveAlert .boss-alert-guide-item.waiting:focus-visible {
+      background: rgba(220, 38, 38, .22) !important;
+      border-color: rgba(252, 165, 165, .82) !important;
+    }
+
+    #bossLiveAlert .boss-alert-item.is-alive,
+    #bossLiveAlert .boss-alert-item.is-alive.boss-new {
+      border-color: rgba(96, 165, 250, .28) !important;
+      border-left-color: #60a5fa !important;
+      background: linear-gradient(90deg, rgba(37, 99, 235, .16), rgba(18, 21, 26, .88) 62%) !important;
+      box-shadow: inset 0 0 22px rgba(37, 99, 235, .04) !important;
+    }
+
+    #bossLiveAlert .boss-alert-item.is-waiting {
+      border-color: rgba(248, 113, 113, .22) !important;
+      border-left-color: #f87171 !important;
+      background: linear-gradient(90deg, rgba(220, 38, 38, .13), rgba(17, 20, 25, .88) 62%) !important;
+      box-shadow: inset 0 0 22px rgba(220, 38, 38, .035) !important;
+    }
+
+    #bossLiveAlert .is-alive .boss-state-badge {
+      border-color: rgba(96, 165, 250, .68) !important;
+      background: rgba(37, 99, 235, .22) !important;
+      color: #dbeafe !important;
+      text-shadow: 0 0 10px rgba(96, 165, 250, .28) !important;
+    }
+
+    #bossLiveAlert .is-waiting .boss-state-badge {
+      border-color: rgba(248, 113, 113, .62) !important;
+      background: rgba(220, 38, 38, .19) !important;
+      color: #fee2e2 !important;
+      text-shadow: 0 0 10px rgba(248, 113, 113, .24) !important;
+    }
+
+    #bossLiveAlert #bossAliveGroup .boss-alert-group-title {
+      color: #93c5fd !important;
+    }
+
+    #bossLiveAlert #bossAliveGroup .boss-alert-group-count {
+      border-color: rgba(96, 165, 250, .45) !important;
+      background: rgba(37, 99, 235, .16) !important;
+      color: #bfdbfe !important;
+    }
+
+    #bossLiveAlert #bossWaitingGroup .boss-alert-group-title {
+      color: #fca5a5 !important;
+    }
+
+    #bossLiveAlert #bossWaitingGroup .boss-alert-group-count {
+      border-color: rgba(248, 113, 113, .42) !important;
+      background: rgba(220, 38, 38, .14) !important;
+      color: #fecaca !important;
+    }
+
+    #bossLiveAlert .is-alive .boss-alert-action-primary {
+      color: #bfdbfe !important;
+    }
+
+    #bossLiveAlert .is-waiting .boss-alert-action-primary,
+    #bossLiveAlert .is-waiting .boss-alert-countdown {
+      color: #fecaca !important;
+    }
+  </style>
+
+
+  <style id="boss-direct-half-layout-v2">
+    /* boss.html 전용: 비밀번호 없이 바로 열고, 출현/처치 목록을 좌우 반반 배치 */
+    html.boss-only-mode #protectedMenuGate {
+      display: none !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert:not(.boss-alert-closed) {
+      top: 50% !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: min(960px, calc(100vw - 20px)) !important;
+      max-width: none !important;
+      max-height: calc(100dvh - 16px) !important;
+      padding: 12px !important;
+      transform: translate(-50%, -50%) !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+
+    /* 직통 화면에서는 닫으면 빈 화면이 되므로 닫기 버튼을 숨깁니다. */
+    html.boss-only-mode #bossLiveAlert .boss-alert-close {
+      display: none !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-head {
+      margin: 0 0 8px !important;
+      padding: 0 0 8px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-title {
+      font-size: 15px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-guide {
+      position: static !important;
+      top: auto !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 6px !important;
+      margin: 0 0 7px !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-guide-item {
+      min-width: 0 !important;
+      padding: 7px 6px !important;
+      border-radius: 8px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-guide-item strong {
+      font-size: 10.5px !important;
+      line-height: 1.2 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-guide-item span {
+      margin-top: 2px !important;
+      font-size: 8.5px !important;
+      line-height: 1.25 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-status {
+      margin-bottom: 7px !important;
+      padding: 6px 8px !important;
+      font-size: 9.5px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-search-wrap {
+      margin-bottom: 8px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-search {
+      min-height: 34px !important;
+      padding: 7px 35px 7px 10px !important;
+      font-size: 10.5px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-search-clear {
+      right: 4px !important;
+      width: 26px !important;
+      height: 26px !important;
+      font-size: 16px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-list {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      align-items: start !important;
+      gap: 8px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert #bossAliveGroup,
+    html.boss-only-mode #bossLiveAlert #bossWaitingGroup {
+      min-width: 0 !important;
+      align-content: start !important;
+      gap: 5px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert #bossAliveGroup {
+      padding-right: 4px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert #bossWaitingGroup {
+      padding-left: 8px !important;
+      border-left: 1px solid rgba(255, 255, 255, .09) !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-list > .boss-alert-group-empty,
+    html.boss-only-mode #bossLiveAlert #bossFavoriteGroup {
+      grid-column: 1 / -1 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert #bossFavoriteGroup {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 5px !important;
+      padding: 7px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert #bossFavoriteGroup > .boss-alert-group-title {
+      grid-column: 1 / -1 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-group-title {
+      padding: 0 1px !important;
+      font-size: 10px !important;
+      line-height: 1.25 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-group-count {
+      min-width: 21px !important;
+      padding: 1px 5px !important;
+      font-size: 9px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-item {
+      grid-template-columns: auto minmax(0, 1fr) !important;
+      gap: 4px 6px !important;
+      min-width: 0 !important;
+      padding: 7px 27px 7px 7px !important;
+      border-left-width: 2px !important;
+      border-radius: 8px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-favorite-button {
+      top: 3px !important;
+      right: 3px !important;
+      width: 23px !important;
+      height: 23px !important;
+      border-radius: 5px !important;
+      font-size: 17px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-state-badge {
+      grid-row: auto !important;
+      min-width: 42px !important;
+      min-height: 21px !important;
+      padding: 0 5px !important;
+      border-radius: 5px !important;
+      font-size: 8.2px !important;
+      line-height: 1 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-name {
+      padding-right: 0 !important;
+      font-size: 11px !important;
+      line-height: 1.25 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-place {
+      margin-top: 1px !important;
+      font-size: 8.8px !important;
+      line-height: 1.3 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-action {
+      grid-column: 1 / -1 !important;
+      padding-top: 4px !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-action-primary {
+      font-size: 9px !important;
+      line-height: 1.3 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-action-sub {
+      margin-top: 2px !important;
+      font-size: 8px !important;
+      line-height: 1.3 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-group-empty {
+      padding: 12px 6px !important;
+      font-size: 8.8px !important;
+      line-height: 1.4 !important;
+    }
+
+    html.boss-only-mode #bossLiveAlert .boss-alert-footnote {
+      margin-top: 8px !important;
+      font-size: 8px !important;
+      line-height: 1.4 !important;
+    }
+
+    @media (max-width: 600px) {
+      html.boss-only-mode #bossLiveAlert:not(.boss-alert-closed) {
+        width: calc(100vw - 6px) !important;
+        max-height: calc(100dvh - 6px) !important;
+        padding: 8px !important;
+        border-radius: 11px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-head {
+        margin-bottom: 6px !important;
+        padding-bottom: 6px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-title {
+        font-size: 14px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-guide {
+        gap: 4px !important;
+        margin-bottom: 5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-guide-item {
+        padding: 5px 4px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-guide-item strong {
+        font-size: 9.5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-guide-item span {
+        display: none !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-status {
+        margin-bottom: 5px !important;
+        padding: 5px 6px !important;
+        font-size: 8.7px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-search-wrap {
+        margin-bottom: 6px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-search {
+        min-height: 31px !important;
+        padding: 6px 32px 6px 8px !important;
+        font-size: 9.5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-list {
+        gap: 5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert #bossAliveGroup {
+        padding-right: 1px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert #bossWaitingGroup {
+        padding-left: 5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-group-title {
+        font-size: 9px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-item {
+        gap: 3px 4px !important;
+        padding: 6px 23px 6px 5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-favorite-button {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 15px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-state-badge {
+        min-width: 37px !important;
+        min-height: 19px !important;
+        padding: 0 4px !important;
+        font-size: 7.5px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-name {
+        font-size: 10px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-place {
+        font-size: 7.8px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-action-primary {
+        font-size: 8.2px !important;
+      }
+
+      html.boss-only-mode #bossLiveAlert .boss-alert-action-sub,
+      html.boss-only-mode #bossLiveAlert .boss-alert-footnote {
+        font-size: 7.3px !important;
+      }
     }
   </style>
 
@@ -15599,6 +15995,7 @@
   let pendingButton = null;
 
   function isUnlocked() {
+    if (window.__BOSS_DIRECT_NO_PASSWORD__ === true) return true;
     if (memoryUnlocked) return true;
     try {
       return sessionStorage.getItem(SESSION_KEY) === "1";
@@ -15862,11 +16259,17 @@
       "use strict";
 
       function openBossOnlyPage() {
+        window.__BOSS_DIRECT_NO_PASSWORD__ = true;
+        try { sessionStorage.setItem("mirProtectedMenuUnlocked_v1", "1"); } catch (_) {}
+
+        const gate = document.getElementById("protectedMenuGate");
+        if (gate) gate.hidden = true;
+
         const bossButton = document.getElementById("bossAlertReopen");
         if (!bossButton) return;
 
-        /* 기존 비밀번호 보호를 그대로 거친 뒤 보스 알리미를 엽니다. */
-        window.setTimeout(() => bossButton.click(), 120);
+        /* boss.html 직통 주소는 비밀번호 없이 보스 화면만 즉시 엽니다. */
+        window.setTimeout(() => bossButton.click(), 80);
       }
 
       if (document.readyState === "loading") {
@@ -15874,6 +16277,16 @@
       } else {
         openBossOnlyPage();
       }
+    })();
+  </script>
+
+
+  <script id="boss-disable-context-menu">
+    (() => {
+      "use strict";
+      document.addEventListener("contextmenu", event => {
+        event.preventDefault();
+      }, true);
     })();
   </script>
 
