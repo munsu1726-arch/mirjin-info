@@ -11624,7 +11624,7 @@
       }
 
       const base = firebaseConfig.databaseURL.replace(/\/$/, '');
-      const url = `${base}/mirBossMonitor/events.json?orderBy=%22timestamp%22&limitToLast=8`;
+      const url = `${base}/mirBossMonitor/events.json`;
       const seenKey = 'mirBossMonitorLastSeen_v1';
       let lastSeen = Number(localStorage.getItem(seenKey) || 0);
       let firstLoad = true;
