@@ -6995,9 +6995,376 @@
       }
     }
   </style>
+
+
+  <style id="mobile-right-drawer-final-v2">
+    /* 모바일 주요 기능 5개: 화면 상단 바 대신 오른쪽 슬라이드 서랍 */
+    @media (max-width: 600px) {
+      html {
+        scroll-padding-top: 0 !important;
+      }
+
+      body,
+      body.mobile-top-collapsed {
+        padding-top: 0 !important;
+      }
+
+      .hero-search {
+        padding-top: 54px !important;
+      }
+
+      /* 방문자 수는 본문 상단에 유지 */
+      .hero-box > .top-dashboard {
+        position: static !important;
+        width: 100% !important;
+        margin: 0 0 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 28px !important;
+        text-align: center !important;
+      }
+
+      .hero-box > .top-dashboard .top-stat-label {
+        font-size: 11px !important;
+      }
+
+      .hero-box > .top-dashboard .top-stat-value,
+      .hero-box > .top-dashboard #todayVisitorCount,
+      .hero-box > .top-dashboard #totalVisitorCount {
+        font-size: 15px !important;
+      }
+
+      .formal-utility-row {
+        display: block !important;
+        margin-bottom: 24px !important;
+      }
+
+      .formal-utility-row .side-alert-stack {
+        position: fixed !important;
+        top: max(calc(env(safe-area-inset-top, 0px) + 12px), calc(50dvh - 154px)) !important;
+        right: 0 !important;
+        left: auto !important;
+        bottom: auto !important;
+        inset: auto 0 auto auto !important;
+        width: 196px !important;
+        height: 308px !important;
+        min-height: 0 !important;
+        max-height: calc(100dvh - 24px - env(safe-area-inset-top, 0px)) !important;
+        margin: 0 !important;
+        padding: 12px 11px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        border: 1px solid rgba(255,255,255,.13) !important;
+        border-right: 0 !important;
+        border-radius: 17px 0 0 17px !important;
+        background: rgba(10,12,15,.97) !important;
+        box-shadow: -16px 18px 46px rgba(0,0,0,.46) !important;
+        backdrop-filter: blur(14px) grayscale(1) !important;
+        -webkit-backdrop-filter: blur(14px) grayscale(1) !important;
+        transform: none !important;
+        transition: right .24s ease, box-shadow .24s ease !important;
+        pointer-events: auto !important;
+        z-index: 10030 !important;
+      }
+
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack {
+        right: -196px !important;
+        width: 196px !important;
+        height: 308px !important;
+        padding: 12px 11px !important;
+        display: flex !important;
+        grid-template-columns: none !important;
+        grid-template-rows: none !important;
+        background: rgba(10,12,15,.97) !important;
+        box-shadow: none !important;
+      }
+
+      .formal-utility-row .side-alert-stack > .boss-alert-reopen,
+      .formal-utility-row .side-alert-stack > .gm-alert-reopen,
+      .formal-utility-row .side-alert-stack > .market-alert-reopen,
+      .formal-utility-row .side-alert-stack > .chat-floating-toggle,
+      .formal-utility-row .side-alert-stack > .market-price-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .boss-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .gm-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .market-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .chat-floating-toggle,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .market-price-reopen {
+        position: static !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        margin: 0 !important;
+        padding: 0 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        border: 1px solid rgba(255,255,255,.10) !important;
+        border-radius: 10px !important;
+        background: #111419 !important;
+        color: rgba(244,244,241,.92) !important;
+        box-shadow: none !important;
+        font-size: 13px !important;
+        font-weight: 720 !important;
+        line-height: 1.2 !important;
+        letter-spacing: -.025em !important;
+        text-align: left !important;
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        transition: background .15s ease, border-color .15s ease !important;
+      }
+
+      .formal-utility-row .side-alert-stack > .boss-alert-reopen:active,
+      .formal-utility-row .side-alert-stack > .gm-alert-reopen:active,
+      .formal-utility-row .side-alert-stack > .market-alert-reopen:active,
+      .formal-utility-row .side-alert-stack > .chat-floating-toggle:active,
+      .formal-utility-row .side-alert-stack > .market-price-reopen:active {
+        background: #1a1e24 !important;
+        border-color: rgba(255,255,255,.22) !important;
+      }
+
+      /* 메뉴 안에 방문자 수가 다시 들어오더라도 표시하지 않음 */
+      .formal-utility-row .side-alert-stack > .top-dashboard,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .top-dashboard {
+        display: none !important;
+      }
+
+      .mobile-top-toggle,
+      body.mobile-top-collapsed .mobile-top-toggle {
+        position: fixed !important;
+        top: 50dvh !important;
+        right: 196px !important;
+        left: auto !important;
+        z-index: 10040 !important;
+        width: 44px !important;
+        height: 72px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 1px solid rgba(255,255,255,.16) !important;
+        border-right: 0 !important;
+        border-radius: 13px 0 0 13px !important;
+        background: rgba(13,16,20,.98) !important;
+        color: #f1f1ed !important;
+        box-shadow: -9px 10px 26px rgba(0,0,0,.38) !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 34px !important;
+        font-weight: 400 !important;
+        line-height: 1 !important;
+        cursor: pointer !important;
+        transform: translateY(-50%) !important;
+        transition: right .24s ease, background .15s ease, transform .15s ease !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      body.mobile-top-collapsed .mobile-top-toggle {
+        right: 0 !important;
+        border-right: 1px solid rgba(255,255,255,.16) !important;
+        border-radius: 13px 0 0 13px !important;
+      }
+
+      .mobile-top-toggle:active,
+      body.mobile-top-collapsed .mobile-top-toggle:active {
+        transform: translateY(-50%) scale(.95) !important;
+        background: #1b1f25 !important;
+      }
+
+      /* 서랍 내부의 펼침 패널은 기존처럼 화면 중앙 팝업으로 유지 */
+      .formal-utility-row .side-alert-stack .gm-alert-box,
+      .formal-utility-row .side-alert-stack .market-alert-mini,
+      .formal-utility-row .side-alert-stack .market-price-summary {
+        position: fixed !important;
+        left: 12px !important;
+        right: 12px !important;
+        top: 50dvh !important;
+        bottom: auto !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: none !important;
+        max-height: calc(100dvh - 32px - env(safe-area-inset-top, 0px)) !important;
+        margin: 0 !important;
+        transform: translateY(-50%) !important;
+        overflow-y: auto !important;
+        z-index: 21000 !important;
+      }
+
+      #bossLiveAlert:not(.boss-alert-closed) {
+        top: 50dvh !important;
+        max-height: calc(100dvh - 32px - env(safe-area-inset-top, 0px)) !important;
+        transform: translateY(-50%) !important;
+      }
+    }
+  </style>
+
+
+  <style id="mobile-drawer-boss-search-favorites-v3">
+    /* 모바일 우측 메뉴 축소 + 방문자 수 상향 + 보스 검색/즐겨찾기 최상단 */
+    #bossLiveAlert .boss-alert-search-wrap {
+      position: relative !important;
+      margin: 0 0 11px !important;
+    }
+
+    #bossLiveAlert .boss-alert-search {
+      width: 100% !important;
+      min-height: 42px !important;
+      padding: 10px 42px 10px 13px !important;
+      border: 1px solid rgba(255,255,255,.13) !important;
+      border-radius: 10px !important;
+      outline: none !important;
+      background: #0b0e12 !important;
+      color: #f1f1ed !important;
+      box-shadow: none !important;
+      font-family: inherit !important;
+      font-size: 12px !important;
+      font-weight: 650 !important;
+      line-height: 1.25 !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    #bossLiveAlert .boss-alert-search::placeholder {
+      color: #737982 !important;
+      opacity: 1 !important;
+    }
+
+    #bossLiveAlert .boss-alert-search:focus {
+      border-color: rgba(255,255,255,.30) !important;
+      background: #0e1116 !important;
+    }
+
+    #bossLiveAlert .boss-alert-search::-webkit-search-cancel-button {
+      display: none !important;
+    }
+
+    #bossLiveAlert .boss-alert-search-clear {
+      position: absolute !important;
+      top: 50% !important;
+      right: 7px !important;
+      width: 29px !important;
+      height: 29px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 7px !important;
+      background: #1a1e24 !important;
+      color: #c9cbd0 !important;
+      font-family: inherit !important;
+      font-size: 19px !important;
+      line-height: 1 !important;
+      cursor: pointer !important;
+      transform: translateY(-50%) !important;
+    }
+
+    #bossLiveAlert .boss-alert-search-clear[hidden] {
+      display: none !important;
+    }
+
+    #bossLiveAlert .boss-alert-group.is-favorites {
+      order: -1 !important;
+      padding: 9px !important;
+      border: 1px solid rgba(245,200,75,.16) !important;
+      border-radius: 12px !important;
+      background: rgba(245,200,75,.025) !important;
+    }
+
+    #bossLiveAlert .boss-alert-group.is-favorites .boss-alert-group-title {
+      margin: 0 1px 2px !important;
+    }
+
+    #bossLiveAlert .boss-alert-group.is-favorites .boss-alert-group-title > span:first-child::before {
+      content: "★" !important;
+      margin-right: 6px !important;
+      color: #f5c84b !important;
+      font-size: 12px !important;
+    }
+
+    @media (max-width: 600px) {
+      .hero-search {
+        padding-top: 38px !important;
+      }
+
+      .hero-box > .top-dashboard {
+        margin: -18px 0 12px !important;
+        gap: 24px !important;
+      }
+
+      .formal-utility-row .side-alert-stack,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack {
+        width: 112px !important;
+        height: 252px !important;
+        padding: 9px 7px !important;
+        gap: 6px !important;
+        border-radius: 14px 0 0 14px !important;
+      }
+
+      .formal-utility-row .side-alert-stack {
+        top: max(calc(env(safe-area-inset-top, 0px) + 12px), calc(50dvh - 126px)) !important;
+        right: 0 !important;
+      }
+
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack {
+        right: -112px !important;
+      }
+
+      .formal-utility-row .side-alert-stack > .boss-alert-reopen,
+      .formal-utility-row .side-alert-stack > .gm-alert-reopen,
+      .formal-utility-row .side-alert-stack > .market-alert-reopen,
+      .formal-utility-row .side-alert-stack > .chat-floating-toggle,
+      .formal-utility-row .side-alert-stack > .market-price-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .boss-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .gm-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .market-alert-reopen,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .chat-floating-toggle,
+      body.mobile-top-collapsed .formal-utility-row .side-alert-stack > .market-price-reopen {
+        height: 41px !important;
+        min-height: 41px !important;
+        padding: 0 7px !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        font-size: 10.5px !important;
+        font-weight: 760 !important;
+        line-height: 1.13 !important;
+        text-align: center !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+      }
+
+      .mobile-top-toggle,
+      body.mobile-top-collapsed .mobile-top-toggle {
+        right: 112px !important;
+        width: 34px !important;
+        height: 62px !important;
+        border-radius: 11px 0 0 11px !important;
+        font-size: 29px !important;
+      }
+
+      body.mobile-top-collapsed .mobile-top-toggle {
+        right: 0 !important;
+      }
+
+      #bossLiveAlert .boss-alert-search {
+        min-height: 44px !important;
+        font-size: 13px !important;
+      }
+    }
+  </style>
+
 </head>
 
-<body>
+<body class="mobile-top-collapsed">
 
   <section class="hero-search">
     <div class="top-left-links" aria-label="상단 바로가기">
@@ -7120,7 +7487,7 @@
   </section>
 
 
-  <button id="mobileTopToggle" class="mobile-top-toggle" type="button" aria-controls="mobileQuickMenu" aria-expanded="true" aria-label="상단 빠른 메뉴 접기" title="상단 빠른 메뉴 열기/닫기">−</button>
+  <button id="mobileTopToggle" class="mobile-top-toggle" type="button" aria-controls="mobileQuickMenu" aria-expanded="false" aria-label="오른쪽 빠른 메뉴 열기" title="오른쪽 빠른 메뉴 열기">‹</button>
 
   <div id="bossLiveAlert" class="boss-live-alert boss-alert-closed" role="dialog" aria-modal="true" aria-live="polite" aria-labelledby="bossAlertTitle">
     <div class="boss-alert-head">
@@ -7139,10 +7506,14 @@
       </button>
     </div>
     <div id="bossAlertStatus" class="boss-alert-status">감시기 연결 확인 중...</div>
+    <div class="boss-alert-search-wrap" role="search" aria-label="실시간 보스 검색">
+      <input id="bossAlertSearch" class="boss-alert-search" type="search" placeholder="보스 이름·지역 검색" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="search" enterkeyhint="search" />
+      <button id="bossAlertSearchClear" class="boss-alert-search-clear" type="button" aria-label="보스 검색어 지우기" title="검색어 지우기" hidden>×</button>
+    </div>
     <div id="bossAlertList" class="boss-alert-list"></div>
     <div class="boss-alert-footnote">종료된 과거 기록은 표시하지 않습니다. 젠 주기는 실제 처치→출현 기록으로 자동 계산되며 감시 주기만큼 오차가 있을 수 있습니다.</div>
   </div>
-  <div id="mobileQuickMenu" class="side-alert-stack" aria-label="알리미와 채팅 빠른 버튼">
+  <div id="mobileQuickMenu" class="side-alert-stack" aria-label="알리미와 채팅 빠른 버튼" aria-hidden="true">
   <button id="bossAlertReopen" class="boss-alert-reopen boss-alert-stack-button" type="button" aria-controls="bossLiveAlert" aria-expanded="false">보스 알리미</button>
   <div id="gmAlertBox" class="gm-alert-box gm-alert-closed" role="region" aria-label="GM패왕 최신글 알림">
     <div class="gm-alert-header">
@@ -14362,6 +14733,8 @@
       const jumpButtons = Array.from(box.querySelectorAll('[data-boss-jump]'));
       const aliveJumpCount = document.getElementById('bossAliveJumpCount');
       const waitingJumpCount = document.getElementById('bossWaitingJumpCount');
+      const bossSearch = document.getElementById('bossAlertSearch');
+      const bossSearchClear = document.getElementById('bossAlertSearchClear');
       if (!box || !list || !status || !close || !reopen) return;
 
       const FETCH_EVENT_LIMIT = 500;
@@ -14374,6 +14747,7 @@
       let firstLoad = true;
       let renderRows = [];
       let latestDataTime = 0;
+      let bossSearchQuery = '';
 
       function setBossOpen(isOpen) {
         box.classList.toggle('boss-alert-closed', !isOpen);
@@ -14437,6 +14811,26 @@
         render();
       });
 
+      if (bossSearch) {
+        bossSearch.addEventListener('input', function () {
+          bossSearchQuery = String(bossSearch.value || '').trim();
+          if (bossSearchClear) bossSearchClear.hidden = !bossSearchQuery;
+          render();
+        });
+      }
+
+      if (bossSearchClear) {
+        bossSearchClear.addEventListener('click', function () {
+          bossSearchQuery = '';
+          if (bossSearch) {
+            bossSearch.value = '';
+            bossSearch.focus({preventScroll:true});
+          }
+          bossSearchClear.hidden = true;
+          render();
+        });
+      }
+
       setBossOpen(false);
 
       if (typeof firebaseConfig === 'undefined' || !firebaseConfig.databaseURL) {
@@ -14476,7 +14870,27 @@
       function favoriteFirst(a, b) {
         const favoriteDifference = Number(isFavorite(b)) - Number(isFavorite(a));
         if (favoriteDifference) return favoriteDifference;
-        return (a.name || '').localeCompare(b.name || '', 'ko');
+        if (a.alive !== b.alive) return a.alive ? -1 : 1;
+        return normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
+      }
+      function normalizeSearchText(value) {
+        return String(value ?? '').toLocaleLowerCase('ko-KR').replace(/\s+/g, ' ').trim();
+      }
+      function matchesBossSearch(item) {
+        const query = normalizeSearchText(bossSearchQuery);
+        if (!query) return true;
+        const stateText = item.alive
+          ? (item.status === '랜덤' ? '출현 중 랜덤 이동' : '출현 중 이동')
+          : '처치됨 리젠 대기';
+        const haystack = normalizeSearchText([
+          normalizeBossName(item.name || ''),
+          item.name || '',
+          item.region || '',
+          item.distribution || '',
+          item.status || '',
+          stateText
+        ].join(' '));
+        return query.split(' ').every(token => !token || haystack.includes(token));
       }
       function isAliveStatus(value) { return value === '이동' || value === '랜덤'; }
       function toMillis(value) {
@@ -14650,28 +15064,44 @@
 
       function render() {
         const now = Date.now();
-        const aliveRows = renderRows.filter(row => row.alive).sort(favoriteFirst);
-        const waitingRows = renderRows.filter(row => !row.alive).sort((a, b) => {
-          const favoriteDifference = Number(isFavorite(b)) - Number(isFavorite(a));
-          if (favoriteDifference) return favoriteDifference;
-          return (a.respawnAt || Number.MAX_SAFE_INTEGER) - (b.respawnAt || Number.MAX_SAFE_INTEGER);
+        const filteredRows = renderRows.filter(matchesBossSearch);
+        const favoriteRows = filteredRows.filter(isFavorite).sort(favoriteFirst);
+        const aliveRows = filteredRows.filter(row => row.alive && !isFavorite(row)).sort(favoriteFirst);
+        const waitingRows = filteredRows.filter(row => !row.alive && !isFavorite(row)).sort((a, b) => {
+          return (a.respawnAt || Number.MAX_SAFE_INTEGER) - (b.respawnAt || Number.MAX_SAFE_INTEGER)
+            || normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
         });
+
+        const favoriteContent = favoriteRows.map(item => cardHtml(item, now)).join('');
         const aliveContent = aliveRows.length
           ? aliveRows.map(item => cardHtml(item, now)).join('')
-          : '<div class="boss-alert-group-empty">현재 출현 중인 보스가 없습니다.</div>';
+          : '<div class="boss-alert-group-empty">현재 조건에 맞는 출현 중 보스가 없습니다.</div>';
         const waitingContent = waitingRows.length
           ? waitingRows.map(item => cardHtml(item, now)).join('')
-          : '<div class="boss-alert-group-empty">현재 처치됨·리젠 대기 보스가 없습니다.</div>';
+          : '<div class="boss-alert-group-empty">현재 조건에 맞는 처치됨·리젠 대기 보스가 없습니다.</div>';
 
-        list.innerHTML = `<section id="bossAliveGroup" class="boss-alert-group" data-boss-group="alive"><div class="boss-alert-group-title"><span>지금 잡을 수 있는 보스</span><span class="boss-alert-group-count">${aliveRows.length}</span></div>${aliveContent}</section><section id="bossWaitingGroup" class="boss-alert-group" data-boss-group="waiting"><div class="boss-alert-group-title"><span>처치됨 · 리젠 대기</span><span class="boss-alert-group-count">${waitingRows.length}</span></div>${waitingContent}</section>`;
-        if (aliveJumpCount) aliveJumpCount.textContent = String(aliveRows.length);
-        if (waitingJumpCount) waitingJumpCount.textContent = String(waitingRows.length);
+        const favoritesSection = favoriteRows.length
+          ? `<section id="bossFavoriteGroup" class="boss-alert-group is-favorites" data-boss-group="favorite"><div class="boss-alert-group-title"><span>즐겨찾기</span><span class="boss-alert-group-count">${favoriteRows.length}</span></div>${favoriteContent}</section>`
+          : '';
+
+        const noResults = bossSearchQuery && !filteredRows.length
+          ? `<div class="boss-alert-group-empty">“${esc(bossSearchQuery)}” 검색 결과가 없습니다.</div>`
+          : '';
+
+        list.innerHTML = `${noResults}${favoritesSection}<section id="bossAliveGroup" class="boss-alert-group" data-boss-group="alive"><div class="boss-alert-group-title"><span>지금 잡을 수 있는 보스</span><span class="boss-alert-group-count">${aliveRows.length}</span></div>${aliveContent}</section><section id="bossWaitingGroup" class="boss-alert-group" data-boss-group="waiting"><div class="boss-alert-group-title"><span>처치됨 · 리젠 대기</span><span class="boss-alert-group-count">${waitingRows.length}</span></div>${waitingContent}</section>`;
+
+        const visibleAliveCount = filteredRows.filter(row => row.alive).length;
+        const visibleWaitingCount = filteredRows.filter(row => !row.alive).length;
+        if (aliveJumpCount) aliveJumpCount.textContent = String(visibleAliveCount);
+        if (waitingJumpCount) waitingJumpCount.textContent = String(visibleWaitingCount);
         const updateText = latestDataTime ? ` · 마지막 확인 ${fmtDate(latestDataTime)}` : '';
-        status.textContent = `출현 중 ${aliveRows.length}마리 · 리젠 대기 ${waitingRows.length}마리${updateText}`;
+        const searchText = bossSearchQuery ? `검색 “${bossSearchQuery}” · ` : '';
+        status.textContent = `${searchText}출현 중 ${visibleAliveCount}마리 · 리젠 대기 ${visibleWaitingCount}마리${updateText}`;
 
         if (box.classList.contains('boss-alert-closed')) {
+          const allAliveCount = renderRows.filter(row => row.alive).length;
           reopen.textContent = '보스 알리미';
-          reopen.setAttribute('aria-label', aliveRows.length ? `보스 알리미, 현재 출현 ${aliveRows.length}마리` : '보스 알리미');
+          reopen.setAttribute('aria-label', allAliveCount ? `보스 알리미, 현재 출현 ${allAliveCount}마리` : '보스 알리미');
         }
       }
 
@@ -15023,26 +15453,7 @@
   <script id="mobile-top-dashboard-mount">
     (() => {
       "use strict";
-      const dashboard = document.querySelector(".top-dashboard");
-      const stack = document.querySelector(".side-alert-stack");
-      if (!dashboard || !stack) return;
-
-      const originalParent = dashboard.parentNode;
-      const marker = document.createComment("top-dashboard-original-position");
-      originalParent.insertBefore(marker, dashboard);
-      const media = window.matchMedia("(max-width: 600px)");
-
-      function placeDashboard() {
-        if (media.matches) {
-          if (dashboard.parentNode !== stack) stack.appendChild(dashboard);
-        } else if (marker.parentNode && dashboard.parentNode !== marker.parentNode) {
-          marker.parentNode.insertBefore(dashboard, marker.nextSibling);
-        }
-      }
-
-      placeDashboard();
-      if (typeof media.addEventListener === "function") media.addEventListener("change", placeDashboard);
-      else if (typeof media.addListener === "function") media.addListener(placeDashboard);
+      /* 모바일에서도 방문자 수는 본문 상단의 원래 위치에 유지합니다. */
     })();
   </script>
 
@@ -15071,26 +15482,24 @@
     (() => {
       "use strict";
       const button = document.getElementById("mobileTopToggle");
-      if (!button) return;
+      const drawer = document.getElementById("mobileQuickMenu");
+      if (!button || !drawer) return;
+
       const media = window.matchMedia("(max-width: 600px)");
-      const storageKey = "mirMobileTopCollapsed_v1";
+      let mobileInitialized = false;
 
-      function readCollapsed() {
-        try { return localStorage.getItem(storageKey) === "1"; }
-        catch (_) { return false; }
-      }
+      function apply(closed, save) {
+        const shouldClose = Boolean(closed) && media.matches;
+        document.body.classList.toggle("mobile-top-collapsed", shouldClose);
 
-      function apply(collapsed, save) {
-        document.body.classList.toggle("mobile-top-collapsed", Boolean(collapsed) && media.matches);
-        const isCollapsed = document.body.classList.contains("mobile-top-collapsed");
-        button.textContent = isCollapsed ? "☰" : "−";
-        button.setAttribute("aria-expanded", String(!isCollapsed));
-        button.setAttribute("aria-label", isCollapsed ? "상단 빠른 메뉴 펼치기" : "상단 빠른 메뉴 접기");
-        button.title = isCollapsed ? "상단 빠른 메뉴 펼치기" : "상단 빠른 메뉴 접기";
-        if (save) {
-          try { localStorage.setItem(storageKey, isCollapsed ? "1" : "0"); }
-          catch (_) {}
-        }
+        const isClosed = document.body.classList.contains("mobile-top-collapsed");
+        button.textContent = isClosed ? "‹" : "›";
+        button.setAttribute("aria-expanded", String(!isClosed));
+        button.setAttribute("aria-label", isClosed ? "오른쪽 빠른 메뉴 열기" : "오른쪽 빠른 메뉴 닫기");
+        button.title = isClosed ? "오른쪽 빠른 메뉴 열기" : "오른쪽 빠른 메뉴 닫기";
+        drawer.setAttribute("aria-hidden", String(isClosed && media.matches));
+
+        /* 모바일 메뉴는 페이지에 처음 들어오면 항상 닫힌 상태로 시작합니다. */
       }
 
       button.addEventListener("click", () => {
@@ -15098,8 +15507,20 @@
       });
 
       function syncForViewport() {
-        if (media.matches) apply(readCollapsed(), false);
-        else apply(false, false);
+        if (media.matches) {
+          if (!mobileInitialized) {
+            apply(true, false);
+            mobileInitialized = true;
+          } else {
+            apply(document.body.classList.contains("mobile-top-collapsed"), false);
+          }
+        } else {
+          mobileInitialized = false;
+          document.body.classList.remove("mobile-top-collapsed");
+          button.textContent = "›";
+          button.setAttribute("aria-expanded", "true");
+          drawer.removeAttribute("aria-hidden");
+        }
       }
 
       syncForViewport();
