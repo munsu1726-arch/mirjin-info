@@ -563,6 +563,38 @@
       line-height: 1.35;
     }
 
+
+    .latest-post-card-important {
+      border-left: 4px solid #ff5a5f !important;
+      padding-left: 14px !important;
+      background: linear-gradient(90deg, rgba(255, 90, 95, 0.13), rgba(255, 90, 95, 0.02) 55%, transparent) !important;
+      box-shadow: inset 0 0 0 1px rgba(255, 90, 95, 0.12);
+    }
+
+    .latest-post-card-important .latest-post-card-title {
+      color: #ffd0d2 !important;
+      font-weight: 900 !important;
+    }
+
+    .latest-post-card-important .latest-post-card-meta {
+      color: #ff9da1 !important;
+      font-weight: 700 !important;
+    }
+
+    .latest-post-important-badge {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ff5a5f;
+      color: #fff;
+      font-size: 0.72em;
+      line-height: 1.45;
+      vertical-align: 0.12em;
+      letter-spacing: -0.02em;
+      box-shadow: 0 0 12px rgba(255, 90, 95, 0.35);
+    }
+
     .latest-post-card-summary {
       display: block;
       margin-top: 5px;
@@ -7497,8 +7529,8 @@
     </div>
     <div class="boss-alert-guide" aria-label="보스 상태 바로가기">
       <button class="boss-alert-guide-item alive" type="button" data-boss-jump="alive" aria-controls="bossAliveGroup">
-        <strong>출현 중 <em id="bossAliveJumpCount" class="boss-jump-count">0</em></strong>
-        <span>출현 목록으로 바로 이동</span>
+        <strong>보스 출몰!! <em id="bossAliveJumpCount" class="boss-jump-count">0</em></strong>
+        <span>출몰 보스 목록으로 바로 이동</span>
       </button>
       <button class="boss-alert-guide-item waiting" type="button" data-boss-jump="waiting" aria-controls="bossWaitingGroup">
         <strong>처치됨 <em id="bossWaitingJumpCount" class="boss-jump-count">0</em></strong>
@@ -7962,7 +7994,7 @@
                 ]
         },
         {
-                "title": "8차 - 희귀 장비 획득 뒤 자동 장비 교체 주의",
+                "title": "8차 - 희귀 장비 획득 후 자동 장비 교체 주의",
                 "category": "장비/주의",
                 "source": "카카오톡 공개대화 정리 8차",
                 "date": "2026-07-10T17:11:00+09:00",
@@ -11180,21 +11212,34 @@
 
     function formatPostDateTime(post) {
       const timestamp = getPostTimestamp(post);
-      const hasTime = Number(post && post.createdAt) > 0 || /\d{1,2}:\d{2}/.test(String(post && post.date || ""));
 
       if (timestamp > 0) {
         const date = new Date(timestamp);
-        const formatted = date.toLocaleString("ko-KR", {
+        return date.toLocaleDateString("ko-KR", {
           year: "numeric",
           month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit"
+          day: "2-digit"
         });
-        return hasTime ? formatted : `${String(post.date || formatted).slice(0, 10)} · 시간 미등록`;
       }
 
-      return post && post.date ? `${post.date} · 시간 미등록` : "날짜 없음";
+      return post && post.date ? String(post.date).slice(0, 10) : "날짜 없음";
+    }
+
+    function formatRecentPostTitle(post) {
+      const title = String(post && post.title || "제목 없음");
+      const match = title.match(/^(\d+차)\s*-\s*(.+)$/);
+      if (!match) {
+        return title;
+      }
+
+      const timestamp = getPostTimestamp(post);
+      if (!timestamp) {
+        return title;
+      }
+
+      const date = new Date(timestamp);
+      const monthDay = `${date.getMonth() + 1}${String(date.getDate()).padStart(2, "0")}`;
+      return `${match[1]}(${monthDay})-${match[2]}`;
     }
 
     function summarizePostContent(content, maxLength = 74) {
@@ -11339,6 +11384,13 @@
       `;
     }
 
+    function isImportantPost(post) {
+      const text = [post && post.title, post && post.category, post && post.content]
+        .filter(Boolean)
+        .join(" ");
+      return /(중요|긴급|주의|피해|사망|버그|자동 교체|채집 중단)/.test(text);
+    }
+
     function renderLatestPosts() {
       if (!latestPostsList) {
         return;
@@ -11393,7 +11445,7 @@
       }
 
       latestPostsList.innerHTML = pagePosts.map(post => {
-        const title = post.title || "제목 없음";
+        const title = formatRecentPostTitle(post);
         const meta = [
           formatPostDateTime(post),
           post.category || "기타",
@@ -11401,10 +11453,11 @@
         ].filter(Boolean).join(" · ");
         const postKey = getLatestPostKey(post);
         const isOpen = latestPostsActiveKey === postKey;
+        const isImportant = isImportantPost(post);
 
         return `
-          <button class="latest-post-card" type="button" onclick="toggleLatestPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
-            <span class="latest-post-card-title">${escapeHtml(title)}</span>
+          <button class="latest-post-card${isImportant ? " latest-post-card-important" : ""}" type="button" onclick="toggleLatestPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
+            <span class="latest-post-card-title">${isImportant ? '<b class="latest-post-important-badge">중요</b>' : ''}${escapeHtml(title)}</span>
             <span class="latest-post-card-meta">${escapeHtml(meta)}</span>
             <span class="latest-post-card-summary">${escapeHtml(summarizePostContent(post.content))}</span>
           </button>
@@ -13839,6 +13892,7 @@
 
     function escapeHtml(value) {
       return String(value)
+        .replace(/가우져/g, "가우져")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -15175,7 +15229,7 @@
         const query = normalizeSearchText(bossSearchQuery);
         if (!query) return true;
         const stateText = item.alive
-          ? (item.status === '랜덤' ? '출현 중 랜덤 이동' : '출현 중 이동')
+          ? (item.status === '랜덤' ? '보스 출몰!! 랜덤 이동' : '보스 출몰!! 이동')
           : '처치됨 리젠 대기';
         const haystack = normalizeSearchText([
           normalizeBossName(item.name || ''),
@@ -15322,20 +15376,20 @@
       }
 
       function cardHtml(item, now) {
-        const badge = item.alive ? (item.status === '랜덤' ? '랜덤 출현' : '출현 중') : '처치됨';
+        const badge = item.alive ? (item.status === '랜덤' ? '랜덤 출몰' : '보스 출몰!!') : '처치됨';
         let primary;
         let sub;
 
         if (item.alive) {
-          primary = item.status === '랜덤' ? '현재 출현 중 · 위치가 랜덤이므로 게임에서 확인하세요' : '현재 출현 중 · 지금 이동해서 잡으세요';
+          primary = item.status === '랜덤' ? '보스 출몰!! · 위치가 랜덤이므로 게임에서 확인하세요' : '보스 출몰!! · 지금 이동해서 잡으세요';
           sub = `상태 확인 ${fmtDate(item.changedTime || latestDataTime)}`;
-          if (item.respawnMinutes) sub += ` · 관측 젠 주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
+          if (item.respawnMinutes) sub += ` · 관측&nbsp;젠&nbsp;주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
         } else if (item.respawnAt) {
           const remaining = item.respawnAt - now;
           primary = remaining > 0
             ? `리젠까지 <span class="boss-alert-countdown">${fmtCountdown(remaining)}</span>`
             : '예상 리젠 시간이 되어 감시기 확인 중';
-          sub = `처치 확인 ${fmtDate(item.changedTime)} · 관측 젠 주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
+          sub = `처치 확인 ${fmtDate(item.changedTime)} · 관측&nbsp;젠&nbsp;주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
         } else {
           primary = '리젠 대기 · 정확한 젠 주기 측정 중';
           sub = `처치 확인 ${fmtDate(item.changedTime)} · 처치→출현 기록이 쌓이면 자동 표시`;
@@ -15343,12 +15397,15 @@
 
         const favorite = isFavorite(item);
         const displayName = normalizeBossName(item.name || '보스');
+        const displayRegion = String(item.region || '')
+          .replace(/^해골동굴\s*[·ㆍ-]?\s*/u, '')
+          .trim();
         return `<article class="boss-alert-item ${item.alive ? 'is-alive' : 'is-waiting'}${favorite ? ' is-favorite' : ''}" data-boss-key="${esc(item.key)}">
           <button class="boss-favorite-button${favorite ? ' is-favorite' : ''}" type="button" data-boss-favorite="${esc(item.key)}" aria-pressed="${favorite}" aria-label="${esc(displayName)} ${favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}" title="${favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}"><span aria-hidden="true">${favorite ? '★' : '☆'}</span></button>
           <span class="boss-state-badge">${esc(badge)}</span>
           <div class="boss-alert-main">
             <div class="boss-alert-name"><span>${esc(displayName)}</span></div>
-            <div class="boss-alert-place">${esc(item.region || '')}${item.region && item.distribution ? ' · ' : ''}${esc(item.distribution || '')}</div>
+            <div class="boss-alert-place">${esc(displayRegion)}${displayRegion && item.distribution ? ' · ' : ''}${esc(item.distribution || '')}</div>
           </div>
           <div class="boss-alert-action">
             <div class="boss-alert-action-primary">${primary}</div>
@@ -15370,7 +15427,7 @@
         const favoriteContent = favoriteRows.map(item => cardHtml(item, now)).join('');
         const aliveContent = aliveRows.length
           ? aliveRows.map(item => cardHtml(item, now)).join('')
-          : '<div class="boss-alert-group-empty">현재 조건에 맞는 출현 중 보스가 없습니다.</div>';
+          : '<div class="boss-alert-group-empty">현재 조건에 맞는 출몰 보스가 없습니다.</div>';
         const waitingContent = waitingRows.length
           ? waitingRows.map(item => cardHtml(item, now)).join('')
           : '<div class="boss-alert-group-empty">현재 조건에 맞는 처치됨·리젠 대기 보스가 없습니다.</div>';
@@ -15391,7 +15448,7 @@
         if (waitingJumpCount) waitingJumpCount.textContent = String(visibleWaitingCount);
         const updateText = latestDataTime ? ` · 마지막 확인 ${fmtDate(latestDataTime)}` : '';
         const searchText = bossSearchQuery ? `검색 “${bossSearchQuery}” · ` : '';
-        status.textContent = `${searchText}출현 중 ${visibleAliveCount}마리 · 리젠 대기 ${visibleWaitingCount}마리${updateText}`;
+        status.textContent = `${searchText}보스 출몰!! ${visibleAliveCount}마리 · 리젠 대기 ${visibleWaitingCount}마리${updateText}`;
 
         if (box.classList.contains('boss-alert-closed')) {
           const allAliveCount = renderRows.filter(row => row.alive).length;
