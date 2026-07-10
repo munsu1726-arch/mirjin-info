@@ -11779,5 +11779,70 @@
     })();
   </script>
 
+
+  <script>
+    /* 2026-07-10 모바일 알리미 닫기 후 같은 위치 재열림(ghost click) 방지 */
+    (() => {
+      "use strict";
+
+      const MOBILE_CLOSE_LOCK_MS = 700;
+      let mobileCloseLockUntil = 0;
+
+      const closeSelector = [
+        "#bossAlertClose",
+        "#gmAlertClose",
+        "#marketAlertClose",
+        "#chatCloseButton",
+        "#marketPriceClose"
+      ].join(",");
+
+      const reopenSelector = [
+        "#bossAlertReopen",
+        "#gmAlertReopen",
+        "#marketAlertReopen",
+        "#chatFloatingToggle",
+        "#chatToggleTop",
+        "#marketPriceToggle"
+      ].join(",");
+
+      function isMobileAlertView() {
+        return window.matchMedia("(max-width: 600px)").matches;
+      }
+
+      function lockMobileReopen() {
+        if (isMobileAlertView()) {
+          mobileCloseLockUntil = Date.now() + MOBILE_CLOSE_LOCK_MS;
+        }
+      }
+
+      ["pointerdown", "touchstart", "mousedown", "pointerup", "touchend"].forEach((eventName) => {
+        document.addEventListener(eventName, (event) => {
+          if (event.target.closest && event.target.closest(closeSelector)) {
+            lockMobileReopen();
+          }
+        }, true);
+      });
+
+      document.addEventListener("click", (event) => {
+        const closeButton = event.target.closest && event.target.closest(closeSelector);
+        if (closeButton) {
+          lockMobileReopen();
+          return;
+        }
+
+        const reopenButton = event.target.closest && event.target.closest(reopenSelector);
+        if (
+          reopenButton &&
+          isMobileAlertView() &&
+          Date.now() < mobileCloseLockUntil
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+        }
+      }, true);
+    })();
+  </script>
+
 </body>
 </html>
