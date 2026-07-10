@@ -4022,6 +4022,34 @@
     .boss-alert-state { color:#fde68a; font-weight:1000; }
     .boss-alert-reopen { position:fixed; left:12px; top:50%; transform:translateY(-50%); z-index:57; border:1px solid rgba(134,239,172,.4); border-radius:999px; padding:8px 11px; background:rgba(15,23,42,.9); color:#bbf7d0; font-size:11px; font-weight:1000; cursor:pointer; }
     .boss-alert-reopen[hidden] { display:none; }
+    .boss-alert-stack-button {
+      position: static;
+      left: auto;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      width: 100%;
+      transform: none;
+      z-index: auto;
+      margin: 0;
+      white-space: nowrap;
+    }
+    .boss-alert-stack-button:hover {
+      transform: translateX(-2px);
+      border-color: rgba(134,239,172,.75);
+      background: rgba(22,101,52,.72);
+      color: #ffffff;
+    }
+    .boss-alert-stack-button.boss-alert-new-button {
+      border-color: rgba(250,204,21,.82);
+      color: #fef3c7;
+      background: rgba(120,53,15,.88);
+      animation: bossAlertButtonPulse 1.1s ease-in-out 4;
+    }
+    @keyframes bossAlertButtonPulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
     @keyframes bossAlertPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.025)} }
     @media(max-width:600px){
       .boss-live-alert{left:10px;right:10px;top:auto;bottom:64px;width:auto;max-height:230px;transform:none}
@@ -4152,7 +4180,7 @@
   </section>
 
 
-  <div id="bossLiveAlert" class="boss-live-alert" role="region" aria-live="polite" aria-label="실시간 보스 상태 알림">
+  <div id="bossLiveAlert" class="boss-live-alert boss-alert-closed" role="region" aria-live="polite" aria-label="실시간 보스 상태 알림">
     <div class="boss-alert-head">
       <span class="boss-alert-dot" aria-hidden="true"></span>
       <span class="boss-alert-title">실시간 보스 알리미</span>
@@ -4161,9 +4189,8 @@
     <div id="bossAlertStatus" class="boss-alert-status">감시기 연결 확인 중...</div>
     <div id="bossAlertList" class="boss-alert-list"></div>
   </div>
-  <button id="bossAlertReopen" class="boss-alert-reopen" type="button" hidden>보스 알리미</button>
-
   <div class="side-alert-stack" aria-label="알리미와 채팅 빠른 버튼">
+  <button id="bossAlertReopen" class="boss-alert-reopen boss-alert-stack-button" type="button" aria-controls="bossLiveAlert" aria-expanded="false">보스 알리미</button>
   <div id="gmAlertBox" class="gm-alert-box gm-alert-closed" role="region" aria-label="GM패왕 최신글 알림">
     <div class="gm-alert-header">
       <div class="gm-alert-title">GM패왕 최신글 알림</div>
@@ -11405,7 +11432,14 @@
             return `<div class="boss-alert-item ${fresh?'boss-new':''}"><div class="boss-alert-name">${esc(e.name)} <span class="boss-alert-state">${esc(e.status)}</span></div><div class="boss-alert-place">${esc(e.region)} · ${esc(e.distribution)}</div><div class="boss-alert-meta">${esc(e.oldStatus)} → ${esc(e.status)} · ${fmt(e.timestamp)}</div></div>`;
           }).join('') : '<div class="boss-alert-item"><div class="boss-alert-place">PC 감시기에서 실제 상태 변화가 생기면 여기에 표시됩니다.</div></div>';
           const newest = events.length ? Number(events[0].timestamp)||0 : 0;
-          if (!firstLoad) events.filter(e => Number(e.timestamp)>lastSeen).forEach(notifyBoss);
+          if (!firstLoad) {
+            const freshEvents = events.filter(e => Number(e.timestamp)>lastSeen);
+            freshEvents.forEach(notifyBoss);
+            if (freshEvents.length && box.classList.contains('boss-alert-closed')) {
+              reopen.classList.add('boss-alert-new-button');
+              reopen.textContent = `보스 알리미 ${freshEvents.length}건`;
+            }
+          }
           if (newest > lastSeen) { lastSeen = newest; localStorage.setItem(seenKey,String(lastSeen)); }
           firstLoad = false;
         } catch (e) {
@@ -11413,8 +11447,15 @@
           console.warn('보스 알림 조회 실패', e);
         }
       }
-      close.addEventListener('click',()=>{ box.classList.add('boss-alert-closed'); reopen.hidden=false; });
-      reopen.addEventListener('click',()=>{ box.classList.remove('boss-alert-closed'); reopen.hidden=true; });
+      function setBossOpen(isOpen) {
+        box.classList.toggle('boss-alert-closed', !isOpen);
+        reopen.hidden = isOpen;
+        reopen.setAttribute('aria-expanded', String(isOpen));
+        if (isOpen) { reopen.classList.remove('boss-alert-new-button'); reopen.textContent='보스 알리미'; }
+      }
+      close.addEventListener('click',()=>setBossOpen(false));
+      reopen.addEventListener('click',()=>setBossOpen(true));
+      setBossOpen(false);
       box.addEventListener('dblclick',()=>{ if ('Notification' in window && Notification.permission==='default') Notification.requestPermission(); });
       refreshBossAlerts();
       setInterval(refreshBossAlerts,3000);
