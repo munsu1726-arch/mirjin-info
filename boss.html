@@ -546,6 +546,41 @@
       background: rgba(30, 41, 59, 0.94);
     }
 
+    .latest-post-card.is-important {
+      border-color: rgba(248, 113, 113, 0.72);
+      border-left: 5px solid #ef4444;
+      background: linear-gradient(90deg, rgba(127, 29, 29, 0.42), rgba(15, 23, 42, 0.88) 68%);
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.10), 0 10px 24px rgba(127, 29, 29, 0.25);
+    }
+
+    .latest-post-card.is-important:hover {
+      border-color: rgba(252, 165, 165, 0.96);
+      background: linear-gradient(90deg, rgba(153, 27, 27, 0.56), rgba(30, 41, 59, 0.96) 72%);
+    }
+
+    .latest-post-card.is-important .latest-post-card-title {
+      color: #fee2e2;
+    }
+
+    .latest-post-card.is-important .latest-post-card-meta {
+      color: #fca5a5;
+    }
+
+    .latest-post-important-badge {
+      display: inline-flex;
+      margin-right: 7px;
+      padding: 2px 6px;
+      border: 1px solid rgba(254, 202, 202, 0.78);
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 9px;
+      font-weight: 1000;
+      line-height: 1.2;
+      vertical-align: 1px;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
+    }
+
     .latest-post-card-title {
       display: block;
       color: #ffffff;
@@ -7926,8 +7961,8 @@
     </div>
     <div class="boss-alert-guide" aria-label="보스 상태 바로가기">
       <button class="boss-alert-guide-item alive" type="button" data-boss-jump="alive" aria-controls="bossAliveGroup">
-        <strong>출현 중 <em id="bossAliveJumpCount" class="boss-jump-count">0</em></strong>
-        <span>출현 목록으로 바로 이동</span>
+        <strong>보스 출몰!! <em id="bossAliveJumpCount" class="boss-jump-count">0</em></strong>
+        <span>출몰 보스 목록으로 바로 이동</span>
       </button>
       <button class="boss-alert-guide-item waiting" type="button" data-boss-jump="waiting" aria-controls="bossWaitingGroup">
         <strong>처치됨 <em id="bossWaitingJumpCount" class="boss-jump-count">0</em></strong>
@@ -8391,7 +8426,7 @@
                 ]
         },
         {
-                "title": "8차 - 희귀 장비 획득 뒤 자동 장비 교체 주의",
+                "title": "8차 - 희귀 장비 획득 후 자동 장비 교체 주의",
                 "category": "장비/주의",
                 "source": "카카오톡 공개대화 정리 8차",
                 "date": "2026-07-10T17:11:00+09:00",
@@ -11768,6 +11803,17 @@
       `;
     }
 
+    function isImportantPost(post) {
+      const text = [
+        post && post.title,
+        post && post.category,
+        post && post.content,
+        ...(Array.isArray(post && post.tags) ? post.tags : [])
+      ].filter(Boolean).join(" ");
+
+      return /(중요|주의|피해|사망|버그|오류|중단|손실|자동교체|자동장착|보상미지급|결제|해킹|도용|삭제|분실|경고)/i.test(text);
+    }
+
     function renderLatestPosts() {
       if (!latestPostsList) {
         return;
@@ -11823,6 +11869,7 @@
 
       latestPostsList.innerHTML = pagePosts.map(post => {
         const title = post.title || "제목 없음";
+        const isImportant = isImportantPost(post);
         const meta = [
           formatPostDateTime(post),
           post.category || "기타",
@@ -11832,8 +11879,8 @@
         const isOpen = latestPostsActiveKey === postKey;
 
         return `
-          <button class="latest-post-card" type="button" onclick="toggleLatestPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
-            <span class="latest-post-card-title">${escapeHtml(title)}</span>
+          <button class="latest-post-card${isImportant ? " is-important" : ""}" type="button" onclick="toggleLatestPostDetail('${escapeJsString(postKey)}')" aria-expanded="${isOpen ? "true" : "false"}" aria-label="${escapeHtml(title)} 내용 보기">
+            <span class="latest-post-card-title">${isImportant ? '<span class="latest-post-important-badge">중요</span>' : ''}${escapeHtml(title)}</span>
             <span class="latest-post-card-meta">${escapeHtml(meta)}</span>
             <span class="latest-post-card-summary">${escapeHtml(summarizePostContent(post.content))}</span>
           </button>
@@ -15571,7 +15618,8 @@
         return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
       }
       function normalizeBossName(value) {
-        const name = String(value ?? '').trim();
+        const name = String(value ?? '').trim()
+          .replace(/가우저/g, '가우져');
         return name === '축거미' ? '흑거미' : name;
       }
       function naturalKey(item) { return `${item.region || ''}|${normalizeBossName(item.name)}|${item.distribution || ''}`; }
@@ -15604,7 +15652,7 @@
         const query = normalizeSearchText(bossSearchQuery);
         if (!query) return true;
         const stateText = item.alive
-          ? (item.status === '랜덤' ? '출현 중 랜덤 이동' : '출현 중 이동')
+          ? (item.status === '랜덤' ? '보스 출몰 랜덤 이동' : '보스 출몰 이동')
           : '처치됨 리젠 대기';
         const haystack = normalizeSearchText([
           normalizeBossName(item.name || ''),
@@ -15751,12 +15799,12 @@
       }
 
       function cardHtml(item, now) {
-        const badge = item.alive ? (item.status === '랜덤' ? '랜덤 출현' : '출현 중') : '처치됨';
+        const badge = item.alive ? (item.status === '랜덤' ? '랜덤 출몰' : '보스 출몰!!') : '처치됨';
         let primary;
         let sub;
 
         if (item.alive) {
-          primary = item.status === '랜덤' ? '현재 출현 중 · 위치가 랜덤이므로 게임에서 확인하세요' : '현재 출현 중 · 지금 이동해서 잡으세요';
+          primary = item.status === '랜덤' ? '보스 출몰!! · 위치가 랜덤이므로 게임에서 확인하세요' : '보스 출몰!! · 지금 이동해서 잡으세요';
           sub = `상태 확인 ${fmtDate(item.changedTime || latestDataTime)}`;
           if (item.respawnMinutes) sub += ` · 관측 젠 주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
         } else if (item.respawnAt) {
@@ -15799,7 +15847,7 @@
         const favoriteContent = favoriteRows.map(item => cardHtml(item, now)).join('');
         const aliveContent = aliveRows.length
           ? aliveRows.map(item => cardHtml(item, now)).join('')
-          : '<div class="boss-alert-group-empty">현재 조건에 맞는 출현 중 보스가 없습니다.</div>';
+          : '<div class="boss-alert-group-empty">현재 조건에 맞는 출몰 보스가 없습니다.</div>';
         const waitingContent = waitingRows.length
           ? waitingRows.map(item => cardHtml(item, now)).join('')
           : '<div class="boss-alert-group-empty">현재 조건에 맞는 처치됨·리젠 대기 보스가 없습니다.</div>';
