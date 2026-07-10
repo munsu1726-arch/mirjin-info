@@ -4060,6 +4060,23 @@
       .boss-alert-reopen{left:10px;right:10px;top:auto;bottom:64px;transform:none;width:auto}
     }
 
+  
+    .boss-live-alert {
+      pointer-events: auto !important;
+    }
+    @media (max-width: 600px) {
+      .boss-live-alert {
+        left: 10px !important;
+        right: 10px !important;
+        top: auto !important;
+        bottom: 64px !important;
+        width: auto !important;
+        max-height: 52vh !important;
+        transform: none !important;
+        z-index: 160 !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -11410,7 +11427,26 @@
       const status = document.getElementById('bossAlertStatus');
       const close = document.getElementById('bossAlertClose');
       const reopen = document.getElementById('bossAlertReopen');
-      if (!box || !list || !status || !window.firebaseConfig || !firebaseConfig.databaseURL) return;
+      if (!box || !list || !status || !close || !reopen) return;
+
+      function setBossOpen(isOpen) {
+        box.classList.toggle('boss-alert-closed', !isOpen);
+        reopen.hidden = isOpen;
+        reopen.setAttribute('aria-expanded', String(isOpen));
+        if (isOpen) {
+          reopen.classList.remove('boss-alert-new-button');
+          reopen.textContent = '보스 알리미';
+        }
+      }
+
+      close.addEventListener('click', function () { setBossOpen(false); });
+      reopen.addEventListener('click', function () { setBossOpen(true); });
+      setBossOpen(false);
+
+      if (typeof firebaseConfig === 'undefined' || !firebaseConfig.databaseURL) {
+        status.textContent = 'Firebase 설정을 찾지 못했습니다.';
+        return;
+      }
 
       const base = firebaseConfig.databaseURL.replace(/\/$/, '');
       const url = `${base}/mirBossMonitor/events.json?orderBy=%22timestamp%22&limitToLast=8`;
@@ -11451,15 +11487,6 @@
           console.warn('보스 알림 조회 실패', e);
         }
       }
-      function setBossOpen(isOpen) {
-        box.classList.toggle('boss-alert-closed', !isOpen);
-        reopen.hidden = isOpen;
-        reopen.setAttribute('aria-expanded', String(isOpen));
-        if (isOpen) { reopen.classList.remove('boss-alert-new-button'); reopen.textContent='보스 알리미'; }
-      }
-      close.addEventListener('click',()=>setBossOpen(false));
-      reopen.addEventListener('click',()=>setBossOpen(true));
-      setBossOpen(false);
       box.addEventListener('dblclick',()=>{ if ('Notification' in window && Notification.permission==='default') Notification.requestPermission(); });
       refreshBossAlerts();
       setInterval(refreshBossAlerts,3000);
