@@ -3109,6 +3109,7 @@
     .side-alert-stack .gm-alert-box,
     .side-alert-stack .market-alert-mini,
     .side-alert-stack .gm-alert-reopen,
+    .side-alert-stack .boss-alert-reopen,
     .side-alert-stack .market-alert-reopen,
     .side-alert-stack .chat-floating-toggle,
     .side-alert-stack .market-price-reopen,
@@ -4023,6 +4024,9 @@
     .boss-alert-reopen { position:fixed; left:12px; top:50%; transform:translateY(-50%); z-index:57; border:1px solid rgba(134,239,172,.4); border-radius:999px; padding:8px 11px; background:rgba(15,23,42,.9); color:#bbf7d0; font-size:11px; font-weight:1000; cursor:pointer; }
     .boss-alert-reopen[hidden] { display:none; }
     .boss-alert-stack-button {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      touch-action: manipulation;
       position: static;
       left: auto;
       top: auto;
