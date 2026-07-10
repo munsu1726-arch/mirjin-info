@@ -15196,7 +15196,8 @@
         return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
       }
       function normalizeBossName(value) {
-        const name = String(value ?? '').trim();
+        const name = String(value ?? '').trim()
+          .replace(/가우저/g, '가우져');
         return name === '축거미' ? '흑거미' : name;
       }
       function naturalKey(item) { return `${item.region || ''}|${normalizeBossName(item.name)}|${item.distribution || ''}`; }
