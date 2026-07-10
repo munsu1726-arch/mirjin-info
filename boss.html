@@ -15619,7 +15619,8 @@
       }
       function normalizeBossName(value) {
         const name = String(value ?? '').trim()
-          .replace(/가우저/g, '가우져');
+          .replace(/가우저/g, '가우져')
+          .replace(/네루대주술사/g, '네루주술사');
         return name === '축거미' ? '흑거미' : name;
       }
       function naturalKey(item) { return `${item.region || ''}|${normalizeBossName(item.name)}|${item.distribution || ''}`; }
@@ -15639,11 +15640,23 @@
         }
       }
       function isFavorite(item) { return favoriteBosses.has(item.key); }
+      function fastSpawnFirst(a, b) {
+        if (a.alive !== b.alive) return a.alive ? -1 : 1;
+
+        if (!a.alive && !b.alive) {
+          return (a.respawnAt || Number.MAX_SAFE_INTEGER) - (b.respawnAt || Number.MAX_SAFE_INTEGER)
+            || (a.respawnMinutes || Number.MAX_SAFE_INTEGER) - (b.respawnMinutes || Number.MAX_SAFE_INTEGER)
+            || normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
+        }
+
+        return (a.respawnMinutes || Number.MAX_SAFE_INTEGER) - (b.respawnMinutes || Number.MAX_SAFE_INTEGER)
+          || normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
+      }
+
       function favoriteFirst(a, b) {
         const favoriteDifference = Number(isFavorite(b)) - Number(isFavorite(a));
         if (favoriteDifference) return favoriteDifference;
-        if (a.alive !== b.alive) return a.alive ? -1 : 1;
-        return normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
+        return fastSpawnFirst(a, b);
       }
       function normalizeSearchText(value) {
         return String(value ?? '').toLocaleLowerCase('ko-KR').replace(/\s+/g, ' ').trim();
@@ -15806,13 +15819,13 @@
         if (item.alive) {
           primary = item.status === '랜덤' ? '보스 출몰!! · 위치가 랜덤이므로 게임에서 확인하세요' : '보스 출몰!! · 지금 이동해서 잡으세요';
           sub = `상태 확인 ${fmtDate(item.changedTime || latestDataTime)}`;
-          if (item.respawnMinutes) sub += ` · 관측 젠 주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
+          if (item.respawnMinutes) sub += ` · 관측&nbsp;젠&nbsp;주기&nbsp;${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
         } else if (item.respawnAt) {
           const remaining = item.respawnAt - now;
           primary = remaining > 0
             ? `리젠까지 <span class="boss-alert-countdown">${fmtCountdown(remaining)}</span>`
             : '예상 리젠 시간이 되어 감시기 확인 중';
-          sub = `처치 확인 ${fmtDate(item.changedTime)} · 관측 젠 주기 ${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
+          sub = `처치 확인 ${fmtDate(item.changedTime)} · 관측&nbsp;젠&nbsp;주기&nbsp;${fmtDuration(item.respawnMinutes)} (${item.stat.count || 1}회)`;
         } else {
           primary = '리젠 대기 · 정확한 젠 주기 측정 중';
           sub = `처치 확인 ${fmtDate(item.changedTime)} · 처치→출현 기록이 쌓이면 자동 표시`;
@@ -15820,12 +15833,32 @@
 
         const favorite = isFavorite(item);
         const displayName = normalizeBossName(item.name || '보스');
+        const region = String(item.region || '').trim();
+        const distribution = String(item.distribution || '').trim();
+
+        let displayPlace = '';
+        if (region && distribution) {
+          const compactRegion = region.replace(/\s+/g, '');
+          const compactDistribution = distribution.replace(/\s+/g, '');
+
+          if (compactRegion === compactDistribution) {
+            displayPlace = region;
+          } else if (compactDistribution.includes(compactRegion)) {
+            displayPlace = distribution;
+          } else if (compactRegion.includes(compactDistribution)) {
+            displayPlace = region;
+          } else {
+            displayPlace = `${region} · ${distribution}`;
+          }
+        } else {
+          displayPlace = region || distribution;
+        }
         return `<article class="boss-alert-item ${item.alive ? 'is-alive' : 'is-waiting'}${favorite ? ' is-favorite' : ''}" data-boss-key="${esc(item.key)}">
           <button class="boss-favorite-button${favorite ? ' is-favorite' : ''}" type="button" data-boss-favorite="${esc(item.key)}" aria-pressed="${favorite}" aria-label="${esc(displayName)} ${favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}" title="${favorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}"><span aria-hidden="true">${favorite ? '★' : '☆'}</span></button>
           <span class="boss-state-badge">${esc(badge)}</span>
           <div class="boss-alert-main">
             <div class="boss-alert-name"><span>${esc(displayName)}</span></div>
-            <div class="boss-alert-place">${esc(item.region || '')}${item.region && item.distribution ? ' · ' : ''}${esc(item.distribution || '')}</div>
+            <div class="boss-alert-place">${esc(displayPlace)}</div>
           </div>
           <div class="boss-alert-action">
             <div class="boss-alert-action-primary">${primary}</div>
@@ -15837,12 +15870,9 @@
       function render() {
         const now = Date.now();
         const filteredRows = renderRows.filter(matchesBossSearch);
-        const favoriteRows = filteredRows.filter(isFavorite).sort(favoriteFirst);
-        const aliveRows = filteredRows.filter(row => row.alive && !isFavorite(row)).sort(favoriteFirst);
-        const waitingRows = filteredRows.filter(row => !row.alive && !isFavorite(row)).sort((a, b) => {
-          return (a.respawnAt || Number.MAX_SAFE_INTEGER) - (b.respawnAt || Number.MAX_SAFE_INTEGER)
-            || normalizeBossName(a.name || '').localeCompare(normalizeBossName(b.name || ''), 'ko');
-        });
+        const favoriteRows = filteredRows.filter(isFavorite).sort(fastSpawnFirst);
+        const aliveRows = filteredRows.filter(row => row.alive && !isFavorite(row)).sort(fastSpawnFirst);
+        const waitingRows = filteredRows.filter(row => !row.alive && !isFavorite(row)).sort(fastSpawnFirst);
 
         const favoriteContent = favoriteRows.map(item => cardHtml(item, now)).join('');
         const aliveContent = aliveRows.length
