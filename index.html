@@ -4078,6 +4078,164 @@
     }
 
   </style>
+
+  <style>
+    /* 알리미 최종 배치 보정:
+       모든 화면에서 오른쪽 세로 고정, 보스 알림창은 화면 중앙 팝업 */
+    .side-alert-stack {
+      position: fixed !important;
+      left: auto !important;
+      right: 10px !important;
+      top: 50% !important;
+      bottom: auto !important;
+      width: auto !important;
+      max-width: min(290px, calc(100vw - 20px)) !important;
+      max-height: calc(100vh - 24px) !important;
+      transform: translateY(-50%) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      align-items: flex-end !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      z-index: 180 !important;
+      pointer-events: none !important;
+    }
+
+    .side-alert-stack .boss-alert-reopen,
+    .side-alert-stack .gm-alert-reopen,
+    .side-alert-stack .market-alert-reopen,
+    .side-alert-stack .chat-floating-toggle,
+    .side-alert-stack .market-price-reopen {
+      position: static !important;
+      display: inline-flex !important;
+      width: auto !important;
+      min-width: 0 !important;
+      min-height: 30px !important;
+      padding: 5px 10px !important;
+      margin: 0 !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 999px !important;
+      font-size: 11px !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      transform: none !important;
+      opacity: .94 !important;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      touch-action: manipulation !important;
+      background: rgba(15, 23, 42, .82) !important;
+      border: 1px solid rgba(255,255,255,.18) !important;
+      box-shadow: 0 7px 20px rgba(0,0,0,.28) !important;
+      backdrop-filter: blur(6px) !important;
+    }
+
+    .side-alert-stack .boss-alert-reopen {
+      color: #bbf7d0 !important;
+      border-color: rgba(134,239,172,.48) !important;
+    }
+
+    .side-alert-stack .boss-alert-reopen:hover,
+    .side-alert-stack .gm-alert-reopen:hover,
+    .side-alert-stack .market-alert-reopen:hover,
+    .side-alert-stack .chat-floating-toggle:hover,
+    .side-alert-stack .market-price-reopen:hover {
+      transform: translateX(-2px) !important;
+      opacity: 1 !important;
+    }
+
+    .side-alert-stack .gm-alert-box,
+    .side-alert-stack .market-alert-mini,
+    .side-alert-stack .market-price-summary {
+      position: static !important;
+      order: 20 !important;
+      width: min(278px, calc(100vw - 20px)) !important;
+      max-width: min(278px, calc(100vw - 20px)) !important;
+      max-height: min(48vh, 390px) !important;
+      margin: 0 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+    }
+
+    /* 보스 알리미: PC/모바일 모두 화면 중앙에 표시 */
+    .boss-live-alert {
+      position: fixed !important;
+      left: 50% !important;
+      right: auto !important;
+      top: 50% !important;
+      bottom: auto !important;
+      width: min(440px, calc(100vw - 28px)) !important;
+      max-height: min(70vh, 560px) !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 220 !important;
+      overflow-y: auto !important;
+      padding: 15px !important;
+      box-shadow: 0 22px 70px rgba(0,0,0,.62) !important;
+    }
+
+    .boss-live-alert .boss-alert-title {
+      font-size: 16px !important;
+    }
+
+    .boss-live-alert .boss-alert-status {
+      font-size: 12px !important;
+    }
+
+    .boss-live-alert .boss-alert-name {
+      font-size: 13px !important;
+    }
+
+    .boss-live-alert .boss-alert-place {
+      font-size: 12px !important;
+    }
+
+    .boss-live-alert .boss-alert-meta {
+      font-size: 11px !important;
+    }
+
+    @media (max-width: 600px) {
+      .side-alert-stack {
+        right: 8px !important;
+        top: 50% !important;
+        bottom: auto !important;
+        max-height: calc(100vh - 32px) !important;
+        transform: translateY(-50%) !important;
+        gap: 5px !important;
+      }
+
+      .side-alert-stack .boss-alert-reopen,
+      .side-alert-stack .gm-alert-reopen,
+      .side-alert-stack .market-alert-reopen,
+      .side-alert-stack .chat-floating-toggle,
+      .side-alert-stack .market-price-reopen {
+        min-height: 28px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+      }
+
+      .boss-live-alert {
+        width: calc(100vw - 24px) !important;
+        max-height: 72vh !important;
+        padding: 13px !important;
+      }
+    }
+  </style>
+
+
+  <style>
+    #bossLiveAlert:not(.boss-alert-closed) {
+      display: block !important;
+      position: fixed !important;
+      left: 50% !important;
+      right: auto !important;
+      top: 50% !important;
+      bottom: auto !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 99999 !important;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -11433,9 +11591,26 @@
         box.classList.toggle('boss-alert-closed', !isOpen);
         reopen.hidden = isOpen;
         reopen.setAttribute('aria-expanded', String(isOpen));
+
         if (isOpen) {
+          /* 기존 CSS 충돌과 모바일 캐시 영향을 받지 않도록 인라인으로 중앙 고정 */
+          box.style.setProperty('display', 'block', 'important');
+          box.style.setProperty('position', 'fixed', 'important');
+          box.style.setProperty('left', '50%', 'important');
+          box.style.setProperty('right', 'auto', 'important');
+          box.style.setProperty('top', '50%', 'important');
+          box.style.setProperty('bottom', 'auto', 'important');
+          box.style.setProperty('width', 'min(440px, calc(100vw - 24px))', 'important');
+          box.style.setProperty('max-height', '72vh', 'important');
+          box.style.setProperty('transform', 'translate(-50%, -50%)', 'important');
+          box.style.setProperty('z-index', '99999', 'important');
+          box.style.setProperty('overflow-y', 'auto', 'important');
+          box.style.setProperty('margin', '0', 'important');
+
           reopen.classList.remove('boss-alert-new-button');
           reopen.textContent = '보스 알리미';
+        } else {
+          box.style.setProperty('display', 'none', 'important');
         }
       }
 
