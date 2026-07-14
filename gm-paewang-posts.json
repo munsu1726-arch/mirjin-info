@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "boardName": "GM패왕",
+    "cafeId": "31717562",
+    "menuId": "48",
+    "sourceUrl": "https://cafe.naver.com/f-e/cafes/31717562/menus/48?viewType=L",
+    "updatedAt": null,
+    "status": "waiting_first_run",
+    "count": 0,
+    "newCount": 0,
+    "collectionMethod": "Playwright browser - open new posts one by one"
+  },
+  "items": []
+}
