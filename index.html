@@ -4544,7 +4544,7 @@ function gmRender(){
 
         <div class="gm-paewang-post-meta">
           <b>${gmEsc(post.writer)}</b>
-          <span>${gmDate(post.timestamp)}</span>
+          <span>${post.timestamp?gmDate(post.timestamp):'작성일 확인 중'}</span>
           ${post.commentCount?`<span>댓글 ${post.commentCount}</span>`:''}
           ${post.readCount?`<span>조회 ${post.readCount.toLocaleString('ko-KR')}</span>`:''}
         </div>
@@ -4597,6 +4597,14 @@ async function gmLoad(){
     const payload=await gmFetchJson();
     gmPosts=gmExtractRows(payload)
       .sort((a,b)=>{
+        const aid=gmNum(a.articleId);
+        const bid=gmNum(b.articleId);
+
+        /* 네이버 카페 게시글 번호가 클수록 최신 글 */
+        if(aid||bid){
+          if(bid!==aid)return bid-aid;
+        }
+
         const at=new Date(a.timestamp||0).getTime()||gmNum(a.timestamp);
         const bt=new Date(b.timestamp||0).getTime()||gmNum(b.timestamp);
         return bt-at;

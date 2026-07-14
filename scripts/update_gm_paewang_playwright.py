@@ -126,6 +126,28 @@ def compact_lines(value: str) -> list[str]:
     return result
 
 
+
+
+def usable_article_title(extracted: str, candidate_title: str) -> str:
+    extracted = text_clean(extracted)
+    candidate_title = text_clean(candidate_title)
+
+    generic_titles = {
+        "미르의 전설: 진",
+        "네이버 카페",
+        "NAVER 카페",
+        "카페",
+    }
+
+    if not extracted or extracted in generic_titles:
+        return candidate_title or "제목 없음"
+
+    if candidate_title and candidate_title not in generic_titles:
+        if len(extracted) < 4 or extracted.endswith(" : 네이버 카페"):
+            return candidate_title
+
+    return extracted
+
 def make_summary(body_text: str, title: str = "") -> str:
     lines = compact_lines(body_text)
     title_key = text_clean(title)
@@ -386,8 +408,19 @@ def scrape_article_detail(
                 except Exception:
                     continue
 
-        final_title = title or str(candidate.get("title") or "제목 없음")
+        candidate_title = str(candidate.get("title") or "")
+        final_title = usable_article_title(title, candidate_title)
         summary = make_summary(body, final_title)
+
+        generic_summary = {
+            "가입카페\n사용자 링크\n서비스 더보기\n카페정보",
+            "가입카페 사용자 링크 서비스 더보기 카페정보",
+        }
+        if text_clean(summary) in generic_summary:
+            summary = (
+                f"{final_title}\n"
+                "본문 자동 추출이 불완전합니다. 원문 게시글에서 전체 내용을 확인해 주세요."
+            )
 
         return {
             **candidate,
@@ -510,6 +543,14 @@ def main() -> int:
             updated["link"] = candidate.get("link") or updated.get("link")
             if candidate.get("title") and candidate.get("title") != "제목 확인 중":
                 updated["title"] = candidate["title"]
+                if updated.get("summary") in {
+                    "가입카페\n사용자 링크\n서비스 더보기\n카페정보",
+                    "가입카페 사용자 링크 서비스 더보기 카페정보",
+                }:
+                    updated["summary"] = (
+                        f"{candidate['title']}\n"
+                        "본문 자동 추출이 불완전합니다. 원문 게시글에서 전체 내용을 확인해 주세요."
+                    )
             merged.append(updated)
             continue
 
@@ -561,6 +602,7 @@ def main() -> int:
             "newCount": len(new_ids),
             "openedArticleCount": len(new_candidates),
             "collectionMethod": "Playwright browser - open new posts one by one",
+            "sortMethod": "articleId descending",
         },
         "items": unique,
     }
