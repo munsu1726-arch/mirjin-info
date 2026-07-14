@@ -7826,9 +7826,64 @@
     }
   </style>
 
+
+<style id="boss-direct-lock-style">
+#bossDirectLock{
+  position:fixed;
+  inset:0;
+  z-index:2147483647;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(3,5,8,.96);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+#bossDirectLock[hidden]{display:none!important}
+.boss-direct-card{
+  width:min(390px,100%);
+  padding:24px 18px;
+  border:1px solid rgba(245,198,92,.48);
+  border-radius:18px;
+  background:linear-gradient(180deg,#15140f,#080b0f);
+  box-shadow:0 25px 80px rgba(0,0,0,.72);
+  color:#f4e5bd;
+  text-align:center;
+}
+.boss-direct-card h1{margin:0 0 7px;font-size:20px}
+.boss-direct-card p{margin:0 0 15px;color:#a8a08f;font-size:11px;line-height:1.6}
+#bossDirectForm{display:grid;grid-template-columns:1fr auto;gap:8px}
+#bossDirectPassword{
+  min-width:0;height:44px;border:1px solid #4b4028;border-radius:10px;
+  background:#070a0e;color:#fff;text-align:center;font-size:17px;letter-spacing:.2em;
+}
+#bossDirectForm button{
+  min-height:44px;border:1px solid #c79d48;border-radius:10px;
+  background:#2b1e08;color:#f4cf79;padding:0 14px;font-weight:900;
+}
+#bossDirectError{min-height:18px;margin:9px 0 0;color:#ff9aa1;font-size:10px}
+@media(max-width:520px){
+  #bossDirectForm{grid-template-columns:1fr}
+}
+</style>
+
 </head>
 
 <body class="mobile-top-collapsed">
+
+<div id="bossDirectLock" hidden>
+  <div class="boss-direct-card">
+    <h1>🔒 보스 알림 보호</h1>
+    <p>비밀번호를 입력해야 보스 알림을 확인할 수 있습니다.</p>
+    <form id="bossDirectForm" autocomplete="off">
+      <input id="bossDirectPassword" type="password" inputmode="numeric" maxlength="4" placeholder="비밀번호 4자리" required>
+      <button type="submit">열기</button>
+    </form>
+    <div id="bossDirectError" role="alert"></div>
+  </div>
+</div>
+
 
   <section class="hero-search">
     <div class="top-left-links" aria-label="상단 바로가기">
@@ -16367,6 +16422,70 @@
       }, true);
     })();
   </script>
+
+
+<script id="boss-direct-lock-script">
+(()=>{
+'use strict';
+const KEY='mirjinBossAccess';
+const PASSWORD='5555';
+const lock=document.getElementById('bossDirectLock');
+const form=document.getElementById('bossDirectForm');
+const input=document.getElementById('bossDirectPassword');
+const error=document.getElementById('bossDirectError');
+
+function unlock(){
+  sessionStorage.setItem(KEY,PASSWORD);
+  if(lock)lock.hidden=true;
+}
+function requirePassword(){
+  if(sessionStorage.getItem(KEY)===PASSWORD){
+    unlock();
+  }else{
+    if(lock)lock.hidden=false;
+    setTimeout(()=>input?.focus(),70);
+  }
+}
+form?.addEventListener('submit',event=>{
+  event.preventDefault();
+  if((input?.value||'').trim()===PASSWORD){
+    if(error)error.textContent='';
+    unlock();
+  }else{
+    if(error)error.textContent='비밀번호가 올바르지 않습니다.';
+    if(input){input.value='';input.focus();}
+  }
+});
+requirePassword();
+
+const desktop=matchMedia('(min-width:769px) and (hover:hover) and (pointer:fine)');
+const editable=target=>Boolean(target?.closest?.('input,textarea,select,[contenteditable="true"]'));
+document.addEventListener('contextmenu',event=>{
+  if(desktop.matches&&!editable(event.target))event.preventDefault();
+},true);
+document.addEventListener('dragstart',event=>{
+  if(desktop.matches&&!editable(event.target))event.preventDefault();
+},true);
+document.addEventListener('copy',event=>{
+  if(desktop.matches&&!editable(event.target))event.preventDefault();
+},true);
+document.addEventListener('selectstart',event=>{
+  if(desktop.matches&&!editable(event.target))event.preventDefault();
+},true);
+document.addEventListener('keydown',event=>{
+  if(!desktop.matches||editable(event.target))return;
+  const key=String(event.key||'').toLowerCase();
+  if(
+    event.key==='F12' ||
+    (event.ctrlKey&&['u','s','p','c'].includes(key)) ||
+    (event.ctrlKey&&event.shiftKey&&['i','j','c'].includes(key))
+  ){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+},true);
+})();
+</script>
 
 </body>
 </html>
