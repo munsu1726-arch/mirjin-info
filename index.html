@@ -3346,6 +3346,26 @@ body.market-modal-open .main-right-actions{visibility:hidden!important;pointer-e
   }
 }
 </style>
+
+<style id="final-scene-logo-crop-fix-v1">
+/* 최종 적용: PC 배경 잘림 및 로고 금빛 레이어 위치 복구 */
+@media (min-width:769px){
+  .scene-zoom-layer .scene-image{
+    width:100%!important;
+    height:100%!important;
+    object-fit:fill!important;
+    object-position:center center!important;
+  }
+  .scene-zoom-layer .logo-gold-sweep{
+    left:57.40%!important;
+    top:5.10%!important;
+    width:26.20%!important;
+    height:auto!important;
+    transform:none!important;
+    transform-origin:center center!important;
+  }
+}
+</style>
 </head>
 <body>
 
