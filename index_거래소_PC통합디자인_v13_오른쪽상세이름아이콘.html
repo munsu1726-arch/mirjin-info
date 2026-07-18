@@ -5319,7 +5319,8 @@ async function load(){
     console.warn('거래소 안전 차단',error);
     let cached=null;try{cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch(_){}
     if(Array.isArray(cached?.rows)){rows=dedupe(cached.rows);loadedAt=Number(cached.loadedAt||0);source='cache'}
-    health=forceUnhealthy(healthExplicit(statusData)||healthRows(rows),String(error?.message||'거래소 상태 확인 실패'));
+    const fallbackHealth=healthExplicit(statusData)||healthRows(rows);
+    health=fallbackHealth.ok?{...fallbackHealth,reason:''}:forceUnhealthy(fallbackHealth,String(error?.message||'거래소 상태 확인 실패'));
     if(!baselineReady){writeKnown(new Set(rows.map(listingKey)));baselineReady=true}
   }
   const previousKey=selected&&listingKey(selected);selected=previousKey?rows.find(row=>listingKey(row)===previousKey)||null:null;

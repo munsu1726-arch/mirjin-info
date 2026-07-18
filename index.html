@@ -3346,26 +3346,6 @@ body.market-modal-open .main-right-actions{visibility:hidden!important;pointer-e
   }
 }
 </style>
-
-<style id="final-scene-logo-crop-fix-v1">
-/* 최종 적용: PC 배경 잘림 및 로고 금빛 레이어 위치 복구 */
-@media (min-width:769px){
-  .scene-zoom-layer .scene-image{
-    width:100%!important;
-    height:100%!important;
-    object-fit:fill!important;
-    object-position:center center!important;
-  }
-  .scene-zoom-layer .logo-gold-sweep{
-    left:57.40%!important;
-    top:5.10%!important;
-    width:26.20%!important;
-    height:auto!important;
-    transform:none!important;
-    transform-origin:center center!important;
-  }
-}
-</style>
 </head>
 <body>
 
@@ -5339,7 +5319,8 @@ async function load(){
     console.warn('거래소 안전 차단',error);
     let cached=null;try{cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch(_){}
     if(Array.isArray(cached?.rows)){rows=dedupe(cached.rows);loadedAt=Number(cached.loadedAt||0);source='cache'}
-    health=forceUnhealthy(healthExplicit(statusData)||healthRows(rows),String(error?.message||'거래소 상태 확인 실패'));
+    const fallbackHealth=healthExplicit(statusData)||healthRows(rows);
+    health=fallbackHealth.ok?{...fallbackHealth,reason:''}:forceUnhealthy(fallbackHealth,String(error?.message||'거래소 상태 확인 실패'));
     if(!baselineReady){writeKnown(new Set(rows.map(listingKey)));baselineReady=true}
   }
   const previousKey=selected&&listingKey(selected);selected=previousKey?rows.find(row=>listingKey(row)===previousKey)||null:null;
