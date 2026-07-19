@@ -5227,12 +5227,12 @@ const STATUS_URL=`${BASE}/mirAuctionMonitor/status.json`;
 const META_URL=`${BASE}/mirAuctionMonitor/currentMeta.json`;
 const PREF_KEY='mirjinMarketAlertPrefsV3';
 const KNOWN_KEY='mirjinMarketKnownListingsV3';
-const CACHE_KEY='mirjinMarketCacheV56DetailOnly';
+const CACHE_KEY='mirjinMarketCacheV561SearchRecovery';
 const DEVICE_KEY='mirjinMarketDeviceIdV1';
 const LAST_HEALTHY_KEY='mirjinMarketLastHealthyAtV1';
 const STALE_MS=8*60*1000;
 const PAGE_SIZE=10;
-const MARKET_BUILD='v56-detail-only-no-list-name-ocr';
+const MARKET_BUILD='v56.2-detail-only-search-recovery';
 const CATEGORIES=['전체','무기','모자','의상','목걸이','팔찌','반지','사약','무공서','재료','기타'];
 const DEFAULT_ADVANCED=['파괴력 보너스','마법피해 보너스','정확도','외공','내공','민첩','체력','마력','방어력','마법저항','공격속도','치명타','회피'];
 let rows=[],category='전체',query='',sort='priceAsc',page=1,selected=null,loadedAt=0,pollTimer=0;
@@ -5263,7 +5263,7 @@ const KNOWN_ITEM_NAMES=['자객의 반지','침묵팔찌','창란반지','창란
 function editDistance(a,b){a=correctionKey(a);b=correctionKey(b);const prev=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const cur=[i];for(let j=1;j<=b.length;j++)cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));for(let j=0;j<cur.length;j++)prev[j]=cur[j]}return prev[b.length]}
 function conservativeKnownName(value){const raw=String(value||'').trim(),key=correctionKey(raw);if(key.length<3)return raw;const ranked=KNOWN_ITEM_NAMES.map(name=>[editDistance(key,correctionKey(name)),name]).filter(([d,name])=>Math.abs(key.length-correctionKey(name).length)<=2&&d<=(Math.max(key.length,correctionKey(name).length)<=6?1:2)).sort((a,b)=>a[0]-b[0]||correctionKey(a[1]).length-correctionKey(b[1]).length);if(!ranked.length)return raw;if(ranked[1]&&ranked[0][0]===ranked[1][0]&&correctionKey(ranked[0][1])!==correctionKey(ranked[1][1]))return raw;return ranked[0][1]}
 const originalCorrectedName=correctedName;correctedName=function(value){const direct=originalCorrectedName(value);return NAME_CORRECTIONS[correctionKey(direct)]||conservativeKnownName(direct)};
-function rawItemName(row){return correctedName(row?.itemName||row?.name||'')}
+function rawItemName(row){const direct=correctedName(row?.itemName||row?.name||'');if(direct)return direct;const detailTrusted=row?.detailVerified===true||row?.manualNameVerified===true||String(row?.nameVerificationSource||'').startsWith('right-detail')||String(row?.detailSourceOfTruth||'').includes('user-confirmed');return detailTrusted?correctedName(row?.detailItemNameRaw||row?.ocrNameCandidate||row?.itemNameCandidate||''):''}
 function namePending(row){return !rawItemName(row)}
 function detailConfirmed(row){return row?.detailVerified===true&&!row?.detailLocatorFailed&&!!rawItemName(row)}
 function attributeSource(row){const primary=row?.attributes&&typeof row.attributes==='object'?row.attributes:{},candidate=row?.attributesCandidate&&typeof row.attributesCandidate==='object'?row.attributesCandidate:{},out={...candidate,...primary};for(const key of ['basicOptions','advancedOptions','gemSkillOptions','enhanceOptions','engraveOptions'])out[key]={...(candidate?.[key]||{}),...(primary?.[key]||{})};return out}
@@ -5350,11 +5350,18 @@ async function load(){
     localStorage.setItem(LAST_HEALTHY_KEY,String(Date.now()));
     await processAlerts(rows,{initial:!baselineReady});baselineReady=true;
   }catch(error){
-    console.warn('거래소 안전 차단',error);
+    console.warn('거래소 검증 경고',error);
+    const liveFallback=currentResult.status==='fulfilled'?dedupe(flatten(currentResult.value)):[];
     let cached=null;try{cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch(_){}
-    if(Array.isArray(cached?.rows)){rows=dedupe(cached.rows);loadedAt=Number(cached.loadedAt||0);source='cache'}
+    if(liveFallback.length){
+      rows=liveFallback;loadedAt=Date.now();source='live-warning';
+      localStorage.setItem(CACHE_KEY,JSON.stringify({rows,loadedAt,meta:metaResult.status==='fulfilled'?metaResult.value:null}));
+    }else if(Array.isArray(cached?.rows)){
+      rows=dedupe(cached.rows);loadedAt=Number(cached.loadedAt||0);source='cache';
+    }
     const fallbackHealth=healthExplicit(statusData)||healthRows(rows);
-    health=fallbackHealth.ok?{...fallbackHealth,reason:''}:forceUnhealthy(fallbackHealth,String(error?.message||'거래소 상태 확인 실패'));
+    health=fallbackHealth.ok?{...fallbackHealth,reason:`검증 경고: ${String(error?.message||'메타데이터 확인 필요')}`}:
+      forceUnhealthy(fallbackHealth,String(error?.message||'거래소 상태 확인 실패'));
     if(!baselineReady){writeKnown(new Set(rows.map(listingKey)));baselineReady=true}
   }
   const previousKey=selected&&listingKey(selected);selected=previousKey?rows.find(row=>listingKey(row)===previousKey)||null:null;
