@@ -4,11 +4,11 @@
     "cafeId": "31717562",
     "menuId": "48",
     "sourceUrl": "https://cafe.naver.com/f-e/cafes/31717562/menus/48?viewType=L",
-    "updatedAt": "2026-07-20T19:31:17+09:00",
+    "updatedAt": "2026-07-21T01:17:22+09:00",
     "status": "ok",
     "count": 22,
-    "newCount": 1,
-    "openedArticleCount": 1,
+    "newCount": 0,
+    "openedArticleCount": 0,
     "collectionMethod": "Playwright browser - open new posts one by one",
     "sortMethod": "articleId descending"
   },
@@ -26,7 +26,7 @@
       "collectedAt": "2026-07-20T19:31:16+09:00",
       "collectStatus": "ok",
       "firstCollectedAt": "2026-07-20T19:31:16+09:00",
-      "isNew": true
+      "isNew": false
     },
     {
       "id": "5522",
