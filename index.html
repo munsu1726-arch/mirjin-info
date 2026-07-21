@@ -5227,13 +5227,13 @@ const STATUS_URL=`${BASE}/mirAuctionMonitor/status.json`;
 const META_URL=`${BASE}/mirAuctionMonitor/currentMeta.json`;
 const PREF_KEY='mirjinMarketAlertPrefsV3';
 const KNOWN_KEY='mirjinMarketKnownListingsV3';
-const CACHE_KEY='mirjinMarketCacheV563DetailNameRecovery';
-const PREVIOUS_CACHE_KEYS=['mirjinMarketCacheV561SearchRecovery','mirjinMarketCacheV124RightDetail','mirjinMarketCacheV10RightDetail','mirjinMarketCacheV9RightDetail'];
+const CACHE_KEY='mirjinMarketCacheV564SingleItemName';
+const PREVIOUS_CACHE_KEYS=['mirjinMarketCacheV563DetailNameRecovery','mirjinMarketCacheV561SearchRecovery','mirjinMarketCacheV124RightDetail','mirjinMarketCacheV10RightDetail','mirjinMarketCacheV9RightDetail'];
 const DEVICE_KEY='mirjinMarketDeviceIdV1';
 const LAST_HEALTHY_KEY='mirjinMarketLastHealthyAtV1';
 const STALE_MS=8*60*1000;
 const PAGE_SIZE=10;
-const MARKET_BUILD='v56.6-live-detail-calibration-evidence-admin';
+const MARKET_BUILD='v56.7-single-item-name-only';
 const CATEGORIES=['전체','무기','모자','의상','목걸이','팔찌','반지','사약','무공서','재료','기타'];
 const DEFAULT_ADVANCED=['파괴력 보너스','마법피해 보너스','정확도','외공','내공','민첩','체력','마력','방어력','마법저항','공격속도','치명타','회피'];
 let rows=[],category='전체',query='',sort='priceAsc',page=1,selected=null,loadedAt=0,pollTimer=0;
@@ -5263,10 +5263,51 @@ function correctedName(value){let raw=String(value||'').normalize('NFKC').trim()
 const KNOWN_ITEM_NAMES=['자객의 반지','침묵팔찌','창란반지','창란목걸이','창란지팡이','창란팔찌','분뢰반지','분뢰팔찌','분뢰목걸이','분뢰지팡이','낙염반지','낙염목걸이','낙염팔찌','낙염지팡이','낙염투구','열일반지','열일목걸이','열일팔찌','열일지팡이','진악반지','진악목걸이','진악투구','진악지팡이','유명반지','유명목걸이','유명검','미르의 갑옷','해골무구','해골소환','해골소환(땅)','해골소환(물)','대지의축복','초급 강화석','중급 강화석','고급 강화석','소환두대도','흑갑옷','천뢰갑옷','불사갑옷','지옥대혈식','월광도법','뿔투구','화염금강장','평범한 천마검','다이아몬드','사파이어','장군반지','폭열권','창란투구','금장갑박','뇌전','백호의 이빨'];
 function editDistance(a,b){a=correctionKey(a);b=correctionKey(b);const prev=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const cur=[i];for(let j=1;j<=b.length;j++)cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));for(let j=0;j<cur.length;j++)prev[j]=cur[j]}return prev[b.length]}
 function conservativeKnownName(value){const raw=String(value||'').trim(),key=correctionKey(raw);if(key.length<3)return raw;const ranked=KNOWN_ITEM_NAMES.map(name=>[editDistance(key,correctionKey(name)),name]).filter(([d,name])=>Math.abs(key.length-correctionKey(name).length)<=2&&d<=(Math.max(key.length,correctionKey(name).length)<=6?1:2)).sort((a,b)=>a[0]-b[0]||correctionKey(a[1]).length-correctionKey(b[1]).length);if(!ranked.length)return raw;if(ranked[1]&&ranked[0][0]===ranked[1][0]&&correctionKey(ranked[0][1])!==correctionKey(ranked[1][1]))return raw;return ranked[0][1]}
-const originalCorrectedName=correctedName;correctedName=function(value){const direct=originalCorrectedName(value);return NAME_CORRECTIONS[correctionKey(direct)]||conservativeKnownName(direct)};
+const originalCorrectedName=correctedName;
+const GENERIC_ITEM_NAME_KEYS=new Set(['무기','모자','의상','목걸이','팔찌','반지','사약','시약','무공서','재료','기타','아이템','아이템명','판매상품','판매물품','상세','기본정보','기본속성','상급속성','가격','판매가격','남은시간','경매장a','경매장b']);
+function cleanNameSegment(value){
+  let text=String(value||'').normalize('NFKC').replace(/[​-‍﻿]/g,' ').trim();
+  if(!text)return'';
+  text=text.replace(/^(?:아이템명|이름|품목명|판매상품)\s*[:：]\s*/u,'').trim();
+  text=text.replace(/\s*(?:이름|상세)?\s*확인\s*중\s*$/u,'').trim();
+  text=text.replace(/\s*(?:판매\s*가격|가격|남은\s*시간|금화)\s*[:：]?.*$/u,'').trim();
+  text=text.replace(/\s*[0-9０-９][0-9０-９,，.]*\s*(?:금화|원)?\s*$/u,'').trim();
+  text=text.replace(/\s*(?:오른쪽\s*)?판매상품\s*상세\s*기준.*$/u,'').trim();
+  text=originalCorrectedName(text);
+  return NAME_CORRECTIONS[correctionKey(text)]||text;
+}
+function singleItemName(value){
+  const raw=String(value||'').normalize('NFKC').trim();
+  if(!raw)return'';
+  const compact=correctionKey(raw);
+  const exactKnown=KNOWN_ITEM_NAMES
+    .map(name=>({name,key:correctionKey(name),at:compact.indexOf(correctionKey(name))}))
+    .filter(entry=>entry.at>=0)
+    .sort((a,b)=>b.key.length-a.key.length||a.at-b.at)[0];
+  if(exactKnown)return exactKnown.name;
+  const pieces=raw.split(/\s*(?:\||｜|¦|·|ㆍ|•|→|=>|\r?\n)\s*/u).map(cleanNameSegment).filter(Boolean);
+  const candidates=[];
+  for(const piece of pieces.length?pieces:[cleanNameSegment(raw)]){
+    const key=correctionKey(piece).toLowerCase();
+    if(!key||GENERIC_ITEM_NAME_KEYS.has(key))continue;
+    if(/(?:확인중|미확정|판독중|판매가격|남은시간|경매장|상세기준|기본속성|상급속성)/u.test(key))continue;
+    if(/[0-9０-９]{2,}/u.test(piece)||piece.length>28)continue;
+    const normalized=conservativeKnownName(piece);
+    const normalizedKey=correctionKey(normalized).toLowerCase();
+    if(!normalizedKey||GENERIC_ITEM_NAME_KEYS.has(normalizedKey))continue;
+    let score=normalizedKey.length;
+    if(KNOWN_ITEM_NAMES.some(name=>correctionKey(name)===correctionKey(normalized)))score+=100;
+    if(/(?:검|도|지팡이|투구|갑옷|목걸이|팔찌|반지|장갑|권|법|석|몬드|사파이어|소환|축복)$/u.test(normalized))score+=20;
+    if(/[가-힣]/u.test(normalized))score+=5;
+    candidates.push({name:normalized,score});
+  }
+  candidates.sort((a,b)=>b.score-a.score||a.name.length-b.name.length);
+  return candidates[0]?.name||'';
+}
+correctedName=function(value){const single=singleItemName(value);if(!single)return'';const direct=originalCorrectedName(single);return NAME_CORRECTIONS[correctionKey(direct)]||conservativeKnownName(direct)};
 const PENDING_NAME_KEYS=new Set(['','이름확인중','이름미확정','확인중','미확정','판독중','unknown','pending','none','null']);
 function usableName(value){const name=correctedName(value),key=correctionKey(name).toLowerCase();return name&&!PENDING_NAME_KEYS.has(key)?name:''}
-function authoritativeItemName(row){for(const value of [row?.itemName,row?.name,row?.manualItemName,row?.detailItemName]){const name=usableName(value);if(name)return name}return''}
+function authoritativeItemName(row){for(const value of [row?.manualItemName,row?.detailItemName,row?.itemName,row?.name]){const name=usableName(value);if(name)return name}return''}
 function detailCandidateName(row){const detailSource=String(row?.detailSourceOfTruth||row?.nameVerificationSource||row?.detailSource||'').toLowerCase();const detailOnly=row?.listNameOcrDisabled!==false||detailSource.includes('detail')||detailSource.includes('right-auction')||String(row?.nameStatus||'').includes('detail');if(!detailOnly)return'';for(const value of [row?.detailItemNameRaw,row?.ocrNameCandidate,row?.itemNameCandidate]){const name=usableName(value);if(name)return name}return''}
 function rawItemName(row){return authoritativeItemName(row)||detailCandidateName(row)}
 function namePending(row){return !authoritativeItemName(row)}
