@@ -5211,7 +5211,7 @@ const BASE='https://mirjin-info-default-rtdb.asia-southeast1.firebasedatabase.ap
 const CURRENT_URL=`${BASE}/mirAuctionMonitor/current.json`,STATUS_URL=`${BASE}/mirAuctionMonitor/status.json`,META_URL=`${BASE}/mirAuctionMonitor/currentMeta.json`;
 const PREF_KEY='mirjinMarketAlertPrefsV4PhotoFirst',KNOWN_KEY='mirjinMarketKnownListingsV4PhotoFirst',CACHE_KEY='mirjinMarketCacheV58116CategoryIndex';
 const PREVIOUS_CACHE_KEYS=['mirjinMarketCacheV58107AllListings','mirjinMarketCacheV564SingleItemName','mirjinMarketCacheV563DetailNameRecovery'];
-const LAST_HEALTHY_KEY='mirjinMarketLastHealthyAtV1',STALE_MS=8*60*1000,PAGE_SIZE=10,MARKET_BUILD='v58.11.6-exact-count-category-index';
+const LAST_HEALTHY_KEY='mirjinMarketLastHealthyAtV1',STALE_MS=8*60*1000,PAGE_SIZE=10,MARKET_BUILD='v58.11.7-exact-count-category-index';
 const CATEGORIES=['전체','무기','모자','의상','목걸이','팔찌','반지','시약','무공서','재료','기타','분류 확인 중'];
 const VIEW_LABELS={list:'물품 목록',detail:'선택 상세',alerts:'검색 알림'};
 let rows=[],category='전체',query='',sort='newest',page=1,selected=null,currentView='list',detailPhotoKind='detail',pollTimer=0,refreshing=false,filterOpen=false;
@@ -5328,7 +5328,7 @@ function renderDetail(){
   const rawAttributeText=String(selected?.attributesText||selected?.attributesCandidateText||'').trim();
   el.innerHTML=`<div class="market-detail-layout premium">
     <section class="market-detail-photo-panel">
-      <div class="market-detail-photo-head"><span><b>상세 속성 1</b><small>검수관리기가 실제 게임 상세창에서 촬영한 원본</small></span>${detail?'<em>촬영 완료</em>':'<em class="pending">촬영 대기</em>'}</div>
+      <div class="market-detail-photo-head"><span><b>상세 속성 1</b><small>검수관리기가 선택 매물의 오른쪽 상세 패널을 촬영한 원본</small></span>${detail?'<em>촬영 완료</em>':'<em class="pending">촬영 대기</em>'}</div>
       <button type="button" class="market-detail-main-photo" id="marketOpenPhoto" ${detail?'':'disabled'}>${detail?`<img src="${detail}" alt="${esc(itemName(selected))} 상세 속성 원본">`:'<span class="market-photo-placeholder"><i>▧</i><b>상세 속성 촬영 대기 중</b><small>매물은 제외하지 않고 그대로 게시됩니다.</small></span>'}</button>
       <div class="market-detail-trust"><span>원본 사진 우선</span><span>이름·속성은 사진 판독 보조</span><span>매물 수와 게시 수 독립</span></div>
     </section>
