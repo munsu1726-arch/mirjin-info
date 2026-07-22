@@ -3382,34 +3382,85 @@ body.market-modal-open .main-right-actions{visibility:hidden!important;pointer-e
 /* hide legacy opening scene only; service modals stay active */
 body>.app,body>.main-right-actions,body>.portrait-menu-handle,body>.ara-recruit-banner,body>.official-fixed,body>.visitor-fixed,body>.effect-canvas,body>.mob-video-zone,body>.elemental-side,body>.visitor-top-badge{display:none!important}
 html,body{height:auto!important;overflow:auto!important;background:#070705!important}.dashboard-shell{position:relative;z-index:10}.service-modal{z-index:3000!important}
-</style></head>
+</style>
+<style id="dashboard-live-upgrade-v132">
+.dashboard-shell::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(216,159,47,.12),transparent 24%),
+    radial-gradient(circle at 82% 42%,rgba(120,54,12,.10),transparent 28%),
+    linear-gradient(115deg,transparent 0 46%,rgba(255,190,61,.025) 50%,transparent 54%);
+  background-size:auto,auto,220px 220px;
+  animation:dashAtmosphere 18s linear infinite;
+}
+@keyframes dashAtmosphere{to{background-position:0 0,0 0,220px 220px}}
+.dash-live-dot{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#64e638;box-shadow:0 0 0 0 rgba(100,230,56,.55);animation:dashLivePulse 1.6s infinite}
+@keyframes dashLivePulse{70%{box-shadow:0 0 0 7px rgba(100,230,56,0)}100%{box-shadow:0 0 0 0 rgba(100,230,56,0)}}
+.dash-action-panel{cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.dash-action-panel:hover,.dash-action-panel:focus-visible{transform:translateY(-2px);border-color:#b9862e!important;box-shadow:0 12px 34px rgba(0,0,0,.34),0 0 22px rgba(196,137,31,.08);outline:none}
+.dash-action-panel:active{transform:translateY(0) scale(.995)}
+.dash-nav-item{position:relative;overflow:hidden;transition:background .16s ease,color .16s ease,transform .16s ease}
+.dash-nav-item::after{content:"";position:absolute;left:50%;right:50%;bottom:0;height:2px;background:#e5ae3f;transition:left .18s,right .18s}
+.dash-nav-item:hover,.dash-nav-item.nav-pressed{color:#ffd477;background:rgba(184,122,23,.12);transform:translateY(-1px)}
+.dash-nav-item:hover::after,.dash-nav-item.nav-pressed::after{left:15%;right:15%}
+.dash-click-ripple{position:absolute;border-radius:50%;background:rgba(255,211,111,.3);transform:scale(0);animation:dashRipple .55s ease-out;pointer-events:none}
+@keyframes dashRipple{to{transform:scale(4);opacity:0}}
+.dash-loading-row{padding:25px 14px;color:#8f887a;text-align:center;font-size:11px}
+.dash-table-row{cursor:pointer}
+.dash-table-row:hover{background:linear-gradient(90deg,rgba(185,126,25,.10),transparent)}
+.dash-market-badge{display:inline-grid;place-items:center;width:21px;height:21px;border:1px solid #805619;border-radius:5px;color:#e6b650;font-size:9px;font-weight:900}
+.dash-table-icon img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+.dash-table-icon{overflow:hidden}
+.dash-empty{padding:24px 12px;text-align:center;color:#80796c;font-size:10px}
+.dash-gm-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.05)}
+.dash-gm-row:last-child{border-bottom:0}.dash-gm-row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ddd3c2;font-size:10px}
+.dash-gm-row small{display:block;margin-top:3px;color:#817a6e;font-size:8px}.dash-gm-row time{color:#b79b66;font-size:8px}
+.dash-data-error{color:#ff7c6e!important}.dash-data-warning{color:#f1b84c!important}
+.dash-toast{position:fixed;left:50%;bottom:82px;z-index:9000;transform:translate(-50%,20px);padding:10px 16px;border:1px solid rgba(222,168,61,.55);border-radius:999px;background:rgba(10,9,6,.96);color:#f4d58f;font-size:11px;opacity:0;pointer-events:none;transition:.22s;box-shadow:0 12px 38px #000}
+.dash-toast.show{opacity:1;transform:translate(-50%,0)}
+.dash-updated{color:#928775!important;font-variant-numeric:tabular-nums}
+@media(max-width:720px){
+ .dash-gm-row{padding:8px 10px}
+ .dash-action-panel:hover{transform:none}
+ .dash-toast{bottom:76px;max-width:88vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+@media(prefers-reduced-motion:reduce){.dashboard-shell::before,.dash-live-dot{animation:none}}
+</style>
+
+</head>
 <body>
 <div class="dashboard-shell">
 <header class="dash-header"><div class="dash-logo"><strong>미르:진</strong><small>미르의 전설: 진 모든 정보를 한 곳에!</small></div><div class="dash-online"><i></i> 시스템 정상 운영 중</div></header>
-<nav class="dash-nav"><button class="dash-nav-item" type="button" ><span>⌂</span><b>홈</b></button><button class="dash-nav-item" type="button" data-open="bossPasswordModal"><span>⚔</span><b>보스 알림</b></button><button class="dash-nav-item" type="button" data-open="marketModal"><span>⚖</span><b>거래소</b></button><button class="dash-nav-item" type="button" data-open="gmPaewangModal"><span>♛</span><b>GM패왕</b></button><button class="dash-nav-item" type="button" data-open="boardModal"><span>▤</span><b>정보·매뉴얼</b></button><button class="dash-nav-item" type="button" data-open="jobModal"><span>♙</span><b>직업별 소개</b></button><button class="dash-nav-item" type="button" data-open="freeBoardModal"><span>▣</span><b>자유게시판</b></button></nav>
+<nav class="dash-nav"><button class="dash-nav-item is-home" type="button" data-dash-home><span>⌂</span><b>홈</b></button><button class="dash-nav-item" type="button" data-open="bossPasswordModal"><span>⚔</span><b>보스 알림</b></button><button class="dash-nav-item" type="button" data-open="marketModal"><span>⚖</span><b>거래소</b></button><button class="dash-nav-item" type="button" data-open="gmPaewangModal"><span>♛</span><b>GM패왕</b></button><button class="dash-nav-item" type="button" data-open="boardModal"><span>▤</span><b>정보·매뉴얼</b></button><button class="dash-nav-item" type="button" data-open="jobModal"><span>♙</span><b>직업별 소개</b></button><button class="dash-nav-item" type="button" data-open="freeBoardModal"><span>▣</span><b>자유게시판</b></button></nav>
 <main class="dash-content">
 <section class="dash-hero"><div class="dash-hero-copy"><h1>미르의 전설: 진</h1><h2>모든 정보를 한 곳에!</h2><p>보스, 거래소, 커뮤니티 등 다양한 정보를<br>실시간으로 확인하세요.</p><button data-open="marketModal">거래소 바로가기</button></div><div class="hero-orb"></div></section>
 <section class="dash-grid">
 <div class="dash-main-col">
-<section class="dash-panel"><div class="dash-title"><h3>◇ 실시간 요약</h3><button data-open="marketModal">더보기 ›</button></div><div class="dash-stats"><article><span>🪙</span><small>전체 매물</small><b>1,248</b><em>▲ 32 (2.63%)</em></article><article><span>🎁</span><small>등록 대기</small><b>24</b><em class="muted">실시간 수집 중</em></article><article><span>🛡</span><small>시스템 상태</small><b class="online-text">정상 운영 중</b><em class="muted">자동 감시 운영 중</em></article><article><span>◷</span><small>자동 삭제 완료 (24h)</small><b>89</b><em class="muted">실시간 수집 중</em></article></div></section>
-<section class="dash-panel"><div class="dash-title"><h3>⚒ 거래소 - 최신 등록 순</h3><button data-open="marketModal">더보기 ›</button></div><div class="dash-table">
-<div class="dash-table-row"><span class="item-icon">◈</span><span><b>강철 팔찌</b><small>팔찌 · 공격 속도 +7%</small></span><em>150,000</em><strong>05:01:47</strong></div>
-<div class="dash-table-row"><span class="item-icon">◉</span><span><b>빛나는 목걸이</b><small>목걸이 · 마력 +120</small></span><em>210,000</em><strong>03:32:18</strong></div>
-<div class="dash-table-row"><span class="item-icon">◇</span><span><b>용왕의 투구</b><small>모자 · 체력 +350</small></span><em>320,000</em><strong>04:12:09</strong></div>
-<div class="dash-table-row"><span class="item-icon">♜</span><span><b>천하무쌍 갑옷</b><small>의상 · 방어력 +250</small></span><em>560,000</em><strong>01:45:22</strong></div>
-<div class="dash-table-row"><span class="item-icon">╱</span><span><b>천마신검</b><small>무기 · 공격력 285~315</small></span><em>850,000</em><strong>02:58:34</strong></div></div></section>
+<section class="dash-panel dash-live-panel">
+<div class="dash-title"><h3><i class="dash-live-dot"></i> 실시간 요약</h3><button type="button" data-open="marketModal">더보기 ›</button></div>
+<div class="dash-stats" id="dashRealtimeStats">
+  <article class="dash-stat-skeleton"><span>◌</span><small>전체 매물</small><b id="dashTotalListings">-</b><em id="dashListingDelta" class="muted">연결 중</em></article>
+  <article class="dash-stat-skeleton"><span>▣</span><small>확인 대기</small><b id="dashPendingListings">-</b><em class="muted">실시간 분석</em></article>
+  <article class="dash-stat-skeleton"><span>◇</span><small>시스템 상태</small><b id="dashSystemState" class="online-text">확인 중</b><em id="dashSystemDetail" class="muted">A/B 감시기 확인</em></article>
+  <article class="dash-stat-skeleton"><span>◷</span><small>24시간 내 종료</small><b id="dashEndingSoon">-</b><em class="muted">실시간 계산</em></article>
+</div></section>
+<section class="dash-panel dash-action-panel" data-open="marketModal" role="button" tabindex="0">
+<div class="dash-title"><h3>⚒ 거래소 - 실제 최신 매물</h3><button type="button" data-open="marketModal">전체보기 ›</button></div>
+<div class="dash-table" id="dashMarketRows"><div class="dash-loading-row">거래소 실시간 데이터를 불러오는 중입니다.</div></div>
+</section>
 </div>
-<aside class="dash-side-col"><section class="dash-panel"><div class="dash-title"><h3>보스 알림 <small>(남은 시간 순)</small></h3><button data-open="bossPasswordModal">더보기 ›</button></div>
-<div class="dash-boss-row"><span>♚</span><b>백룡<small>백룡의 둥지</small></b><em class="urgent">00:12:08</em></div>
-<div class="dash-boss-row"><span>♞</span><b>혈마교주<small>혈마교 본거지</small></b><em class="urgent">00:28:34</em></div>
-<div class="dash-boss-row"><span>♛</span><b>황제<small>황제의 무덤</small></b><em>00:45:11</em></div>
-<div class="dash-boss-row"><span>♜</span><b>적혈마왕<small>적혈마왕의 방</small></b><em>01:15:22</em></div>
-<div class="dash-boss-row"><span>♝</span><b>청룡<small>청룡의 동굴</small></b><em class="safe">01:08:45</em></div></section><section class="dash-panel notice-panel"><div class="dash-title"><h3>공지사항</h3><button data-open="boardModal">더보기 ›</button></div><p>• 시스템 점검 안내</p><p>• 거래소 감시기 업데이트</p><p>• 매물 등록 규칙 변경 안내</p></section></aside>
+<aside class="dash-side-col"><section class="dash-panel dash-action-panel" data-open="bossPasswordModal" role="button" tabindex="0">
+<div class="dash-title"><h3>보스 알림 <small>(남은 시간 순)</small></h3><button type="button" data-open="bossPasswordModal">전체보기 ›</button></div>
+<div id="dashBossRows"><div class="dash-loading-row">보스 실시간 데이터를 불러오는 중입니다.</div></div>
+</section><section class="dash-panel notice-panel dash-action-panel" data-open="gmPaewangModal" role="button" tabindex="0">
+<div class="dash-title"><h3>GM패왕 최신 게시글</h3><button type="button" data-open="gmPaewangModal">전체보기 ›</button></div>
+<div id="dashGmRows"><div class="dash-loading-row">GM패왕 게시글을 불러오는 중입니다.</div></div>
+</section></aside>
 </section>
 <section class="dash-features"><article><span>🛡</span><b>24시간 자동 감시</b><small>보스와 거래소를 놓치지 않습니다.</small></article><article><span>◉</span><b>정확한 데이터</b><small>OCR 기반 실시간 정보 제공</small></article><article><span>🔔</span><b>실시간 알림</b><small>중요한 정보를 즉시 전달</small></article><article><span>▤</span><b>안정적인 운영</b><small>독립 시스템으로 24시간 운영</small></article></section>
 </main>
 <footer class="dash-footer"><strong>미르:진</strong><span>이용약관　|　개인정보처리방침　|　운영정책</span><small>© 2026 Mir Jin. All rights reserved.</small></footer>
-<nav class="dash-mobile-bottom"><button >⌂<small>홈</small></button><button data-open="bossPasswordModal">⚔<small>보스 알림</small></button><button data-open="marketModal">⚖<small>거래소</small></button><button class="plus" data-open="freeBoardModal">＋</button><button data-open="gmPaewangModal">♛<small>GM패왕</small></button><button data-open="boardModal">♙<small>마이페이지</small></button></nav>
+<nav class="dash-mobile-bottom"><button type="button" data-dash-home>⌂<small>홈</small></button><button data-open="bossPasswordModal">⚔<small>보스 알림</small></button><button data-open="marketModal">⚖<small>거래소</small></button><button class="plus" data-open="freeBoardModal">＋</button><button data-open="gmPaewangModal">♛<small>GM패왕</small></button><button data-open="boardModal">♙<small>마이페이지</small></button></nav>
 </div>
 
 
@@ -5473,6 +5524,152 @@ render();
 })();
 </script>
 
+
+
+<script id="dashboard-live-upgrade-script-v132">
+(()=>{
+'use strict';
+const DB='https://mirjin-info-default-rtdb.asia-southeast1.firebasedatabase.app';
+const AUCTION=`${DB}/mirAuctionMonitor/current.json`;
+const AUCTION_STATUS=`${DB}/mirAuctionMonitor/status.json`;
+const BOSS=`${DB}/mirBossMonitor/current.json`;
+const BOSS_STATS=`${DB}/mirBossMonitor/stats.json`;
+const GM='gm-paewang-posts.json';
+let lastListingCount=null;
+let refreshTimer=0;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const flatten=v=>Array.isArray(v)?v.filter(Boolean):v&&typeof v==='object'?Object.entries(v).map(([firebaseKey,row])=>({firebaseKey,...(row||{})})):[];
+const n=v=>{const x=Number(String(v??'').replace(/[^\d.-]/g,''));return Number.isFinite(x)?x:0};
+const ts=v=>{if(!v)return 0;const x=Number(v);if(Number.isFinite(x))return x<1e12?x*1000:x;const d=Date.parse(v);return Number.isFinite(d)?d:0};
+const fmtPrice=v=>n(v).toLocaleString('ko-KR');
+const fmtDate=v=>{const d=new Date(ts(v));return Number.isNaN(d.getTime())?'-':d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})};
+function remainMs(row){
+  const end=ts(row.listingEndAt||row.endAt||row.expiresAt||row.expectedEndAt||row.expireAt);
+  if(end)return Math.max(0,end-Date.now());
+  const seconds=n(row.remainingSeconds||row.remainSeconds||row.remainingTimeSeconds);
+  return Math.max(0,seconds*1000);
+}
+function fmtRemain(ms){
+  if(!ms)return '시간 확인 중';
+  const sec=Math.floor(ms/1000),d=Math.floor(sec/86400),h=Math.floor(sec%86400/3600),m=Math.floor(sec%3600/60),s=sec%60;
+  return d?`${d}일 ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function listingName(r){return String(r.manualItemName||r.detailItemName||r.itemName||r.name||'이름 확인 중').trim()}
+function listingPrice(r){return r.price??r.salePrice??r.gold??r.amount??0}
+function listingWorker(r){return String(r.worker||r.market||r.auction||r.workerCode||r.source||'').toUpperCase().includes('B')?'B':'A'}
+function listingCategory(r){return String(r.category||r.itemCategory||r.type||'기타')}
+function listingIcon(r){return String(r.iconDataUrl||r.iconUrl||r.image||'')}
+function activeListings(rows){return rows.filter(r=>{const ms=remainMs(r);return ms>0||(!ts(r.listingEndAt||r.endAt||r.expiresAt)&&String(r.status||'').toLowerCase()!=='expired')})}
+async function fetchJson(url,timeout=8500){
+  const c=new AbortController(),timer=setTimeout(()=>c.abort(),timeout);
+  try{const res=await fetch(`${url}${url.includes('?')?'&':'?'}v=${Date.now()}`,{cache:'no-store',signal:c.signal});if(!res.ok)throw new Error(`HTTP ${res.status}`);return await res.json()}
+  finally{clearTimeout(timer)}
+}
+function toast(message){
+  let el=$('dashActionToast');if(!el){el=document.createElement('div');el.id='dashActionToast';el.className='dash-toast';document.body.appendChild(el)}
+  el.textContent=message;el.classList.add('show');clearTimeout(el._timer);el._timer=setTimeout(()=>el.classList.remove('show'),1700);
+}
+function systemHealth(payload){
+  const now=Date.now(),nodes=[payload?.workers?.A,payload?.workers?.B,payload?.A,payload?.B].filter(Boolean);
+  if(!payload)return {ok:false,label:'연결 확인 중',detail:'상태 데이터 없음'};
+  if(nodes.length>=2){
+    const ok=nodes.every(x=>{
+      if(x.ok===false||x.error)return false;
+      const heartbeat=ts(x.heartbeat||x.updatedAt||x.lastSeen||x.timestamp);
+      return !heartbeat||now-heartbeat<8*60*1000;
+    });
+    return {ok,label:ok?'정상 운영 중':'거래소 점검중',detail:ok?'A/B 감시기 정상':'A/B 상태 확인 필요'};
+  }
+  const raw=JSON.stringify(payload).toLowerCase();
+  const bad=/error|offline|stale|fail|점검/.test(raw);
+  return {ok:!bad,label:bad?'거래소 점검중':'정상 운영 중',detail:bad?'상태 신호 이상':'감시기 연결됨'};
+}
+function renderMarket(rows,status){
+  const active=activeListings(rows).sort((a,b)=>ts(b.registeredAt||b.createdAt||b.updatedAt||b.timestamp)-ts(a.registeredAt||a.createdAt||a.updatedAt||a.timestamp));
+  const total=active.length;
+  const pending=active.filter(r=>/확인 중|미확정|pending|unknown/i.test(`${listingName(r)} ${r.verified} ${r.iconStatus||''}`)||r.verified===false).length;
+  const ending=active.filter(r=>{const ms=remainMs(r);return ms>0&&ms<=86400000}).length;
+  $('dashTotalListings')&&($('dashTotalListings').textContent=total.toLocaleString('ko-KR'));
+  $('dashPendingListings')&&($('dashPendingListings').textContent=pending.toLocaleString('ko-KR'));
+  $('dashEndingSoon')&&($('dashEndingSoon').textContent=ending.toLocaleString('ko-KR'));
+  const delta=lastListingCount==null?0:total-lastListingCount;
+  if($('dashListingDelta')) $('dashListingDelta').textContent=lastListingCount==null?'실시간 연결됨':`${delta>=0?'▲':'▼'} ${Math.abs(delta)}건`;
+  lastListingCount=total;
+  const h=systemHealth(status);
+  if($('dashSystemState')){
+    $('dashSystemState').textContent=h.label;
+    $('dashSystemState').classList.toggle('dash-data-error',!h.ok);
+  }
+  $('dashSystemDetail')&&($('dashSystemDetail').textContent=h.detail);
+  const list=$('dashMarketRows');if(!list)return;
+  const top=active.slice(0,5);
+  list.innerHTML=top.length?top.map(r=>{
+    const icon=listingIcon(r),ms=remainMs(r),name=listingName(r);
+    return `<div class="dash-table-row" data-open="marketModal">
+      <span class="dash-table-icon">${icon?`<img src="${esc(icon)}" alt="">`:'◇'}</span>
+      <span><b>${esc(name)}</b><small>${esc(listingCategory(r))} · 경매장 ${listingWorker(r)}</small></span>
+      <span><i class="dash-market-badge">${listingWorker(r)}</i></span>
+      <strong>${fmtPrice(listingPrice(r))}</strong>
+      <em data-dashboard-remain="${ms}">${fmtRemain(ms)}</em>
+      <time>${fmtDate(r.registeredAt||r.createdAt||r.updatedAt||r.timestamp)}</time>
+    </div>`;
+  }).join(''):'<div class="dash-empty">현재 표시할 실제 매물이 없습니다.</div>';
+}
+function bossName(r){return String(r.name||r.bossName||r.mobName||'보스 확인 중')}
+function bossStatus(r){return String(r.status||r.state||r.bossStatus||'')}
+function bossTime(r){
+  const end=ts(r.respawnAt||r.nextSpawnAt||r.expectedAt||r.endAt);
+  if(end)return Math.max(0,end-Date.now());
+  const sec=n(r.remainingSeconds||r.remainSeconds||r.countdown);
+  return Math.max(0,sec*1000);
+}
+function renderBoss(current,stats){
+  let rows=flatten(current).map(r=>{
+    const key=[r.region||'',bossName(r),r.distribution||r.location||''].join('|');
+    return {...(stats?.[key]||stats?.[r.firebaseKey]||{}),...r};
+  });
+  rows=rows.filter(r=>!/처치 완료|삭제|expired/i.test(bossStatus(r))).sort((a,b)=>(bossTime(a)||9e15)-(bossTime(b)||9e15)).slice(0,5);
+  const el=$('dashBossRows');if(!el)return;
+  el.innerHTML=rows.length?rows.map((r,i)=>{
+    const ms=bossTime(r),cls=ms&&ms<1800000?'urgent':ms&&ms>3600000?'safe':'';
+    return `<div class="dash-boss-row" data-open="bossPasswordModal"><span>${['♜','♞','♛','♟','♝'][i%5]}</span><div><b>${esc(bossName(r))}</b><small>${esc(r.distribution||r.location||r.region||bossStatus(r)||'위치 확인 중')}</small></div><em class="${cls}" data-dashboard-remain="${ms}">${ms?fmtRemain(ms):esc(bossStatus(r)||'실시간 확인')}</em></div>`;
+  }).join(''):'<div class="dash-empty">현재 표시할 보스 정보가 없습니다.</div>';
+}
+function renderGm(payload){
+  const posts=(payload?.items||payload?.posts||[]).slice().sort((a,b)=>n(b.articleId||b.id)-n(a.articleId||a.id)).slice(0,5);
+  const el=$('dashGmRows');if(!el)return;
+  el.innerHTML=posts.length?posts.map(p=>`<div class="dash-gm-row" data-open="gmPaewangModal"><div><b>${esc(p.title||'제목 확인 중')}</b><small>${esc(p.writer||'GM패왕')}</small></div><time>${fmtDate(p.timestamp||p.publishedAt||p.date)}</time></div>`).join(''):'<div class="dash-empty">GM패왕 자동 수집 게시글이 아직 없습니다.</div>';
+}
+async function refreshDashboard(){
+  const results=await Promise.allSettled([fetchJson(AUCTION),fetchJson(AUCTION_STATUS,6000),fetchJson(BOSS),fetchJson(BOSS_STATS,6000),fetchJson(GM,6000)]);
+  try{renderMarket(flatten(results[0].status==='fulfilled'?results[0].value:{}),results[1].status==='fulfilled'?results[1].value:null)}
+  catch(e){console.warn(e);$('dashMarketRows')&&($('dashMarketRows').innerHTML='<div class="dash-empty dash-data-error">거래소 데이터를 불러오지 못했습니다.</div>')}
+  try{renderBoss(results[2].status==='fulfilled'?results[2].value:{},results[3].status==='fulfilled'?results[3].value:{})}
+  catch(e){console.warn(e);$('dashBossRows')&&($('dashBossRows').innerHTML='<div class="dash-empty dash-data-error">보스 데이터를 불러오지 못했습니다.</div>')}
+  try{renderGm(results[4].status==='fulfilled'?results[4].value:{})}
+  catch(e){console.warn(e);$('dashGmRows')&&($('dashGmRows').innerHTML='<div class="dash-empty dash-data-error">GM패왕 게시글을 불러오지 못했습니다.</div>')}
+}
+document.addEventListener('click',e=>{
+  const home=e.target.closest('[data-dash-home]');
+  if(home){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});toast('홈 화면입니다');}
+  const action=e.target.closest('.dash-nav-item,[data-open]');
+  if(action){
+    action.classList.add('nav-pressed');setTimeout(()=>action.classList.remove('nav-pressed'),420);
+    const rect=action.getBoundingClientRect(),r=document.createElement('i');r.className='dash-click-ripple';
+    const size=Math.max(rect.width,rect.height);Object.assign(r.style,{width:size+'px',height:size+'px',left:(e.clientX-rect.left-size/2)+'px',top:(e.clientY-rect.top-size/2)+'px'});
+    if(getComputedStyle(action).position==='static')action.style.position='relative';action.appendChild(r);setTimeout(()=>r.remove(),650);
+    const label=action.querySelector('b,small')?.textContent?.trim();
+    if(action.dataset.open&&label)toast(`${label} 열기`);
+  }
+});
+document.addEventListener('keydown',e=>{const el=e.target.closest?.('.dash-action-panel');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();el.click()}});
+setInterval(()=>document.querySelectorAll('[data-dashboard-remain]').forEach(el=>{const start=n(el.dataset.dashboardRemain);if(start>0){const born=n(el.dataset.dashboardBorn)||(el.dataset.dashboardBorn=Date.now());el.textContent=fmtRemain(Math.max(0,start-(Date.now()-born)))}}),1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshDashboard()});
+refreshDashboard();
+clearInterval(refreshTimer);refreshTimer=setInterval(refreshDashboard,60000);
+})();
+</script>
 
 </body>
 </html>
