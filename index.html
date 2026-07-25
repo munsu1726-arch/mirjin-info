@@ -1363,347 +1363,6 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
   .app-only-home-body button{grid-column:2;justify-self:start}
 }
 </style>
-<style id="database-ui-v2-styles">
-.modal-dialog:has(.human-db-shell){width:min(1280px,calc(100vw - 32px));height:min(880px,calc(100svh - 32px))}
-.human-db-shell{position:relative}
-.human-db-hero{padding:18px 22px;background:linear-gradient(125deg,#102a43 0%,#15517b 58%,#087a70 120%)}
-.human-db-hero h3{font-size:24px}.human-db-hero p{font-size:13px}
-.human-db-kicker{font-size:10px}.human-db-stats span{font-size:10px}
-.human-db-tabs button{font-size:13px}.human-db-tabs button b{font-size:10px}
-.human-db-toolbar{grid-template-columns:minmax(280px,1fr) auto}
-.human-db-search input{font-size:14px}
-#humanDbFilters .field{font-size:13px}
-.human-db-summary span{font-size:13px}.human-db-summary span b{font-size:15px}.human-db-summary small{font-size:11px}
-.human-db-content{position:relative;display:block;padding:12px 16px 16px}
-.human-db-list{height:100%}
-.human-db-list-head span{font-size:14px}.human-db-list-head small{font-size:11px}
-.human-db-record{grid-template-columns:42px minmax(0,1fr) 190px;min-height:66px;padding:9px 12px}
-.human-db-record:hover{transform:none;background:#f1f7fc;box-shadow:inset 3px 0 #2474bd}
-.human-db-record-icon{width:38px;height:38px;border-radius:12px}
-.human-db-record-copy b{font-size:14px}.human-db-record-copy small{font-size:11px}
-.human-db-record-meta em{font-size:11px}.human-db-record-meta small{font-size:10.5px}
-.human-db-pagination button{min-width:32px;height:32px;font-size:12px}
-.human-db-detail-layer{position:absolute;z-index:50;inset:0;display:grid;place-items:center;padding:22px}
-.human-db-detail-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(8,22,38,.66);backdrop-filter:blur(5px);cursor:default}
-.human-db-detail-card{position:relative;width:min(720px,calc(100% - 24px));max-height:calc(100% - 24px);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.7);border-radius:24px;background:#fff;box-shadow:0 28px 80px rgba(4,17,32,.32);animation:dbDetailIn .2s ease-out}
-@keyframes dbDetailIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
-.human-db-detail-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;border-bottom:1px solid #e4ebf2;background:linear-gradient(180deg,#fff,#f8fafc)}
-.human-db-detail-bar div{display:grid;gap:3px}.human-db-detail-bar b{color:#1e3045;font-size:15px}.human-db-detail-bar span{color:#78889a;font-size:11px}
-.human-db-detail-close{display:grid;place-items:center;width:38px;height:38px;border:1px solid #dce5ee;border-radius:12px;background:#fff;color:#394b60;font-size:20px}
-.human-db-detail-close:hover{border-color:#a9c6e2;background:#eef6fd}
-.human-db-detail-panel{min-height:0;overflow:auto;padding:20px}
-.human-db-detail-panel .human-db-detail-head{grid-template-columns:58px minmax(0,1fr)}
-.human-db-detail-panel .human-db-detail-symbol{width:58px;height:58px;border-radius:17px;font-size:20px}
-.human-db-detail-panel .human-db-detail-head small{font-size:11px}
-.human-db-detail-panel .human-db-detail-head h3{font-size:24px}
-.human-db-detail-panel .human-db-detail-head p{font-size:11px}
-.human-db-detail-panel .human-db-description{padding:14px 15px;font-size:13px;line-height:1.7}
-.human-db-detail-panel .human-db-specs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.human-db-detail-panel .human-db-specs div{padding:12px 13px}
-.human-db-detail-panel .human-db-specs dt{font-size:10px}
-.human-db-detail-panel .human-db-specs dd{font-size:12px}
-.human-db-detail-panel .human-db-related header b{font-size:13px}
-.human-db-detail-panel .human-db-related header span{font-size:10px}
-.human-db-detail-panel .human-db-related p b{font-size:11px}
-.human-db-detail-panel .human-db-related p span{font-size:10px}
-.human-db-detail-panel::-webkit-scrollbar{width:8px}.human-db-detail-panel::-webkit-scrollbar-thumb{border:2px solid #fff;border-radius:999px;background:#cbd8e5}
-@media(max-width:900px){
-  .modal-dialog:has(.human-db-shell){width:calc(100vw - 16px);height:calc(100svh - 16px)}
-  .human-db-content{display:block;overflow:hidden}
-  .human-db-list{height:100%;min-height:0}
-  .human-db-toolbar{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  .modal-dialog:has(.human-db-shell){width:100vw;height:100svh;max-height:none;border-radius:0}
-  .human-db-hero{padding:13px 14px}.human-db-hero h3{font-size:19px}.human-db-hero p{display:none}
-  .human-db-stats div{padding:8px 4px}.human-db-stats b{font-size:15px}
-  .human-db-tabs{padding:8px 8px 0}.human-db-tabs button{padding:9px 9px;font-size:12px}
-  .human-db-toolbar{padding:9px}.human-db-search input{height:40px}
-  #humanDbFilters{display:grid;grid-template-columns:1fr 1fr}
-  .human-db-summary{padding:0 10px 8px}.human-db-summary small{display:none}
-  .human-db-content{padding:8px}
-  .human-db-record{grid-template-columns:34px minmax(0,1fr);min-height:61px;padding:8px}
-  .human-db-record-icon{width:32px;height:32px}
-  .human-db-record-meta{grid-column:2;display:flex;gap:7px;margin-top:-4px;text-align:left}
-  .human-db-record-meta small{margin:0}
-  .human-db-record-copy b{font-size:13px}
-  .human-db-list-head small{display:none}
-  .human-db-detail-layer{align-items:end;padding:0}
-  .human-db-detail-card{width:100%;max-height:92%;border-radius:22px 22px 0 0}
-  .human-db-detail-panel{padding:16px}
-  .human-db-detail-panel .human-db-detail-head{grid-template-columns:50px minmax(0,1fr)}
-  .human-db-detail-panel .human-db-detail-symbol{width:50px;height:50px}
-  .human-db-detail-panel .human-db-detail-head h3{font-size:20px}
-  .human-db-detail-panel .human-db-specs{grid-template-columns:1fr}
-}
-</style>
-<script id="database-ui-v2">
-(function(){
-  const pageSize=50;
-  const chanceValue=value=>parseFloat(String(value??'').replace(/[^0-9.+-]/g,''))||0;
-  const closeDetail=()=>document.getElementById('humanDbDetailLayer')?.remove();
-  document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&document.getElementById('humanDbDetailLayer')){
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      closeDetail();
-    }
-  },true);
-  const switchTab=(view,tab,query='')=>{
-    view.tab=tab;
-    view.query=query;
-    view.filterA='all';
-    view.filterB='all';
-    view.page=1;
-    renderDatabaseModal(false);
-  };
-  const openDetail=(db,view,row)=>{
-    closeDetail();
-    const shell=document.querySelector('.human-db-shell');
-    if(!shell)return;
-    const layer=document.createElement('div');
-    layer.className='human-db-detail-layer';
-    layer.id='humanDbDetailLayer';
-    layer.innerHTML=`<button class="human-db-detail-backdrop" type="button" aria-label="상세 정보 닫기"></button><article class="human-db-detail-card" role="dialog" aria-modal="true" aria-labelledby="humanDbDetailTitle"><header class="human-db-detail-bar"><div><b id="humanDbDetailTitle">상세 정보</b><span>목록은 닫히지 않고 그대로 유지됩니다</span></div><button class="human-db-detail-close" type="button" aria-label="닫기">×</button></header><div class="human-db-detail-panel" id="humanDbDetailPanel"></div></article>`;
-    shell.appendChild(layer);
-    const panel=layer.querySelector('#humanDbDetailPanel');
-    if(view.tab==='items'){
-      const sources=db.drops.filter(drop=>String(drop[4])===String(row[0])||String(drop[5])===String(row[1]));
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol quality-${esc(row[7])}">◆</span><div><small>${esc(humanDbCategory(row[5]))} · ${esc(humanDbQuality(row[7]))}</small><h3>${esc(row[1]||'이름 없음')}</h3><p>아이템 ID ${esc(row[0])}</p></div></div><p class="human-db-description">${esc(row[12]||'등록된 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>착용 레벨</dt><dd>${esc(row[3]||0)}</dd></div><div><dt>품질</dt><dd>${esc(humanDbQuality(row[7]))}</dd></div><div><dt>아이템 레벨</dt><dd>${esc(row[8]||0)}</dd></div><div><dt>직업 조건</dt><dd>${esc(row[4]||'제한 없음')}</dd></div><div><dt>거래</dt><dd>${esc(row[9]||'-')}</dd></div><div><dt>창고</dt><dd>${esc(row[10]||'-')}</dd></div><div><dt>상점 가격</dt><dd>${esc(humanDbPrice(row[11]))}</dd></div><div><dt>세부 분류</dt><dd>${esc(row[6]||'-')}</dd></div></dl><section class="human-db-related"><header><b>드랍 정보</b><span>${sources.length.toLocaleString('ko-KR')}건</span></header>${sources.length?`<div>${sources.slice(0,6).map(drop=>`<p><b>${esc(drop[1]||'획득처 미확인')}</b><span>${esc(drop[3]||'맵 미확인')} · ${esc(drop[7]||'확률 미확인')}</span></p>`).join('')}</div><button class="soft-btn" type="button" data-db-go="drops">전체 드랍 정보 보기</button>`:'<div class="human-db-related-empty">연결된 드랍 정보가 없습니다.</div>'}</section>`;
-      panel.querySelector('[data-db-go="drops"]')?.addEventListener('click',()=>switchTab(view,'drops',row[1]));
-    }else if(view.tab==='drops'){
-      const item=db.items.find(value=>String(value[0])===String(row[4]))||db.items.find(value=>String(value[1])===String(row[5]));
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol drop">⬡</span><div><small>드랍 그룹 ${esc(row[0]||'-')}</small><h3>${esc(row[5]||'아이템 미확인')}</h3><p>원본 파일 순서의 드랍 기록</p></div></div><p class="human-db-description">${esc(row[1]||'등록된 드랍 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>출현 정보</dt><dd>${esc(row[2]||'-')}</dd></div><div><dt>출현 맵</dt><dd>${esc(row[3]||'-')}</dd></div><div><dt>아이템 ID</dt><dd>${esc(row[4]||'-')}</dd></div><div><dt>수량</dt><dd>${esc(row[6]||'-')}</dd></div><div><dt>드랍 확률</dt><dd>${esc(row[7]||'-')}</dd></div></dl>${item?`<section class="human-db-related"><header><b>연결된 아이템</b><span>${esc(humanDbQuality(item[7]))}</span></header><div><p><b>${esc(item[1])}</b><span>${esc(humanDbCategory(item[5]))} · 착용 Lv.${esc(item[3]||0)}</span></p></div><button class="soft-btn" type="button" data-db-go="items">아이템 상세 보기</button></section>`:''}`;
-      panel.querySelector('[data-db-go="items"]')?.addEventListener('click',()=>switchTab(view,'items',item?.[1]||row[5]));
-    }else{
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol skill">✦</span><div><small>${esc(humanDbJob(row[2]))} · 유형 ${esc(row[4]||'-')}</small><h3>${esc(row[1]||'이름 없음')}</h3><p>스킬 ID ${esc(row[0])}</p></div></div><p class="human-db-description">${esc(row[8]||'등록된 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>필요 레벨</dt><dd>${esc(row[3]||0)}</dd></div><div><dt>재사용 대기</dt><dd>${esc(humanDbWait(row[5]))}</dd></div><div><dt>MP 소모</dt><dd>${esc(row[6]||0)}</dd></div><div><dt>HP 소모</dt><dd>${esc(row[7]||0)}</dd></div><div><dt>직업 코드</dt><dd>${esc(row[2]||0)}</dd></div><div><dt>아이콘 값</dt><dd>${esc(row[9]||'-')}</dd></div></dl>`;
-    }
-    layer.querySelector('.human-db-detail-backdrop').addEventListener('click',closeDetail);
-    layer.querySelector('.human-db-detail-close').addEventListener('click',closeDetail);
-    layer.querySelector('.human-db-detail-close').focus();
-  };
-  renderDatabaseModal=function(reset=true){
-    const db=humanDatabase();
-    if(reset||!state.databaseView)state.databaseView={tab:'items',query:'',filterA:'all',filterB:'all',page:1};
-    const view=state.databaseView;
-    if(!['items','drops','skills'].includes(view.tab))view.tab='items';
-    const tabs=[['items','아이템',db.items.length],['drops','드랍 정보',db.drops.length],['skills','직업별 스킬',db.skills.length]];
-    $('modalBody').innerHTML=`<div class="human-db-shell"><section class="human-db-hero"><div><span class="human-db-kicker">MIRJIN INTEGRATED DATABASE</span><h3>최신 통합 DB</h3><p>전체 한국어 데이터로 정리했으며, 목록을 누르면 상세 정보가 별도 팝업으로 열립니다.</p></div><div class="human-db-stats"><div><b>${db.items.length.toLocaleString('ko-KR')}</b><span>아이템</span></div><div><b>${db.drops.length.toLocaleString('ko-KR')}</b><span>드랍 기록</span></div><div><b>${db.skills.length.toLocaleString('ko-KR')}</b><span>스킬</span></div></div></section><div class="human-db-tabs" role="tablist">${tabs.map(([id,label,count])=>`<button type="button" role="tab" aria-selected="${view.tab===id}" class="${view.tab===id?'active':''}" data-db-tab="${id}"><span>${label}</span><b>${count.toLocaleString('ko-KR')}</b></button>`).join('')}</div><div class="human-db-toolbar"><label class="human-db-search"><span>⌕</span><input id="humanDbSearch" value="${esc(view.query)}" placeholder="이름, ID, 설명을 검색하세요"></label><div id="humanDbFilters"></div></div><div class="human-db-summary" id="humanDbSummary"></div><div class="human-db-content"><section class="human-db-list"><div class="human-db-list-head"><span id="humanDbListTitle"></span><small id="humanDbOrderNote"></small></div><div class="human-db-records" id="humanDbRecords"></div><div class="human-db-pagination" id="humanDbPagination"></div></section></div></div>`;
-    $('modalBody').querySelectorAll('[data-db-tab]').forEach(button=>button.addEventListener('click',()=>switchTab(view,button.dataset.dbTab)));
-    if(view.tab==='items'){
-      const categories=[...new Set(db.items.map(row=>row[5]).filter(value=>value!==''))].sort((a,b)=>num(a)-num(b));
-      $('humanDbFilters').innerHTML=`<select class="field" id="humanDbFilterA"><option value="all">전체 분류</option>${categories.map(value=>`<option value="${esc(value)}"${String(view.filterA)===String(value)?' selected':''}>${esc(humanDbCategory(value))}</option>`).join('')}</select><select class="field" id="humanDbFilterB"><option value="all">전체 품질</option>${[0,1,2,3,4,5].map(value=>`<option value="${value}"${String(view.filterB)===String(value)?' selected':''}>${esc(humanDbQuality(value))}</option>`).join('')}</select>`;
-    }else if(view.tab==='drops'){
-      $('humanDbFilters').innerHTML=`<select class="field" id="humanDbFilterA"><option value="all">전체 확률</option><option value="10"${view.filterA==='10'?' selected':''}>10% 이상</option><option value="1"${view.filterA==='1'?' selected':''}>1% 이상</option><option value="under1"${view.filterA==='under1'?' selected':''}>1% 미만</option></select>`;
-    }else{
-      const jobs=[...new Set(db.skills.map(row=>row[2]).filter(value=>value!==''))].sort((a,b)=>num(a)-num(b));
-      const types=[...new Set(db.skills.map(row=>row[4]).filter(value=>value!==''))].sort((a,b)=>num(a)-num(b));
-      $('humanDbFilters').innerHTML=`<select class="field" id="humanDbFilterA"><option value="all">전체 직업</option>${jobs.map(value=>`<option value="${esc(value)}"${String(view.filterA)===String(value)?' selected':''}>${esc(humanDbJob(value))}</option>`).join('')}</select><select class="field" id="humanDbFilterB"><option value="all">전체 유형</option>${types.map(value=>`<option value="${esc(value)}"${String(view.filterB)===String(value)?' selected':''}>유형 ${esc(value)}</option>`).join('')}</select>`;
-    }
-    const draw=()=>{
-      const query=view.query.trim().toLocaleLowerCase('ko-KR');
-      let rows;
-      if(view.tab==='items'){
-        rows=db.items.map((row,index)=>({row,index})).filter(({row})=>(view.filterA==='all'||String(row[5])===String(view.filterA))&&(view.filterB==='all'||String(row[7])===String(view.filterB))&&(!query||`${row[0]} ${row[1]} ${row[4]} ${row[12]}`.toLocaleLowerCase('ko-KR').includes(query)));
-        rows.sort((a,b)=>num(a.row[3])-num(b.row[3])||num(a.row[7])-num(b.row[7])||a.index-b.index);
-      }else if(view.tab==='drops'){
-        rows=db.drops.map((row,index)=>({row,index})).filter(({row})=>{const chance=chanceValue(row[7]);const accepted=view.filterA==='all'||(view.filterA==='10'&&chance>=10)||(view.filterA==='1'&&chance>=1)||(view.filterA==='under1'&&chance<1);return accepted&&(!query||`${row[0]} ${row[1]} ${row[2]} ${row[3]} ${row[4]} ${row[5]}`.toLocaleLowerCase('ko-KR').includes(query))});
-      }else{
-        rows=db.skills.map((row,index)=>({row,index})).filter(({row})=>(view.filterA==='all'||String(row[2])===String(view.filterA))&&(view.filterB==='all'||String(row[4])===String(view.filterB))&&(!query||`${row[0]} ${row[1]} ${row[2]} ${row[3]} ${row[8]}`.toLocaleLowerCase('ko-KR').includes(query)));
-      }
-      const totalPages=Math.max(1,Math.ceil(rows.length/pageSize));
-      view.page=Math.min(Math.max(1,view.page),totalPages);
-      const pageRows=rows.slice((view.page-1)*pageSize,view.page*pageSize);
-      $('humanDbSummary').innerHTML=`<span><b>${rows.length.toLocaleString('ko-KR')}</b>개 검색 결과</span><small>항목을 누르면 상세 팝업이 열립니다 · 페이지당 ${pageSize}개</small>`;
-      $('humanDbListTitle').textContent=view.tab==='items'?'아이템 목록':view.tab==='drops'?'드랍 정보 목록':'직업별 스킬 목록';
-      $('humanDbOrderNote').textContent=view.tab==='items'?'착용 레벨 낮은 순 · 일반 품질부터':'전달받은 원본 파일 순서';
-      $('humanDbRecords').innerHTML=pageRows.length?pageRows.map(({row,index})=>{
-        if(view.tab==='items')return`<button type="button" class="human-db-record" data-db-record="${index}"><span class="human-db-record-icon quality-${esc(row[7])}">◆</span><span class="human-db-record-copy"><b>${esc(row[1]||'이름 없음')}</b><small>ID ${esc(row[0])} · ${esc(humanDbCategory(row[5]))}</small></span><span class="human-db-record-meta"><em>착용 Lv.${esc(row[3]||0)}</em><small>${esc(humanDbQuality(row[7]))}</small></span></button>`;
-        if(view.tab==='drops')return`<button type="button" class="human-db-record" data-db-record="${index}"><span class="human-db-record-icon drop">⬡</span><span class="human-db-record-copy"><b>${esc(row[5]||'아이템 미확인')}</b><small>${esc(row[1]||'획득처 미확인')} · ${esc(row[3]||'맵 미확인')}</small></span><span class="human-db-record-meta"><em>수량 ${esc(row[6]||'-')}</em><small>${esc(row[7]||'확률 미확인')}</small></span></button>`;
-        return`<button type="button" class="human-db-record" data-db-record="${index}"><span class="human-db-record-icon skill">✦</span><span class="human-db-record-copy"><b>${esc(row[1]||'이름 없음')}</b><small>스킬 ID ${esc(row[0])} · ${esc(humanDbJob(row[2]))}</small></span><span class="human-db-record-meta"><em>필요 Lv.${esc(row[3]||0)}</em><small>유형 ${esc(row[4]||'-')}</small></span></button>`;
-      }).join(''):'<div class="human-db-empty"><b>검색 결과가 없습니다</b><span>검색어나 필터 조건을 바꿔보세요.</span></div>';
-      $('humanDbPagination').innerHTML=humanDbPageButtons(view.page,totalPages);
-      $('humanDbRecords').querySelectorAll('[data-db-record]').forEach(button=>button.addEventListener('click',()=>{
-        const source=view.tab==='items'?db.items:view.tab==='drops'?db.drops:db.skills;
-        openDetail(db,view,source[num(button.dataset.dbRecord)]);
-      }));
-      $('humanDbPagination').querySelectorAll('[data-db-page]').forEach(button=>button.addEventListener('click',()=>{view.page=num(button.dataset.dbPage);draw();$('humanDbRecords').scrollTop=0}));
-    };
-    $('humanDbSearch').addEventListener('input',event=>{view.query=event.target.value;view.page=1;draw()});
-    $('humanDbFilterA')?.addEventListener('change',event=>{view.filterA=event.target.value;view.page=1;draw()});
-    $('humanDbFilterB')?.addEventListener('change',event=>{view.filterB=event.target.value;view.page=1;draw()});
-    draw();
-  };
-})();
-</script>
-<style id="database-ui-v3-styles">
-.modal-dialog:has(.human-db-launcher-shell){width:min(980px,calc(100vw - 32px));height:min(700px,calc(100svh - 32px))}
-.modal-dialog:has(.human-db-launcher-shell) .modal-body{padding:0;overflow:hidden}
-.human-db-launcher-shell{position:relative;height:100%;min-height:0;display:flex;flex-direction:column;background:linear-gradient(145deg,#f7faff,#edf3f8)}
-.human-db-launcher-head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 28px 22px;background:linear-gradient(125deg,#102a43,#15517b 58%,#087a70 120%);color:#fff}
-.human-db-launcher-copy small{display:block;color:#9adbd5;font-size:10px;font-weight:950;letter-spacing:.15em}
-.human-db-launcher-copy h3{margin:8px 0 0;font-size:26px;letter-spacing:-.04em}
-.human-db-launcher-copy p{margin:8px 0 0;color:#d4e3ed;font-size:13px;line-height:1.55}
-.human-db-launcher-total{min-width:125px;padding:15px;border:1px solid rgba(255,255,255,.18);border-radius:17px;background:rgba(255,255,255,.09);text-align:center;backdrop-filter:blur(8px)}
-.human-db-launcher-total b{display:block;font-size:24px}.human-db-launcher-total span{display:block;margin-top:4px;color:#cde0eb;font-size:10px}
-.human-db-launch-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:26px 28px 14px}
-.human-db-launch-tab{display:grid;grid-template-columns:46px minmax(0,1fr) auto;align-items:center;gap:12px;min-height:82px;padding:14px 15px;border:1px solid #dce6ef;border-radius:17px;background:#fff;color:#26435f;text-align:left;box-shadow:0 10px 26px rgba(35,66,104,.07)}
-.human-db-launch-tab:hover{transform:translateY(-3px);border-color:#aecbe4;box-shadow:0 16px 34px rgba(35,66,104,.12)}
-.human-db-launch-tab i{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:#edf3f8;color:#47647f;font-size:18px;font-style:normal}
-.human-db-launch-tab[data-db-launch="items"] i{background:#edf4ff;color:#2869aa}
-.human-db-launch-tab[data-db-launch="drops"] i{background:#eaf8f3;color:#0d8a67}
-.human-db-launch-tab[data-db-launch="skills"] i{background:#f2edff;color:#7551c7}
-.human-db-launch-tab span{display:grid;gap:4px}.human-db-launch-tab strong{font-size:15px}.human-db-launch-tab small{color:#8290a0;font-size:10px}
-.human-db-launch-tab b{padding:5px 8px;border-radius:999px;background:#edf2f7;color:#65768a;font-size:10px}
-.human-db-launch-note{margin:auto 28px 26px;padding:14px 16px;border:1px solid #dbe6ef;border-radius:14px;background:rgba(255,255,255,.8);color:#657589;font-size:12px;line-height:1.6}
-.human-db-browser-layer{position:absolute;z-index:40;inset:0;display:grid;place-items:center;padding:18px}
-.human-db-browser-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(7,20,35,.66);backdrop-filter:blur(6px);cursor:default}
-.human-db-browser-card{position:relative;width:100%;height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.78);border-radius:23px;background:#f2f6fa;box-shadow:0 28px 90px rgba(5,18,32,.34);animation:dbDetailIn .2s ease-out}
-.human-db-browser-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 18px;border-bottom:1px solid #dce6ef;background:#fff}
-.human-db-browser-title{display:flex;align-items:center;gap:11px}.human-db-browser-title i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#eaf3fb;color:#24689f;font-style:normal}.human-db-browser-title h3{margin:0;font-size:18px}.human-db-browser-title p{margin:4px 0 0;color:#8491a0;font-size:10.5px}
-.human-db-browser-close{display:grid;place-items:center;width:39px;height:39px;border:1px solid #dce5ee;border-radius:12px;background:#f8fafc;color:#3d4f63;font-size:20px}
-.human-db-browser-toolbar{display:grid;grid-template-columns:minmax(260px,1fr) auto;gap:8px;padding:11px 14px;border-bottom:1px solid #dfe7ef;background:#fff}
-.human-db-browser-search{position:relative}.human-db-browser-search span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#6f8295;font-size:18px}.human-db-browser-search input{height:40px;padding-left:36px}
-.human-db-browser-filters{display:flex;gap:7px}.human-db-browser-filters .field{width:auto;min-width:130px;height:40px;font-size:12px}
-.human-db-browser-summary{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;color:#627388;font-size:11px}.human-db-browser-summary b{color:#1c639e;font-size:13px}
-.human-db-browser-scroll{flex:1;min-height:0;overflow:auto;padding:0 14px 14px}
-.human-db-browser-scroll::-webkit-scrollbar{width:8px}.human-db-browser-scroll::-webkit-scrollbar-thumb{border:2px solid #f2f6fa;border-radius:999px;background:#c7d5e3}
-.human-db-linear-items{display:grid;gap:6px}
-.human-db-linear-row{width:100%;display:grid;grid-template-columns:40px minmax(0,1fr) 190px;align-items:center;gap:11px;min-height:62px;padding:9px 12px;border:1px solid #e0e8f0;border-radius:12px;background:#fff;text-align:left}
-.human-db-linear-row:hover{border-color:#b8cfe3;background:#f8fbfe;transform:translateX(2px)}
-.human-db-linear-row i{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#edf2f7;color:#7a8a9b;font-style:normal}
-.human-db-linear-row>span{min-width:0}.human-db-linear-row strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#26394e;font-size:13px}.human-db-linear-row small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:5px;color:#8592a1;font-size:10px}
-.human-db-linear-meta{text-align:right}.human-db-linear-meta b{display:block;color:#3c5d79;font-size:11px}.human-db-linear-meta em{display:block;margin-top:5px;color:#8491a0;font-size:10px;font-style:normal}
-.human-db-browser-pagination{display:flex;justify-content:center;gap:5px;padding:9px 12px;border-top:1px solid #dce5ee;background:#fff}.human-db-browser-pagination button{min-width:31px;height:31px;border:1px solid #dbe5ee;border-radius:8px;background:#fff;color:#566a7f;font-size:11px;font-weight:800}.human-db-browser-pagination button.active{border-color:#2474bd;background:#2474bd;color:#fff}.human-db-browser-pagination button:disabled{opacity:.35}
-.monster-drop-stack{display:grid;gap:10px}
-.monster-drop-group{overflow:hidden;border:1px solid #dce6ef;border-radius:15px;background:#fff;box-shadow:0 7px 18px rgba(35,66,104,.05)}
-.monster-drop-head{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid #e4ebf2;background:linear-gradient(180deg,#fff,#f8fafc)}
-.monster-drop-head i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#eaf8f3;color:#0a8765;font-style:normal;font-size:17px}
-.monster-drop-head h4{margin:0;color:#21364c;font-size:14px}.monster-drop-head p{margin:4px 0 0;color:#8391a1;font-size:10px}.monster-drop-head b{padding:5px 8px;border-radius:999px;background:#eaf4fc;color:#2369a3;font-size:10px}
-.monster-drop-items{display:grid}
-.monster-drop-item{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 85px 105px;align-items:center;gap:10px;min-height:46px;padding:7px 14px;border:0;border-bottom:1px solid #edf2f6;background:#fff;text-align:left}.monster-drop-item:last-child{border-bottom:0}.monster-drop-item:hover{background:#f2f8fc}.monster-drop-item strong{font-size:12px}.monster-drop-item span,.monster-drop-item em{color:#718399;font-size:10.5px;font-style:normal;text-align:right}.monster-drop-item em{color:#0c8062;font-weight:850}
-.skill-job-stack{display:grid;gap:12px}
-.skill-job-group{overflow:hidden;border:1px solid #dce6ef;border-radius:15px;background:#fff}
-.skill-job-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #e4ebf2;background:#f8fafc}.skill-job-head h4{margin:0;font-size:14px}.skill-job-head b{padding:4px 8px;border-radius:999px;background:#f0ebff;color:#704dbf;font-size:10px}
-.skill-job-rows{display:grid}
-.skill-job-row{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 90px 90px;align-items:center;gap:10px;min-height:50px;padding:8px 14px;border:0;border-bottom:1px solid #edf2f6;background:#fff;text-align:left}.skill-job-row:last-child{border-bottom:0}.skill-job-row:hover{background:#f7f4ff}.skill-job-row strong{font-size:12px}.skill-job-row small{display:block;margin-top:4px;color:#8290a0;font-size:10px}.skill-job-row span,.skill-job-row em{color:#61758b;font-size:10px;font-style:normal;text-align:right}
-.human-db-browser-empty{min-height:220px;display:grid;place-content:center;gap:6px;color:#8190a0;text-align:center}.human-db-browser-empty b{font-size:14px}.human-db-browser-empty span{font-size:11px}
-@media(max-width:700px){
-  .modal-dialog:has(.human-db-launcher-shell){width:100vw;height:100svh;max-height:none;border-radius:0}
-  .human-db-launcher-head{padding:18px 16px}.human-db-launcher-copy h3{font-size:21px}.human-db-launcher-copy p{font-size:11px}.human-db-launcher-total{display:none}
-  .human-db-launch-tabs{gap:7px;padding:18px 10px 10px}.human-db-launch-tab{grid-template-columns:1fr;gap:7px;min-height:106px;padding:10px;text-align:center}.human-db-launch-tab i{width:36px;height:36px;margin:auto}.human-db-launch-tab span{gap:2px}.human-db-launch-tab strong{font-size:12px}.human-db-launch-tab small{display:none}.human-db-launch-tab b{justify-self:center}
-  .human-db-launch-note{margin:auto 12px 16px;font-size:11px}
-  .human-db-browser-layer{padding:0}.human-db-browser-card{border-radius:0}
-  .human-db-browser-toolbar{grid-template-columns:1fr;padding:9px}.human-db-browser-filters{display:grid;grid-template-columns:1fr 1fr}.human-db-browser-filters .field{width:100%;min-width:0}
-  .human-db-browser-summary{padding:8px 10px}.human-db-browser-summary span:last-child{display:none}
-  .human-db-browser-scroll{padding:0 8px 10px}
-  .human-db-linear-row{grid-template-columns:34px minmax(0,1fr);padding:8px}.human-db-linear-meta{grid-column:2;display:flex;gap:7px;text-align:left}.human-db-linear-meta em{margin:0}
-  .monster-drop-head{grid-template-columns:36px minmax(0,1fr) auto;padding:10px}.monster-drop-head i{width:34px;height:34px}.monster-drop-head p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.monster-drop-item{grid-template-columns:minmax(0,1fr) auto;padding:8px 10px}.monster-drop-item span{display:none}
-  .skill-job-row{grid-template-columns:minmax(0,1fr) auto;padding:8px 10px}.skill-job-row em{display:none}
-}
-</style>
-<script id="database-ui-v3">
-(function(){
-  const browserState={tab:'',query:'',filterA:'all',filterB:'all',page:1};
-  const closeBrowser=()=>{document.getElementById('humanDbDetailLayer')?.remove();document.getElementById('humanDbBrowserLayer')?.remove()};
-  document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&!document.getElementById('humanDbDetailLayer')&&document.getElementById('humanDbBrowserLayer')){
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      closeBrowser();
-    }
-  },true);
-  const browserPageButtons=(page,total)=>humanDbPageButtons(page,total);
-  const openDbDetail=(tab,row)=>{
-    document.getElementById('humanDbDetailLayer')?.remove();
-    const shell=document.querySelector('.human-db-launcher-shell');
-    if(!shell)return;
-    const layer=document.createElement('div');
-    layer.className='human-db-detail-layer';
-    layer.id='humanDbDetailLayer';
-    layer.innerHTML=`<button class="human-db-detail-backdrop" type="button" aria-label="상세 정보 닫기"></button><article class="human-db-detail-card" role="dialog" aria-modal="true" aria-labelledby="humanDbDetailTitle"><header class="human-db-detail-bar"><div><b id="humanDbDetailTitle">상세 정보</b><span>선택한 데이터의 전체 내용입니다</span></div><button class="human-db-detail-close" type="button" aria-label="닫기">×</button></header><div class="human-db-detail-panel" id="humanDbDetailPanel"></div></article>`;
-    shell.appendChild(layer);
-    const panel=layer.querySelector('#humanDbDetailPanel');
-    if(tab==='items'){
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol quality-${esc(row[7])}">◆</span><div><small>${esc(humanDbCategory(row[5]))} · ${esc(humanDbQuality(row[7]))}</small><h3>${esc(row[1]||'이름 없음')}</h3><p>아이템 ID ${esc(row[0])}</p></div></div><p class="human-db-description">${esc(row[12]||'등록된 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>착용 레벨</dt><dd>${esc(row[3]||0)}</dd></div><div><dt>품질</dt><dd>${esc(humanDbQuality(row[7]))}</dd></div><div><dt>아이템 레벨</dt><dd>${esc(row[8]||0)}</dd></div><div><dt>직업 조건</dt><dd>${esc(row[4]||'제한 없음')}</dd></div><div><dt>거래</dt><dd>${esc(row[9]||'-')}</dd></div><div><dt>창고</dt><dd>${esc(row[10]||'-')}</dd></div><div><dt>상점 가격</dt><dd>${esc(humanDbPrice(row[11]))}</dd></div><div><dt>세부 분류</dt><dd>${esc(row[6]||'-')}</dd></div></dl>`;
-    }else if(tab==='drops'){
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol drop">⬡</span><div><small>${esc(row[2]||row[1]||'몬스터 미확인')}</small><h3>${esc(row[5]||'아이템 미확인')}</h3><p>드랍 그룹 ${esc(row[0]||'-')}</p></div></div><p class="human-db-description">${esc(row[1]||'등록된 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>몬스터</dt><dd>${esc(row[2]||row[1]||'-')}</dd></div><div><dt>출현 맵</dt><dd>${esc(row[3]||'-')}</dd></div><div><dt>아이템 ID</dt><dd>${esc(row[4]||'-')}</dd></div><div><dt>수량</dt><dd>${esc(row[6]||'-')}</dd></div><div><dt>드랍 확률</dt><dd>${esc(row[7]||'-')}</dd></div></dl>`;
-    }else{
-      panel.innerHTML=`<div class="human-db-detail-head"><span class="human-db-detail-symbol skill">✦</span><div><small>${esc(humanDbJob(row[2]))} · 유형 ${esc(row[4]||'-')}</small><h3>${esc(row[1]||'이름 없음')}</h3><p>스킬 ID ${esc(row[0])}</p></div></div><p class="human-db-description">${esc(row[8]||'등록된 설명이 없습니다.')}</p><dl class="human-db-specs"><div><dt>필요 레벨</dt><dd>${esc(row[3]||0)}</dd></div><div><dt>재사용 대기</dt><dd>${esc(humanDbWait(row[5]))}</dd></div><div><dt>MP 소모</dt><dd>${esc(row[6]||0)}</dd></div><div><dt>HP 소모</dt><dd>${esc(row[7]||0)}</dd></div><div><dt>직업 코드</dt><dd>${esc(row[2]||0)}</dd></div><div><dt>아이콘 값</dt><dd>${esc(row[9]||'-')}</dd></div></dl>`;
-    }
-    layer.querySelector('.human-db-detail-backdrop').addEventListener('click',()=>layer.remove());
-    layer.querySelector('.human-db-detail-close').addEventListener('click',()=>layer.remove());
-    layer.querySelector('.human-db-detail-close').focus();
-  };
-  const openDbBrowser=tab=>{
-    const db=humanDatabase();
-    closeBrowser();
-    browserState.tab=tab;
-    browserState.query='';
-    browserState.filterA='all';
-    browserState.filterB='all';
-    browserState.page=1;
-    const layer=document.createElement('div');
-    layer.className='human-db-browser-layer';
-    layer.id='humanDbBrowserLayer';
-    const title=tab==='items'?'아이템':tab==='drops'?'몬스터별 드랍 정보':'직업별 스킬';
-    const subtitle=tab==='items'?'낮은 착용 레벨과 일반 품질부터 표시합니다':tab==='drops'?'몬스터마다 드랍되는 아이템을 한 번에 확인합니다':'직업별로 스킬을 이어서 표시합니다';
-    const icon=tab==='items'?'◆':tab==='drops'?'⬡':'✦';
-    layer.innerHTML=`<button class="human-db-browser-backdrop" type="button" aria-label="닫기"></button><article class="human-db-browser-card" role="dialog" aria-modal="true"><header class="human-db-browser-head"><div class="human-db-browser-title"><i>${icon}</i><div><h3>${title}</h3><p>${subtitle}</p></div></div><button class="human-db-browser-close" type="button" aria-label="닫기">×</button></header><div class="human-db-browser-toolbar"><label class="human-db-browser-search"><span>⌕</span><input class="field" id="humanDbV3Search" placeholder="이름, ID, 설명 검색"></label><div class="human-db-browser-filters" id="humanDbV3Filters"></div></div><div class="human-db-browser-summary" id="humanDbV3Summary"></div><div class="human-db-browser-scroll" id="humanDbV3Scroll"></div><div class="human-db-browser-pagination" id="humanDbV3Pagination"></div></article>`;
-    document.querySelector('.human-db-launcher-shell')?.appendChild(layer);
-    layer.querySelector('.human-db-browser-backdrop').addEventListener('click',closeBrowser);
-    layer.querySelector('.human-db-browser-close').addEventListener('click',closeBrowser);
-    if(tab==='items'){
-      const categories=[...new Set(db.items.map(row=>row[5]).filter(value=>value!==''))].sort((a,b)=>num(a)-num(b));
-      $('humanDbV3Filters').innerHTML=`<select class="field" id="humanDbV3FilterA"><option value="all">전체 분류</option>${categories.map(value=>`<option value="${esc(value)}">${esc(humanDbCategory(value))}</option>`).join('')}</select><select class="field" id="humanDbV3FilterB"><option value="all">전체 품질</option>${[0,1,2,3,4,5].map(value=>`<option value="${value}">${esc(humanDbQuality(value))}</option>`).join('')}</select>`;
-    }else if(tab==='skills'){
-      const jobs=[...new Set(db.skills.map(row=>row[2]).filter(value=>value!==''))].sort((a,b)=>num(a)-num(b));
-      $('humanDbV3Filters').innerHTML=`<select class="field" id="humanDbV3FilterA"><option value="all">전체 직업</option>${jobs.map(value=>`<option value="${esc(value)}">${esc(humanDbJob(value))}</option>`).join('')}</select>`;
-    }else{
-      $('humanDbV3Filters').innerHTML='<span class="field" style="display:flex;align-items:center;color:#6e7f91">몬스터 기준</span>';
-    }
-    const draw=()=>{
-      const query=browserState.query.trim().toLocaleLowerCase('ko-KR');
-      const scroll=$('humanDbV3Scroll');
-      const pagination=$('humanDbV3Pagination');
-      if(tab==='items'){
-        let rows=db.items.map((row,index)=>({row,index})).filter(({row})=>(browserState.filterA==='all'||String(row[5])===browserState.filterA)&&(browserState.filterB==='all'||String(row[7])===browserState.filterB)&&(!query||`${row[0]} ${row[1]} ${row[4]} ${row[12]}`.toLocaleLowerCase('ko-KR').includes(query)));
-        rows.sort((a,b)=>num(a.row[3])-num(b.row[3])||num(a.row[7])-num(b.row[7])||a.index-b.index);
-        const pages=Math.max(1,Math.ceil(rows.length/60));browserState.page=Math.min(browserState.page,pages);const visible=rows.slice((browserState.page-1)*60,browserState.page*60);
-        $('humanDbV3Summary').innerHTML=`<span><b>${rows.length.toLocaleString('ko-KR')}</b>개</span><span>항목을 누르면 상세 정보가 열립니다</span>`;
-        scroll.innerHTML=visible.length?`<div class="human-db-sheet items"><div class="human-db-sheet-head"><b>아이템 ID</b><b>아이템명</b><b>분류</b><b>착용 레벨</b><b>품질</b><b>상점 가격</b></div>${visible.map(({row,index})=>`<button class="human-db-sheet-row" type="button" data-db-v3-item="${index}"><span>${esc(row[0])}</span><strong>${esc(row[1]||'이름 없음')}</strong><span>${esc(humanDbCategory(row[5]))}</span><span>${esc(row[3]||0)}</span><span>${esc(humanDbQuality(row[7]))}</span><span>${esc(humanDbPrice(row[11]))}</span></button>`).join('')}</div>`:'<div class="human-db-browser-empty"><b>검색 결과가 없습니다</b><span>검색어나 필터를 바꿔보세요.</span></div>';
-        pagination.innerHTML=browserPageButtons(browserState.page,pages);
-        scroll.querySelectorAll('[data-db-v3-item]').forEach(button=>button.addEventListener('click',()=>openDbDetail('items',db.items[num(button.dataset.dbV3Item)])));
-      }else if(tab==='drops'){
-        let rows=db.drops.map((row,index)=>({row,index})).filter(({row})=>!query||`${row[0]} ${row[1]} ${row[2]} ${row[3]} ${row[4]} ${row[5]}`.toLocaleLowerCase('ko-KR').includes(query));
-        const pages=Math.max(1,Math.ceil(rows.length/60));browserState.page=Math.min(browserState.page,pages);const visible=rows.slice((browserState.page-1)*60,browserState.page*60);
-        $('humanDbV3Summary').innerHTML=`<span><b>${rows.length.toLocaleString('ko-KR')}</b>개 드랍 기록</span><span>열 제목을 기준으로 엑셀처럼 확인할 수 있습니다</span>`;
-        scroll.innerHTML=visible.length?`<div class="human-db-sheet drops"><div class="human-db-sheet-head"><b>드랍 그룹</b><b>몬스터</b><b>지역·맵</b><b>아이템 ID</b><b>아이템명</b><b>수량</b><b>확률</b></div>${visible.map(({row,index})=>`<button class="human-db-sheet-row" type="button" data-db-v3-drop="${index}"><span>${esc(row[0]||'-')}</span><strong>${esc(row[2]||row[1]||'몬스터 미확인')}</strong><span>${esc(row[3]||'-')}</span><span>${esc(row[4]||'-')}</span><strong>${esc(row[5]||'아이템 미확인')}</strong><span>${esc(row[6]||'-')}</span><span>${esc(row[7]||'확률 미확인')}</span></button>`).join('')}</div>`:'<div class="human-db-browser-empty"><b>검색 결과가 없습니다</b><span>몬스터나 아이템 이름을 다시 입력해 보세요.</span></div>';
-        pagination.innerHTML=browserPageButtons(browserState.page,pages);
-        scroll.querySelectorAll('[data-db-v3-drop]').forEach(button=>button.addEventListener('click',()=>openDbDetail('drops',db.drops[num(button.dataset.dbV3Drop)])));
-      }else{
-        let rows=db.skills.map((row,index)=>({row,index})).filter(({row})=>(browserState.filterA==='all'||String(row[2])===browserState.filterA)&&(!query||`${row[0]} ${row[1]} ${row[3]} ${row[8]}`.toLocaleLowerCase('ko-KR').includes(query)));
-        const pages=Math.max(1,Math.ceil(rows.length/60));browserState.page=Math.min(browserState.page,pages);const visible=rows.slice((browserState.page-1)*60,browserState.page*60);
-        $('humanDbV3Summary').innerHTML=`<span><b>${rows.length.toLocaleString('ko-KR')}</b>개 스킬</span><span>열 제목을 기준으로 엑셀처럼 확인할 수 있습니다</span>`;
-        scroll.innerHTML=visible.length?`<div class="human-db-sheet skills"><div class="human-db-sheet-head"><b>스킬 ID</b><b>스킬명</b><b>직업</b><b>필요 레벨</b><b>유형</b><b>MP 소모</b><b>설명</b></div>${visible.map(({row,index})=>`<button class="human-db-sheet-row" type="button" data-db-v3-skill="${index}"><span>${esc(row[0])}</span><strong>${esc(row[1]||'이름 없음')}</strong><span>${esc(humanDbJob(row[2]))}</span><span>${esc(row[3]||0)}</span><span>${esc(row[4]||'-')}</span><span>${esc(row[6]||0)}</span><span>${esc(row[8]||'-')}</span></button>`).join('')}</div>`:'<div class="human-db-browser-empty"><b>검색 결과가 없습니다</b><span>직업이나 스킬 이름을 다시 확인해 보세요.</span></div>';
-        pagination.innerHTML=browserPageButtons(browserState.page,pages);
-        scroll.querySelectorAll('[data-db-v3-skill]').forEach(button=>button.addEventListener('click',()=>openDbDetail('skills',db.skills[num(button.dataset.dbV3Skill)])));
-      }
-      pagination.querySelectorAll('[data-db-page]').forEach(button=>button.addEventListener('click',()=>{browserState.page=num(button.dataset.dbPage);draw();scroll.scrollTop=0}));
-    };
-    $('humanDbV3Search').addEventListener('input',event=>{browserState.query=event.target.value;browserState.page=1;draw()});
-    $('humanDbV3FilterA')?.addEventListener('change',event=>{browserState.filterA=event.target.value;browserState.page=1;draw()});
-    $('humanDbV3FilterB')?.addEventListener('change',event=>{browserState.filterB=event.target.value;browserState.page=1;draw()});
-    draw();
-    layer.querySelector('#humanDbV3Search').focus();
-  };
-  renderDatabaseModal=function(){
-    const db=humanDatabase();
-    $('modalBody').innerHTML=`<div class="human-db-launcher-shell"><section class="human-db-launcher-head"><div class="human-db-launcher-copy"><small>MIRJIN INTEGRATED DATABASE</small><h3>최신 통합 DB</h3><p>확인할 항목을 선택하면 별도의 팝업으로 전체 데이터가 표시됩니다.</p></div><div class="human-db-launcher-total"><b>${(db.items.length+db.drops.length+db.skills.length).toLocaleString('ko-KR')}</b><span>전체 데이터</span></div></section><div class="human-db-launch-tabs"><button class="human-db-launch-tab" type="button" data-db-launch="items"><i>◆</i><span><strong>아이템</strong><small>레벨·품질 기준 정렬</small></span><b>${db.items.length.toLocaleString('ko-KR')}</b></button><button class="human-db-launch-tab" type="button" data-db-launch="drops"><i>⬡</i><span><strong>드랍 정보</strong><small>몬스터별 드랍 아이템</small></span><b>${db.drops.length.toLocaleString('ko-KR')}</b></button><button class="human-db-launch-tab" type="button" data-db-launch="skills"><i>✦</i><span><strong>직업별 스킬</strong><small>직업별 연속 표시</small></span><b>${db.skills.length.toLocaleString('ko-KR')}</b></button></div><p class="human-db-launch-note">위 세 항목 중 하나를 누르면 검색과 필터가 포함된 별도 팝업이 열립니다. 드랍 정보는 아이템이 아닌 몬스터를 기준으로 묶었습니다.</p></div>`;
-    $('modalBody').querySelectorAll('[data-db-launch]').forEach(button=>button.addEventListener('click',()=>openDbBrowser(button.dataset.dbLaunch)));
-  };
-})();
-</script>
 <style id="boss-ui-v2-styles">
 .modal-dialog:has(.boss-board-v2){width:min(1240px,calc(100vw - 32px));height:min(840px,calc(100svh - 32px))}
 .boss-board-v2{height:100%;min-height:0;display:flex;flex-direction:column;gap:12px}
@@ -3366,34 +3025,6 @@ button{transition:transform .18s ease,background .18s ease,border-color .18s eas
     openService(service);
   });
 });
-</script>
-<script id="database-popup-stability-v1">
-(()=>{
-  const databaseRenderer=renderDatabaseModal;
-  renderDatabaseModal=function(reset=true){
-    const viewingDatabase=state.activeService==='database'&&(
-      document.getElementById('humanDbBrowserLayer')||
-      document.getElementById('humanDbDetailLayer')
-    );
-    if(!reset&&viewingDatabase)return;
-    return databaseRenderer(reset);
-  };
-
-  document.addEventListener('click',event=>{
-    if(!event.target.closest('.human-db-browser-backdrop'))return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  },true);
-
-  const serviceModal=document.getElementById('serviceModal');
-  serviceModal?.addEventListener('click',event=>{
-    const viewingDatabase=state.activeService==='database'&&document.getElementById('humanDbBrowserLayer');
-    if(viewingDatabase&&event.target===serviceModal){
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-  },true);
-})();
 </script>
 <style id="premium-live-dashboard-v1">
 body{
@@ -6043,70 +5674,75 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
 }
 .site-header .brand-lockup-v3{justify-content:center!important}
 </style>
-<style id="database-spreadsheet-view-v8">
-.human-db-browser-scroll{overflow:auto!important;padding:0 14px 14px!important}
-.modal-dialog:has(.human-db-browser-layer){width:min(1380px,calc(100vw - 18px))!important;height:min(900px,calc(100svh - 18px))!important}
-.human-db-browser-head{min-height:54px!important;padding:8px 14px!important}
-.human-db-browser-title i{width:34px!important;height:34px!important}
-.human-db-browser-title h3{font-size:16px!important}
-.human-db-browser-toolbar{padding:7px 10px!important}
-.human-db-browser-search input,.human-db-browser-filters .field{height:36px!important}
-.human-db-browser-summary{padding:6px 12px!important}
-.human-db-sheet{
-  min-width:920px;
-  overflow:hidden;
-  border:1px solid #cbd8e4;
-  border-radius:10px;
-  background:#fff;
-  box-shadow:0 5px 18px rgba(35,66,104,.05);
-}
-.human-db-sheet-head,.human-db-sheet-row{
-  width:100%;
-  display:grid;
-  align-items:stretch;
-  margin:0;
-  padding:0;
-  border:0;
-  border-bottom:1px solid #dce5ed;
-  background:#fff;
-  text-align:left;
-}
-.human-db-sheet.items .human-db-sheet-head,.human-db-sheet.items .human-db-sheet-row{grid-template-columns:100px minmax(220px,2fr) 140px 100px 120px 130px}
-.human-db-sheet.drops .human-db-sheet-head,.human-db-sheet.drops .human-db-sheet-row{grid-template-columns:105px 160px 170px 100px minmax(180px,1fr) 80px 120px}
-.human-db-sheet.skills{min-width:1080px}
-.human-db-sheet.skills .human-db-sheet-head,.human-db-sheet.skills .human-db-sheet-row{grid-template-columns:90px 160px 120px 90px 80px 90px minmax(350px,1fr)}
-.human-db-sheet-head{
-  position:sticky;
-  z-index:3;
-  top:0;
-  color:#173b5a;
-  background:linear-gradient(180deg,#eaf2f8,#dfeaf3);
-  box-shadow:0 2px 0 rgba(58,91,121,.12);
-}
-.human-db-sheet-head b,.human-db-sheet-row>span,.human-db-sheet-row>strong{
-  min-width:0;
-  min-height:32px;
-  display:flex;
-  align-items:center;
-  padding:5px 8px;
-  overflow:hidden;
-  border-right:1px solid #d6e1ea;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:10px;
-}
-.human-db-sheet-head b{min-height:34px;font-size:10.5px;font-weight:950}
-.human-db-sheet-head b:last-child,.human-db-sheet-row>*:last-child{border-right:0}
-.human-db-sheet-row:last-child{border-bottom:0}
-.human-db-sheet-row:nth-child(odd){background:#f8fbfd}
-.human-db-sheet-row:hover,.human-db-sheet-row:focus-visible{outline:0;background:#eaf5ff;box-shadow:inset 4px 0 #2878b8}
-.human-db-sheet-row>strong{color:#1d344a;font-weight:900}
-.human-db-sheet-row>span{color:#586d82}
+
+<style id="database-single-panel-v9">
+.modal-dialog:has(.db-single-shell){width:min(1380px,calc(100vw - 18px));height:min(900px,calc(100svh - 18px))}
+.modal-dialog:has(.db-single-shell) .modal-body{overflow:hidden;padding:0;background:#edf3f8}
+.db-single-shell{height:100%;display:grid;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0}
+.db-single-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;border-bottom:1px solid #dbe5ed;background:#fff}
+.db-single-tab{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;padding:11px;border:1px solid #dce5ed;border-radius:12px;background:#f8fafc;color:#425a70;text-align:left}
+.db-single-tab.active{border-color:#3280bd;background:#eaf4fc;color:#155d95;box-shadow:inset 0 -3px #2879b8}
+.db-single-tab i{font-style:normal}.db-single-tab strong{font-size:12px}.db-single-tab b{font-size:10px}
+.db-single-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:8px;padding:9px 12px;background:#fff}
+.db-single-toolbar input,.db-single-toolbar select{height:37px;border:1px solid #d7e2eb;border-radius:9px;background:#fff;padding:0 11px}
+.db-single-filters{display:flex;gap:7px}.db-single-summary{display:flex;justify-content:space-between;padding:6px 13px;color:#63778b;font-size:10px;background:#f7fafc}
+.db-single-scroll{min-height:0;overflow:auto;padding:0 12px 12px}
+.db-sheet{min-width:900px;border:1px solid #cbd8e4;border-radius:9px;overflow:hidden;background:#fff}
+.db-sheet-head,.db-sheet-row{display:grid;width:100%;align-items:stretch;margin:0;padding:0;border:0;border-bottom:1px solid #dce5ed;background:#fff;text-align:left}
+.db-sheet.items .db-sheet-head,.db-sheet.items .db-sheet-row{grid-template-columns:95px minmax(220px,2fr) 140px 100px 120px 130px}
+.db-sheet.drops .db-sheet-head,.db-sheet.drops .db-sheet-row{grid-template-columns:100px 160px 170px 100px minmax(180px,1fr) 80px 120px}
+.db-sheet.skills .db-sheet-head,.db-sheet.skills .db-sheet-row{grid-template-columns:90px 160px 120px 90px 80px 90px minmax(340px,1fr)}
+.db-sheet-head{position:sticky;z-index:2;top:0;background:linear-gradient(#eaf2f8,#dfeaf3);color:#173b5a}
+.db-sheet-head b,.db-sheet-row span,.db-sheet-row strong{min-width:0;min-height:33px;display:flex;align-items:center;padding:5px 8px;overflow:hidden;border-right:1px solid #d6e1ea;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.db-sheet-row:nth-child(even){background:#f8fbfd}.db-sheet-row:hover,.db-sheet-row.selected{background:#e7f3fd;box-shadow:inset 4px 0 #2878b8}
+.db-inline-detail{display:none;grid-column:1/-1;padding:13px 16px;border-top:2px solid #77acd2;border-bottom:1px solid #cbdce9;background:#f2f8fd;color:#314a60}
+.db-sheet-row.selected+.db-inline-detail{display:block}.db-inline-detail h3{margin:0 0 8px;font-size:15px}.db-inline-detail dl{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:0}.db-inline-detail div{padding:8px;border:1px solid #d5e4ef;border-radius:8px;background:#fff}.db-inline-detail dt{font-size:8px;color:#7c8e9e}.db-inline-detail dd{margin:4px 0 0;font-size:10px;font-weight:800;overflow-wrap:anywhere}
+.db-empty{padding:50px;text-align:center;color:#8493a2}
+.floating-chat-panel{grid-template-rows:auto minmax(0,1fr) auto!important}
+.floating-chat-rooms{display:none!important}
+.floating-chat-drawer{max-height:calc(100svh - 24px)!important}
+.floating-chat-compose{position:relative;z-index:3;flex:none!important}
 @media(max-width:700px){
-  .human-db-browser-scroll{padding:0 8px 10px!important}
-  .human-db-browser-head{min-height:50px!important}
-  .human-db-browser-title p{display:none}
-  .human-db-sheet-head b,.human-db-sheet-row>span,.human-db-sheet-row>strong{min-height:31px;padding:5px 7px;font-size:10px}
+ .db-single-tabs{gap:5px;padding:8px}.db-single-tab{grid-template-columns:1fr;padding:8px;text-align:center}.db-single-tab i,.db-single-tab b{display:none}
+ .db-single-toolbar{grid-template-columns:1fr}.db-single-filters{display:grid;grid-template-columns:1fr 1fr}.db-single-scroll{padding:0 7px 8px}
+ .db-inline-detail dl{grid-template-columns:1fr 1fr}
+ .floating-chat-drawer{top:50%!important;height:calc(100svh - 28px)!important}
 }
 </style>
+<script id="database-single-panel-v9">
+(()=>{
+ const $=id=>document.getElementById(id);
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const num=v=>Number(v)||0;
+ const payload=()=>{try{return JSON.parse($("humanDatabasePayload").textContent)}catch(_){return {items:[],drops:[],skills:[]}}};
+ const cat=v=>({"0":"무기","1":"모자","2":"의상","3":"목걸이","4":"팔찌","5":"반지","6":"시약","7":"무공서","8":"재료"}[String(v)]||"기타");
+ const quality=v=>({"0":"일반","1":"고급","2":"희귀","3":"영웅","4":"전설","5":"신화"}[String(v)]||String(v||"일반"));
+ const job=v=>({"0":"공용","1":"전사","2":"술사","3":"도사","4":"자객"}[String(v)]||String(v||"공용"));
+ const state9={tab:"items",query:"",selected:-1};
+ function fields(row){
+   if(state9.tab==="items")return [["아이템 ID",row[0]],["아이템명",row[1]],["분류",cat(row[5])],["착용 레벨",row[3]||0],["품질",quality(row[7])],["상점 가격",row[11]||"-"],["설명",row[12]||"-"]];
+   if(state9.tab==="drops")return [["드랍 그룹",row[0]||"-"],["몬스터",row[2]||row[1]||"-"],["지역·맵",row[3]||"-"],["아이템 ID",row[4]||"-"],["아이템명",row[5]||"-"],["수량",row[6]||"-"],["확률",row[7]||"-"]];
+   return [["스킬 ID",row[0]],["스킬명",row[1]],["직업",job(row[2])],["필요 레벨",row[3]||0],["유형",row[4]||"-"],["MP 소모",row[6]||0],["설명",row[8]||"-"]];
+ }
+ function draw(){
+   const db=payload(), rows=db[state9.tab]||[], q=state9.query.trim().toLowerCase();
+   const filtered=rows.map((row,index)=>({row,index})).filter(x=>!q||x.row.join(" ").toLowerCase().includes(q));
+   $("dbSingleSummary").innerHTML="<span><b>"+filtered.length.toLocaleString("ko-KR")+"</b>개 표시</span><span>행을 누르면 바로 아래 칸에 상세 내용이 표시됩니다.</span>";
+   const cls=state9.tab;
+   const headers=cls==="items"?["아이템 ID","아이템명","분류","착용 레벨","품질","상점 가격"]:cls==="drops"?["드랍 그룹","몬스터","지역·맵","아이템 ID","아이템명","수량","확률"]:["스킬 ID","스킬명","직업","필요 레벨","유형","MP 소모","설명"];
+   const cells=row=>cls==="items"?[row[0],row[1],cat(row[5]),row[3]||0,quality(row[7]),row[11]||"-"]:cls==="drops"?[row[0]||"-",row[2]||row[1]||"-",row[3]||"-",row[4]||"-",row[5]||"-",row[6]||"-",row[7]||"-"]:[row[0],row[1],job(row[2]),row[3]||0,row[4]||"-",row[6]||0,row[8]||"-"];
+   $("dbSingleScroll").innerHTML=filtered.length?'<div class="db-sheet '+cls+'"><div class="db-sheet-head">'+headers.map(h=>"<b>"+h+"</b>").join("")+'</div>'+filtered.map(x=>'<button class="db-sheet-row '+(x.index===state9.selected?"selected":"")+'" data-db-row="'+x.index+'" type="button">'+cells(x.row).map((v,i)=>(i===1?"<strong>":"<span>")+esc(v)+(i===1?"</strong>":"</span>")).join("")+'</button><section class="db-inline-detail">'+(x.index===state9.selected?'<h3>'+esc(fields(x.row)[1][1]||"상세 정보")+'</h3><dl>'+fields(x.row).map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join("")+"</dl>":"")+"</section>").join("")+"</div>":'<div class="db-empty">검색 결과가 없습니다.</div>';
+   $("dbSingleScroll").querySelectorAll("[data-db-row]").forEach(b=>b.addEventListener("click",()=>{state9.selected=num(b.dataset.dbRow);draw();$("dbSingleScroll").querySelector(".db-sheet-row.selected")?.scrollIntoView({block:"nearest"})}));
+ }
+ window.renderDatabaseModal=function(){
+   const db=payload();
+   $("modalBody").innerHTML='<div class="db-single-shell"><nav class="db-single-tabs"><button class="db-single-tab active" data-db-tab="items"><i>◆</i><strong>아이템</strong><b>'+db.items.length.toLocaleString("ko-KR")+'</b></button><button class="db-single-tab" data-db-tab="drops"><i>⬡</i><strong>드랍 정보</strong><b>'+db.drops.length.toLocaleString("ko-KR")+'</b></button><button class="db-single-tab" data-db-tab="skills"><i>✦</i><strong>직업별 스킬</strong><b>'+db.skills.length.toLocaleString("ko-KR")+'</b></button></nav><div class="db-single-toolbar"><input id="dbSingleSearch" placeholder="이름, ID, 설명 검색"><div class="db-single-filters"></div></div><div class="db-single-summary" id="dbSingleSummary"></div><div class="db-single-scroll" id="dbSingleScroll"></div></div>';
+   state9.selected=-1;state9.query="";
+   $("modalBody").querySelectorAll("[data-db-tab]").forEach(b=>b.addEventListener("click",()=>{state9.tab=b.dataset.dbTab;state9.selected=-1;$("modalBody").querySelectorAll("[data-db-tab]").forEach(x=>x.classList.toggle("active",x===b));draw()}));
+   $("dbSingleSearch").addEventListener("input",e=>{state9.query=e.target.value;state9.selected=-1;draw()});
+   draw();
+ };
+})();
+</script>
+
 </body></html>
