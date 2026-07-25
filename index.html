@@ -1779,7 +1779,7 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
   };
   renderBossModal=function(){
     let favorites=readBossFavorites(),favoriteOnly=false;
-    $('modalBody').innerHTML=`<div class="boss-board-v2"><div class="boss-board-toolbar"><label class="boss-board-search"><span>⌕</span><input class="field" id="bossSearchV2" placeholder="보스 이름이나 등장 위치 검색"></label><button class="soft-btn boss-favorite-filter" id="bossFavoriteFilterV2" type="button" aria-pressed="false"><span>★</span>즐겨찾기만 <b id="bossFavoriteCountV2">0</b></button><div class="boss-board-guide"><span><i></i>출현 중 = 현재 보스 있음</span><span><i></i>리젠 대기 = 남은 시간 확인</span></div><button class="soft-btn" id="bossRefreshV2" type="button">새로고침</button></div><div class="boss-split-layout"><section class="boss-lane boss-lane-live"><header class="boss-lane-head"><i>●</i><div><h3>현재 출현 중</h3><p>이동형·랜덤 위치 출현을 포함해 현재 존재하는 보스입니다.</p></div><b class="boss-lane-count" id="bossLiveCount">0</b></header><div class="boss-lane-list" id="bossLiveList"></div></section><section class="boss-lane boss-lane-wait"><header class="boss-lane-head"><i>◷</i><div><h3>리젠 시간 확인</h3><p>아직 출현하지 않았으며 남은 시간을 확인할 수 있습니다.</p></div><b class="boss-lane-count" id="bossWaitCount">0</b></header><div class="boss-lane-list" id="bossWaitList"></div></section></div></div>`;
+    $('modalBody').innerHTML=`<div class="boss-board-v2"><div class="boss-board-toolbar"><label class="boss-board-search"><span>⌕</span><input class="field" id="bossSearchV2" placeholder="보스 이름이나 등장 위치 검색"></label><button class="soft-btn boss-favorite-filter" id="bossFavoriteFilterV2" type="button" aria-pressed="false"><span>★</span>즐겨찾기만 <b id="bossFavoriteCountV2">0</b></button><div class="boss-board-guide"><span><i></i>출현 중 = 현재 보스 있음</span><span><i></i>리젠 대기 = 남은 시간 확인</span></div><button class="soft-btn" id="bossRefreshV2" type="button">새로고침</button></div><section class="boss-mobile-favorites" id="bossMobileFavoritesV3" hidden><header class="boss-lane-head"><i>★</i><div><h3>내 즐겨찾기</h3><p>저장한 보스를 가장 먼저 확인하세요.</p></div><b class="boss-lane-count" id="bossMobileFavoriteCountV3">0</b></header><div class="boss-lane-list" id="bossMobileFavoriteListV3"></div></section><div class="boss-split-layout"><section class="boss-lane boss-lane-live"><header class="boss-lane-head"><i>●</i><div><h3>현재 출현 중</h3><p>이동형·랜덤 위치 출현을 포함해 현재 존재하는 보스입니다.</p></div><b class="boss-lane-count" id="bossLiveCount">0</b></header><div class="boss-lane-list" id="bossLiveList"></div></section><section class="boss-lane boss-lane-wait"><header class="boss-lane-head"><i>◷</i><div><h3>리젠 시간 확인</h3><p>아직 출현하지 않았으며 남은 시간을 확인할 수 있습니다.</p></div><b class="boss-lane-count" id="bossWaitCount">0</b></header><div class="boss-lane-list" id="bossWaitList"></div></section></div></div>`;
     const favoriteButton=record=>{const key=bossFavoriteId(record),active=favorites.has(key);return`<button class="boss-v2-favorite ${active?'active':''}" data-boss-favorite="${encodeURIComponent(key)}" type="button" aria-label="${active?'즐겨찾기 해제':'즐겨찾기 추가'}" aria-pressed="${active}" title="${active?'즐겨찾기 해제':'즐겨찾기 추가'}">${active?'★':'☆'}</button>`};
     const liveCard=record=>{const favorite=favorites.has(bossFavoriteId(record));return`<article class="boss-v2-card live ${favorite?'favorite':''}"><header><h4>${esc(bossName(record))}</h4>${favoriteButton(record)}<span>출현 중</span></header><p class="boss-v2-place"><i>⌖</i><span>${esc(bossPlace(record))}</span></p><footer><span class="boss-v2-method">${esc(bossSpawnMethod(record))}</span><strong>현재 보스 있음</strong></footer></article>`};
     const waitCard=record=>{const end=remainingEnd(record),favorite=favorites.has(bossFavoriteId(record));return`<article class="boss-v2-card wait ${favorite?'favorite':''}"><header><h4>${esc(bossName(record))}</h4>${favoriteButton(record)}<span>리젠 대기</span></header><p class="boss-v2-place"><i>⌖</i><span>${esc(bossPlace(record))}</span></p><footer><span>예상 남은 시간</span><strong class="time-hot" data-end="${end}">${bossRemainText(end)||'시간 확인 중'}</strong></footer></article>`};
@@ -1789,10 +1789,18 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
       const favoriteSort=(a,b)=>favorites.has(bossFavoriteId(a))===favorites.has(bossFavoriteId(b))?0:favorites.has(bossFavoriteId(a))?-1:1;
       const live=state.boss.filter(record=>bossAlive(record)&&matches(record)).sort((a,b)=>favoriteSort(a,b)||bossName(a).localeCompare(bossName(b),'ko'));
       const waiting=state.boss.filter(record=>!bossAlive(record)&&matches(record)).sort((a,b)=>favoriteSort(a,b)||(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15));
+      const mobileFavorites=state.boss.filter(record=>favorites.has(bossFavoriteId(record))&&matches(record)).sort((a,b)=>{
+        if(bossAlive(a)!==bossAlive(b))return bossAlive(a)?-1:1;
+        return bossAlive(a)?bossName(a).localeCompare(bossName(b),'ko'):(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15);
+      });
       const savedCount=state.boss.filter(record=>favorites.has(bossFavoriteId(record))).length;
       $('bossLiveCount').textContent=live.length.toLocaleString('ko-KR');
       $('bossWaitCount').textContent=waiting.length.toLocaleString('ko-KR');
       $('bossFavoriteCountV2').textContent=savedCount.toLocaleString('ko-KR');
+      $('bossMobileFavoritesV3').hidden=!mobileFavorites.length&&!favoriteOnly;
+      $('modalBody').querySelector('.boss-board-v2').classList.toggle('favorite-only',favoriteOnly);
+      $('bossMobileFavoriteCountV3').textContent=mobileFavorites.length.toLocaleString('ko-KR');
+      $('bossMobileFavoriteListV3').innerHTML=mobileFavorites.length?mobileFavorites.map(record=>bossAlive(record)?liveCard(record):waitCard(record)).join(''):'<div class="boss-lane-empty"><b>저장한 즐겨찾기가 없습니다</b><span>별표를 눌러 자주 찾는 보스를 추가하세요.</span></div>';
       $('bossFavoriteFilterV2').classList.toggle('active',favoriteOnly);
       $('bossFavoriteFilterV2').setAttribute('aria-pressed',String(favoriteOnly));
       $('bossLiveList').innerHTML=live.length?live.map(liveCard).join(''):'<div class="boss-lane-empty"><b>현재 출현 중인 보스가 없습니다</b><span>새 데이터가 확인되면 여기에 표시됩니다.</span></div>';
@@ -4610,9 +4618,20 @@ body{
   const preservePagePosition=()=>{
     if(isMobileChat())preservedPageScrollY=window.scrollY;
   };
+  let latestScrollTimers=[];
+  const scrollMessagesToLatest=()=>{
+    const pin=()=>{messages.scrollTop=Math.max(0,messages.scrollHeight-messages.clientHeight)};
+    latestScrollTimers.forEach(timer=>clearTimeout(timer));
+    pin();
+    requestAnimationFrame(()=>{pin();requestAnimationFrame(pin)});
+    latestScrollTimers=[setTimeout(pin,120),setTimeout(pin,360)];
+  };
   const restorePagePosition=()=>{
     if(!isMobileChat()||!root.classList.contains('open'))return;
-    requestAnimationFrame(()=>window.scrollTo(0,preservedPageScrollY));
+    requestAnimationFrame(()=>{
+      window.scrollTo(0,preservedPageScrollY);
+      scrollMessagesToLatest();
+    });
   };
   const setOpen=open=>{
     if(open)preservePagePosition();
@@ -4655,7 +4674,7 @@ body{
       renderChatHome();
     }));
     messages.querySelectorAll('[data-floating-chat-delete]').forEach(button=>button.addEventListener('click',()=>deleteChatMessage(button.dataset.floatingChatDelete)));
-    messages.scrollTop=messages.scrollHeight;
+    scrollMessagesToLatest();
   };
   const send=async()=>{
     if(await sendChatMessage(state.chatRoom,name.value,text.value)){
@@ -5465,6 +5484,27 @@ document.querySelectorAll('.side-rail').forEach(rail=>rail.remove());
 @media (max-height:620px){
   .floating-chat-toggle{top:28px!important}
   .floating-schedule-toggle{top:108px!important}
+}
+.boss-mobile-favorites{display:none}
+@media (max-width:760px){
+  .boss-board-v2{display:flex;flex-direction:column}
+  .boss-mobile-favorites:not([hidden]){
+    display:block;
+    margin-bottom:10px;
+    overflow:hidden;
+    border:1px solid #e8cf83;
+    border-radius:15px;
+    background:linear-gradient(145deg,#fffdf5,#fff);
+    box-shadow:0 9px 24px rgba(133,96,17,.1);
+  }
+  .boss-mobile-favorites .boss-lane-head{
+    border-bottom-color:#f0dfae!important;
+    background:linear-gradient(135deg,#fff8df,#fffdf5)!important;
+  }
+  .boss-mobile-favorites .boss-lane-head>i{color:#d39508!important;background:#fff0b8!important}
+  .boss-mobile-favorites .boss-lane-count{color:#8d6208!important;background:#fff1bd!important}
+  .boss-split-layout .boss-v2-card.favorite{display:none!important}
+  .boss-board-v2.favorite-only .boss-split-layout{display:none!important}
 }
 </style>
 </body></html>
