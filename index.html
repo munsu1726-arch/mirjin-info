@@ -6494,4 +6494,57 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   .wuxia-header-info small{overflow:hidden;text-overflow:ellipsis;margin-top:4px;font-size:7.5px}
 }
 </style>
+<style id="compact-ink-header-v19">
+/* 상단은 미르: 진 로고의 아래 기준선까지만 남기고 위쪽 여백을 잘라낸다. */
+.site-header{
+  height:126px!important;
+  background-position:center 66%!important;
+}
+.site-header .brand{
+  top:50%!important;
+}
+.site-header .brand .mirjin-image-v4{
+  width:270px!important;
+  height:96px!important;
+}
+.wuxia-header-info{
+  min-width:224px;
+  padding:11px 14px;
+}
+.wuxia-header-left{left:34px}
+.wuxia-header-right{right:34px}
+@media(max-width:1050px) and (min-width:701px){
+  .site-header{height:116px!important}
+  .site-header .brand .mirjin-image-v4{width:230px!important;height:84px!important}
+  .wuxia-header-info{min-width:185px;padding:9px 10px}
+  .wuxia-header-left{left:15px}
+  .wuxia-header-right{right:15px}
+}
+@media(max-width:700px){
+  .site-header{
+    height:122px!important;
+    background-position:center 62%!important;
+  }
+  .site-header .brand{
+    top:54%!important;
+    transform:translate(calc(-50% + 12px),-50%)!important;
+  }
+  .site-header .brand .mirjin-image-v4{
+    width:232px!important;
+    max-width:72vw!important;
+    height:92px!important;
+  }
+  /* 좁은 화면에서는 안내 카드가 로고 아래를 늘리지 않게 제거한다. */
+  .wuxia-header-info{display:none!important}
+  /* 줄어든 상단 바로 아래부터 빠른메뉴가 시작하며 본문 중앙을 덮지 않는다. */
+  .unified-service-rail{
+    top:128px!important;
+    gap:6px!important;
+    max-height:calc(100dvh - 142px)!important;
+  }
+  .unified-service-button{
+    min-height:58px!important;
+  }
+}
+</style>
 </body></html>
