@@ -6668,58 +6668,123 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
 .site-header .header-inner::after{
   content:"";
   position:absolute;
-  z-index:0;
-  left:-28%;
-  width:156%;
+  z-index:1;
+  left:-42%;
+  width:184%;
   pointer-events:none;
-  opacity:.7;
-  filter:blur(7px);
-  mix-blend-mode:screen;
+  border-radius:50%;
+  filter:blur(12px);
+  mix-blend-mode:multiply;
   will-change:transform,opacity;
 }
 .site-header .header-inner::before{
-  top:18%;
-  height:66%;
+  top:8%;
+  height:78%;
+  opacity:.58;
   background:
-    radial-gradient(ellipse at 8% 55%,rgba(255,255,255,.96) 0 9%,transparent 27%),
-    radial-gradient(ellipse at 32% 42%,rgba(222,232,231,.88) 0 11%,transparent 31%),
-    radial-gradient(ellipse at 59% 62%,rgba(255,255,255,.94) 0 10%,transparent 29%),
-    radial-gradient(ellipse at 86% 40%,rgba(216,228,227,.84) 0 10%,transparent 30%);
-  animation:mirjinMistDriftA 15s linear infinite;
+    radial-gradient(ellipse at 8% 58%,rgba(102,124,128,.28) 0 8%,rgba(183,198,198,.24) 15%,transparent 31%),
+    radial-gradient(ellipse at 31% 38%,rgba(122,142,145,.25) 0 10%,rgba(216,224,222,.30) 19%,transparent 34%),
+    radial-gradient(ellipse at 58% 66%,rgba(94,119,124,.24) 0 9%,rgba(207,218,216,.30) 18%,transparent 33%),
+    radial-gradient(ellipse at 84% 39%,rgba(112,134,139,.27) 0 9%,rgba(220,226,224,.28) 18%,transparent 34%);
+  animation:mirjinMistDriftA 13s ease-in-out infinite alternate;
 }
 .site-header .header-inner::after{
-  bottom:-5%;
-  height:58%;
-  opacity:.54;
+  bottom:-16%;
+  height:76%;
+  opacity:.46;
   background:
-    radial-gradient(ellipse at 17% 62%,rgba(203,219,219,.90) 0 11%,transparent 31%),
-    radial-gradient(ellipse at 49% 45%,rgba(255,255,255,.96) 0 14%,transparent 35%),
-    radial-gradient(ellipse at 80% 64%,rgba(199,216,220,.88) 0 11%,transparent 32%);
-  animation:mirjinMistDriftB 21s linear infinite;
+    radial-gradient(ellipse at 14% 58%,rgba(77,104,111,.25) 0 10%,rgba(185,201,201,.26) 19%,transparent 36%),
+    radial-gradient(ellipse at 47% 42%,rgba(122,145,148,.24) 0 13%,rgba(218,226,224,.31) 22%,transparent 39%),
+    radial-gradient(ellipse at 80% 63%,rgba(82,108,115,.27) 0 10%,rgba(190,205,205,.28) 19%,transparent 36%);
+  animation:mirjinMistDriftB 18s ease-in-out infinite alternate;
 }
 .site-header .brand,
-.site-header .wuxia-header-info{z-index:3!important}
+.site-header .wuxia-header-info{z-index:5!important}
 @keyframes mirjinMistDriftA{
-  0%{transform:translate3d(-13%,2px,0) scale(1.02);opacity:.50}
-  45%{opacity:.78}
-  100%{transform:translate3d(13%,-4px,0) scale(1.08);opacity:.56}
+  0%{transform:translate3d(-18%,3px,0) scale(1.00);opacity:.38}
+  45%{opacity:.68}
+  100%{transform:translate3d(18%,-5px,0) scale(1.10);opacity:.54}
 }
 @keyframes mirjinMistDriftB{
-  0%{transform:translate3d(14%,0,0) scale(1.08);opacity:.40}
-  55%{opacity:.64}
-  100%{transform:translate3d(-14%,-3px,0) scale(1.01);opacity:.48}
+  0%{transform:translate3d(20%,0,0) scale(1.11);opacity:.32}
+  55%{opacity:.57}
+  100%{transform:translate3d(-20%,-4px,0) scale(1.00);opacity:.49}
 }
 @media(max-width:700px){
   .site-header .header-inner::before{
-    top:30%;
-    height:52%;
-    opacity:.42;
-    animation-duration:16s;
+    top:15%;
+    height:68%;
+    opacity:.62;
+    filter:blur(9px);
+    animation-duration:12s;
   }
   .site-header .header-inner::after{
-    bottom:0;
-    height:42%;
-    animation-duration:21s;
+    bottom:-12%;
+    height:64%;
+    opacity:.54;
+    filter:blur(10px);
+    animation-duration:16s;
+  }
+}
+</style>
+<style id="floating-chat-compose-fixed-v23">
+/* 메시지만 스크롤하고 작성칸은 PC·모바일 모두 하단에 항상 고정 */
+.floating-chat-drawer{
+  height:min(630px,calc(100dvh - 24px))!important;
+  max-height:calc(100dvh - 24px)!important;
+}
+.floating-chat-panel{
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+.floating-chat-head{flex:0 0 auto!important}
+.floating-chat-rooms{
+  display:none!important;
+  flex:0 0 0!important;
+  min-height:0!important;
+  height:0!important;
+  overflow:hidden!important;
+}
+.floating-chat-messages{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+.floating-chat-compose{
+  position:relative!important;
+  z-index:20!important;
+  flex:0 0 66px!important;
+  width:100%!important;
+  min-height:66px!important;
+  display:grid!important;
+  grid-template-columns:82px minmax(0,1fr) 62px!important;
+  gap:7px!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:visible!important;
+  background:#fff!important;
+}
+.floating-chat-compose input,
+.floating-chat-compose button{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-width:0!important;
+}
+@media(max-width:700px){
+  .floating-chat-drawer{
+    height:min(620px,calc(100dvh - 14px))!important;
+    max-height:calc(100dvh - 14px)!important;
+  }
+  .floating-chat-compose{
+    flex-basis:62px!important;
+    min-height:62px!important;
+    grid-template-columns:72px minmax(0,1fr) 58px!important;
+    gap:5px!important;
   }
 }
 </style>
