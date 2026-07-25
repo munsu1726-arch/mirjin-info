@@ -5872,14 +5872,25 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     rail.innerHTML=`
       <button class="unified-service-button chat" type="button" data-unified="chat"><i>💬</i><span id="unifiedChatCount">0</span></button>
       <button class="unified-service-button schedule" type="button" data-unified="schedule"><i>📅</i><span id="unifiedScheduleCount">0</span></button>
-      <button class="unified-service-button" type="button" data-unified="boss"><i>👹</i><span>BOSS</span></button>
-      <button class="unified-service-button" type="button" data-unified="market"><i>⚒</i><span>경매장</span></button>
-      <button class="unified-service-button" type="button" data-unified="database"><i>▦</i><span>통합 DB</span></button>`;
+      <button class="unified-service-button boss" type="button" data-unified="boss"><i>👹</i><span>BOSS</span></button>
+      <button class="unified-service-button market" type="button" data-unified="market"><i>⚒</i><span>경매장</span></button>
+      <button class="unified-service-button database" type="button" data-unified="database"><i>▦</i><span>통합 DB</span></button>`;
     document.body.appendChild(rail);
+    let railAutoCloseTimer=0;
     const setRailOpen=open=>{
+      clearTimeout(railAutoCloseTimer);
       rail.classList.toggle('expanded',open);
       rail.setAttribute('aria-expanded',String(open));
+      if(open){
+        railAutoCloseTimer=setTimeout(()=>setRailOpen(false),3000);
+      }
     };
+    rail.addEventListener('pointerdown',()=>{
+      if(rail.classList.contains('expanded')){
+        clearTimeout(railAutoCloseTimer);
+        railAutoCloseTimer=setTimeout(()=>setRailOpen(false),3000);
+      }
+    });
     rail.querySelectorAll('[data-unified]').forEach(button=>button.addEventListener('click',event=>{
       event.stopPropagation();
       if(!rail.classList.contains('expanded')){
@@ -6226,7 +6237,8 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
   .site-header .brand{
     justify-content:center!important;
-    transform:translateX(12px)!important;
+    /* 기존 중앙 기준(-50%, -50%)을 유지한 채 오른쪽으로만 12px 보정한다. */
+    transform:translate(calc(-50% + 12px),-50%)!important;
   }
   .page-grid,.center-stage,.showcase,.top-grid,
   .top-grid>.panel,.top-grid>.feature-card{
@@ -6259,6 +6271,21 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   }
   .unified-service-button i{font-size:18px!important}
   .unified-service-button span{font-size:7px!important}
+  .unified-service-button.chat{
+    background:linear-gradient(155deg,#16a37e,#08715c)!important;
+  }
+  .unified-service-button.schedule{
+    background:linear-gradient(155deg,#42618f,#263b5e)!important;
+  }
+  .unified-service-button.boss{
+    background:linear-gradient(155deg,#b94646,#712626)!important;
+  }
+  .unified-service-button.market{
+    background:linear-gradient(155deg,#c08a28,#765113)!important;
+  }
+  .unified-service-button.database{
+    background:linear-gradient(155deg,#5d63b8,#34396f)!important;
+  }
   .boss-table-panel .panel-body{
     width:100%!important;
     padding-left:10px!important;
