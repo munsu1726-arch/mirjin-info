@@ -1025,7 +1025,7 @@ function skeletonTable(){return `<div>${Array.from({length:6},()=>`<div class="s
 
 function shortStamp(v){if(typeof v==='string'&&/^\d{4}-\d{2}-\d{2}/.test(v))return v.slice(5,10).replace('-','.')+' 00:00';const d=new Date(num(v)||Date.now()),z=n=>String(n).padStart(2,'0');return`${z(d.getMonth()+1)}.${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`}
 function renderBossPreview(){const rows=[...state.boss].sort((a,b)=>(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15)).slice(0,8);$('metricBoss').textContent=state.boss.filter(bossAlive).length.toLocaleString('ko-KR');$('metricBossSub').textContent=`전체 ${state.boss.length}마리`;if(!rows.length){$('bossPreview').innerHTML='<div class="empty">표시할 BOSS 데이터가 없습니다.</div>';return}$('bossPreview').innerHTML=`<table class="data-table"><thead><tr><th>보스 이름</th><th>등장 위치</th><th>상태</th><th>남은 시간</th></tr></thead><tbody>${rows.map(r=>{const s=bossStatus(r),cls=bossAlive(r)?(/랜덤/.test(s)?'state-random':/이동/.test(s)?'state-move':'state-alive'):'state-wait',end=remainingEnd(r);return`<tr><td><strong>${esc(bossName(r))}</strong></td><td>${esc(bossPlace(r))}</td><td><span class="state-badge ${cls}">${esc(s)}</span></td><td class="${bossAlive(r)?'time-hot':''}" data-end="${end}" data-hide-zero="true">${bossRemainText(end)}</td></tr>`}).join('')}</tbody></table>`}
-function renderMarketPreview(){const allRows=activeMarket(state.market).sort((a,b)=>(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15)),rows=allRows.filter(r=>itemName(r)!=='이름 확인 중'),pending=allRows.length-rows.length;$('metricMarket').textContent=allRows.length.toLocaleString('ko-KR');$('metricMarketSub').textContent=marketHealth(state.marketStatus).label;$('metricPending').textContent=pending.toLocaleString('ko-KR');if(!rows.length){$('marketPreview').innerHTML='<div class="empty">이름이 확인된 경매장 매물이 없습니다.</div>';return}$('marketPreview').innerHTML=`<table class="data-table"><thead><tr><th>아이템 이름</th><th>판매자</th><th>최저가</th><th>남은 시간</th></tr></thead><tbody>${rows.slice(0,8).map(r=>`<tr><td><strong>${esc(itemName(r))}</strong></td><td>${esc(r.seller||r.sellerName||itemCategory(r)||'확인 중')}</td><td>${esc(fmtPrice(itemPrice(r)))}</td><td class="time-hot" data-end="${remainingEnd(r)}">${remainText(remainingEnd(r))}</td></tr>`).join('')}</tbody></table>`}
+function renderMarketPreview(){const allRows=activeMarket(state.market).sort((a,b)=>(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15)),rows=allRows.slice(0,8),pending=allRows.filter(r=>itemName(r)==='이름 확인 중').length;$('metricMarket').textContent=allRows.length.toLocaleString('ko-KR');$('metricMarketSub').textContent=marketHealth(state.marketStatus).label;$('metricPending').textContent=pending.toLocaleString('ko-KR');if(!rows.length){$('marketPreview').innerHTML='<div class="empty">표시할 경매장 매물이 없습니다.</div>';return}$('marketPreview').innerHTML=`<table class="data-table"><thead><tr><th>아이템 이름</th><th>판매자</th><th>최저가</th><th>남은 시간</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(itemName(r)||'이름 확인 중')}</strong></td><td>${esc(r.seller||r.sellerName||itemCategory(r)||'확인 중')}</td><td>${esc(fmtPrice(itemPrice(r)))}</td><td class="time-hot" data-end="${remainingEnd(r)}">${remainText(remainingEnd(r))}</td></tr>`).join('')}</tbody></table>`}
 function renderSimplePreview(target,rows,kind){const el=$(target);if(!rows.length){el.innerHTML='<div class="empty">표시할 데이터가 없습니다.</div>';return}if(kind==='gm'){el.innerHTML=rows.slice(0,8).map(r=>`<div class="list-row"><b>${esc(r.title)}</b><em>${esc(r.writer||'GM패왕')}</em><time>${esc(r.displayDate||shortStamp(r.timestamp))}</time></div>`).join('');return}if(kind==='info'){el.innerHTML=rows.slice(0,8).map((r,i)=>`<div class="list-row"><b>${esc((r.title||'정보 게시글').startsWith('[')?r.title:`[${r.category||'정보'}] ${r.title}`)}</b><em>운영자</em><time>${shortStamp(r.lastSeen||r.updatedAt||Date.now()).slice(0,5)}</time><span>${num(r.views)||[123,256,342,178,289,401,267,193][i%8]}</span></div>`).join('');return}if(kind==='free'){el.innerHTML=rows.slice(0,8).map((r,i)=>`<div class="list-row"><b>[${esc(r.type||'잡담')}] ${esc(r.title)}</b><em>${esc(r.name||'미르유저')}</em><time>${shortStamp(r.time).slice(0,5)}</time><span>${num(r.views)||[120,85,98,76,65,112,90,54][i%8]}</span></div>`).join('');return}el.innerHTML=rows.slice().reverse().slice(0,5).map((r,i)=>`<div class="list-row"><span class="avatar-mini">${esc((r.nickname||'?').slice(0,1))}</span><b>${esc(r.nickname)} <time>${shortStamp(r.time).slice(6)}</time></b><small>${esc(r.text)}</small></div>`).join('')}
 function renderHome(){renderBossPreview();renderMarketPreview();renderSimplePreview('gmPreview',state.gm,'gm');renderInfoHome();renderFreeHome();renderChatHome();renderSchedule();renderAlertsPreview();$('headerLiveText').textContent=`마지막 갱신 ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`}
 function makeAlerts(){const alerts=[];state.boss.filter(bossAlive).forEach(r=>alerts.push({type:'boss',icon:'👹',title:`${bossName(r)} ${bossStatus(r)}`,text:bossPlace(r),time:ts(r.updatedAt||r.changedAt||r.timestamp)||Date.now()}));visibleMarket(state.market).slice().sort((a,b)=>ts(b.registeredAt||b.createdAt||b.updatedAt||b.timestamp)-ts(a.registeredAt||a.createdAt||a.updatedAt||a.timestamp)).slice(0,20).forEach(r=>alerts.push({type:'market',icon:'⚒️',title:`신규 매물 · ${itemName(r)}`,text:`${fmtPrice(itemPrice(r))} · 경매장 ${worker(r)}`,time:ts(r.registeredAt||r.createdAt||r.updatedAt||r.timestamp)||0}));state.gm.slice(0,10).forEach(r=>alerts.push({type:'gm',icon:'♛',title:r.title,text:r.writer,time:ts(r.timestamp)||0}));const now=Date.now(),limit=now+7*86400000;state.schedule.filter(x=>{const t=scheduleStartMs(x);return t>=now-3600000&&t<=limit}).forEach(x=>alerts.push({type:'schedule',icon:'📅',title:`스케줄 · ${x.title}`,text:`${x.dateKey} ${x.time||'시간 미정'}`,time:scheduleStartMs(x)}));state.alerts=alerts.sort((a,b)=>b.time-a.time).slice(0,60);$('metricAlerts').textContent=state.alerts.length.toLocaleString('ko-KR')}
@@ -1209,8 +1209,8 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     $('bossPreview').innerHTML=`<table class="data-table"><thead><tr><th>보스 이름</th><th>등장 위치</th><th>상태</th><th>남은 시간</th></tr></thead><tbody>${rows.map(r=>{const s=bossStatus(r),cls=bossAlive(r)?(/랜덤/.test(s)?'state-random':/이동/.test(s)?'state-move':'state-alive'):'state-wait',end=remainingEnd(r);return`<tr><td><strong>${esc(bossName(r))}</strong></td><td>${esc(bossPlace(r))}</td><td><span class="state-badge ${cls}">${esc(s)}</span></td><td class="${bossAlive(r)?'time-hot':''}" data-end="${end}" data-hide-zero="true">${bossRemainText(end)}</td></tr>`}).join('')}</tbody></table>`;
   };
   renderMarketPreview=function(){
-    const all=activeMarket(state.market).sort((a,b)=>(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15)),rows=all.filter(r=>itemName(r)!=='이름 확인 중').slice(0,8),pending=all.length-rows.length;$('metricMarket').textContent=all.length.toLocaleString('ko-KR');$('metricMarketSub').textContent=marketHealth(state.marketStatus).label;$('metricPending').textContent=pending.toLocaleString('ko-KR');
-    if(!rows.length){$('marketPreview').innerHTML='<div class="empty">이름이 확인된 경매장 매물이 없습니다.</div>';return}
+    const all=activeMarket(state.market).sort((a,b)=>(remainingEnd(a)||9e15)-(remainingEnd(b)||9e15)),rows=all.slice(0,8),pending=all.filter(r=>itemName(r)==='이름 확인 중').length;$('metricMarket').textContent=all.length.toLocaleString('ko-KR');$('metricMarketSub').textContent=marketHealth(state.marketStatus).label;$('metricPending').textContent=pending.toLocaleString('ko-KR');
+    if(!rows.length){$('marketPreview').innerHTML='<div class="empty">표시할 경매장 매물이 없습니다.</div>';return}
     $('marketPreview').innerHTML=`<table class="data-table"><thead><tr><th>아이템 이름</th><th>판매자</th><th>최저가</th><th>남은 시간</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(itemName(r))}</strong></td><td>${esc(r.seller||r.sellerName||itemCategory(r)||'확인 중')}</td><td>${esc(fmtPrice(itemPrice(r)))}</td><td class="time-hot" data-end="${remainingEnd(r)}">${remainText(remainingEnd(r))}</td></tr>`).join('')}</tbody></table>`;
   };
   document.getElementById('openWeeklySchedule')?.addEventListener('click',openWeeklySchedule);
@@ -5915,13 +5915,6 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
         document.getElementById('floatingChatDrawer')?.classList.remove('open');
         document.getElementById('floatingScheduleDrawer')?.classList.remove('open');
         openService(service);
-        if(service==='database'){
-          setTimeout(()=>document.querySelector('[data-db-launch="items"]')?.click(),0);
-          [0,30].forEach(delay=>setTimeout(()=>{
-            const active=document.activeElement;
-            if(active?.matches?.('#humanDbV3Search,.human-db-browser-search input'))active.blur();
-          },delay));
-        }
       }
     }));
     const syncCounts=()=>{
@@ -6301,6 +6294,62 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     overflow:hidden!important;
     text-overflow:ellipsis!important;
     white-space:nowrap!important;
+  }
+  .market-table-panel{min-height:470px!important}
+  .market-table-panel .panel-body{
+    min-height:405px!important;
+    overflow:auto!important;
+  }
+  #marketPreview{min-height:342px!important}
+  /* 빠른메뉴 채팅: 메시지만 스크롤하고 작성칸은 항상 화면 하단에 고정한다. */
+  .floating-chat-drawer{
+    top:8px!important;
+    right:0!important;
+    bottom:auto!important;
+    width:calc(100vw - 18px)!important;
+    height:calc(100dvh - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+    transform:translateX(100%)!important;
+  }
+  .floating-chat-drawer.open{
+    transform:translateX(0)!important;
+  }
+  .floating-chat-panel{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  .floating-chat-head{flex:0 0 auto!important}
+  .floating-chat-rooms{display:none!important}
+  .floating-chat-messages{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+  }
+  .floating-chat-compose{
+    position:relative!important;
+    z-index:3!important;
+    flex:0 0 auto!important;
+    display:grid!important;
+    grid-template-columns:72px minmax(0,1fr) 58px!important;
+    width:100%!important;
+    min-height:62px!important;
+    padding:10px!important;
+    padding-bottom:max(10px,env(safe-area-inset-bottom))!important;
+    visibility:visible!important;
+    opacity:1!important;
+    background:#fff!important;
+  }
+  .floating-chat-compose input,
+  .floating-chat-send{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
   }
 }
 </style>
