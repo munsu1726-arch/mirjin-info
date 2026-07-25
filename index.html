@@ -959,7 +959,33 @@ function openImageViewer(src,title='경매장 상세 이미지'){if(!src)return;
 function closeImageViewer(){const v=$('imageViewer');v.classList.remove('open');v.setAttribute('aria-hidden','true');$('imageViewerImg').src=''}
 function openGuildContact(){openService('chat')}
 
-function fetchJson(url,timeout=9000,options={}){const c=new AbortController(),timer=setTimeout(()=>c.abort(),timeout);return fetch(url,{cache:'no-store',...options,signal:c.signal}).then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json()}).finally(()=>clearTimeout(timer))}
+const DATA_FALLBACKS=[
+  ['mirBossMonitor/current.json','data/boss-current.data'],
+  ['mirBossMonitor/stats.json','data/boss-stats.data'],
+  ['mirAuctionMonitor/current.json','data/auction-current.data'],
+  ['mirAuctionMonitor/status.json','data/auction-status.data'],
+  ['mirAuctionMonitor/currentMeta.json','data/auction-meta.data'],
+  ['mirAuctionAdminOverrides.json','data/auction-overrides.data'],
+  ['mirjinCommunityPosts.json','data/community.data'],
+  ['mirChat/messages.json','data/chat.data'],
+  ['mirjinSchedule.json','data/schedule.data'],
+  ['gm-paewang-posts.json','data/gm-posts.data']
+];
+async function fetchJson(url,timeout=9000,options={}){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
+  try{
+    const response=await fetch(url,{cache:'no-store',...options,signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  }catch(error){
+    const method=String(options.method||'GET').toUpperCase();
+    const fallback=method==='GET'?DATA_FALLBACKS.find(([needle])=>String(url).includes(needle))?.[1]:'';
+    if(!fallback)throw error;
+    const response=await fetch(`${fallback}?v=20260726-31`,{cache:'no-store'});
+    if(!response.ok)throw error;
+    return await response.json();
+  }finally{clearTimeout(timer)}
+}
 function deepRows(value,kind='generic'){
   const out=[],seen=new Set();
   const looksListing=r=>r&&typeof r==='object'&&!Array.isArray(r)&&['listingId','itemName','manualItemName','detailItemName','priceValue','listingPriceValue','remainingSeconds','attributes','detailOptions'].some(k=>r[k]!==undefined);
@@ -6735,70 +6761,6 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     text-align:right!important;
     font-size:8.5px!important;
     white-space:nowrap!important;
-  }
-}
-</style>
-<style id="animated-ink-mist-v20">
-.site-header .header-inner::before,
-.site-header .header-inner::after{
-  content:"";
-  position:absolute;
-  z-index:1;
-  left:-42%;
-  width:184%;
-  pointer-events:none;
-  border-radius:50%;
-  filter:blur(16px);
-  mix-blend-mode:normal;
-  will-change:transform,opacity;
-}
-.site-header .header-inner::before{
-  top:-4%;
-  height:92%;
-  opacity:.92;
-  background:
-    radial-gradient(ellipse at 8% 58%,rgba(83,108,114,.48) 0 8%,rgba(224,231,229,.64) 17%,transparent 34%),
-    radial-gradient(ellipse at 31% 38%,rgba(111,134,139,.43) 0 10%,rgba(255,255,255,.74) 21%,transparent 38%),
-    radial-gradient(ellipse at 58% 66%,rgba(74,102,109,.44) 0 9%,rgba(238,243,241,.72) 20%,transparent 37%),
-    radial-gradient(ellipse at 84% 39%,rgba(102,128,134,.46) 0 9%,rgba(255,255,255,.70) 20%,transparent 38%);
-  animation:mirjinMistDriftA 10s linear infinite alternate!important;
-}
-.site-header .header-inner::after{
-  bottom:-22%;
-  height:96%;
-  opacity:.82;
-  background:
-    radial-gradient(ellipse at 14% 58%,rgba(66,96,104,.46) 0 10%,rgba(242,246,244,.70) 21%,transparent 39%),
-    radial-gradient(ellipse at 47% 42%,rgba(105,132,137,.42) 0 13%,rgba(255,255,255,.76) 24%,transparent 42%),
-    radial-gradient(ellipse at 80% 63%,rgba(70,101,109,.48) 0 10%,rgba(235,241,239,.72) 21%,transparent 39%);
-  animation:mirjinMistDriftB 14s linear infinite alternate!important;
-}
-.site-header .brand,
-.site-header .wuxia-header-info{z-index:5!important}
-@keyframes mirjinMistDriftA{
-  0%{transform:translate3d(-22%,3px,0) scale(1.00);opacity:.66}
-  45%{opacity:.94}
-  100%{transform:translate3d(22%,-5px,0) scale(1.12);opacity:.78}
-}
-@keyframes mirjinMistDriftB{
-  0%{transform:translate3d(24%,0,0) scale(1.12);opacity:.58}
-  55%{opacity:.86}
-  100%{transform:translate3d(-24%,-4px,0) scale(1.00);opacity:.72}
-}
-@media(max-width:700px){
-  .site-header .header-inner::before{
-    top:2%;
-    height:82%;
-    opacity:.92;
-    filter:blur(11px);
-    animation-duration:9s;
-  }
-  .site-header .header-inner::after{
-    bottom:-18%;
-    height:84%;
-    opacity:.84;
-    filter:blur(12px);
-    animation-duration:12s;
   }
 }
 </style>
