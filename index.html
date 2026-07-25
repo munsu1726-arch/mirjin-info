@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 
-<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#eef4fb" name="theme-color"/><meta content="보스, 경매장, 게시판, 채팅과 스케줄을 한곳에서 확인하는 미르의 전설: 진 정보 허브" name="description"/><title>미르진 | 미르의 전설: 진 정보 허브</title><style>
+<html class="mirjin-initializing" lang="ko"><head><meta charset="utf-8"/><meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#eef4fb" name="theme-color"/><meta content="보스, 경매장, 게시판, 채팅과 스케줄을 한곳에서 확인하는 미르의 전설: 진 정보 허브" name="description"/><title>미르진 | 미르의 전설: 진 정보 허브</title><style>
 :root{
   --bg:#edf5fc;--panel:#fff;--line:#e1e8ef;--text:#101820;--muted:#7a8795;
   --blue:#145eb5;--green:#079358;--purple:#6a4fd6;--orange:#d96817;--red:#d92127;
   --shadow:0 5px 16px rgba(31,65,98,.08);--radius:10px;
 }
 /* Critical cleanup: never flash retired header logos on refresh. */
+.mirjin-initializing body{visibility:hidden!important}
 .site-header .brand>img,
 .site-header .brand .brand-lockup,
-.site-header .brand .brand-lockup-v2{display:none!important}
+.site-header .brand .brand-lockup-v2,
+.site-header .brand .ara-brand-tag,
+.site-header .brand .brand-unit,
+.site-header .brand .aramun-lockup-v2,
+.site-header .brand .aramun-text-v3{display:none!important}
+.site-header .main-nav,
+.site-header .mobile-nav-toggle,
+.site-header .header-icons{display:none!important}
 *{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans KR",sans-serif;overflow-x:hidden}
 button,input,select,textarea{font:inherit}button{cursor:pointer}img{display:block;max-width:100%}.hidden{display:none!important}
@@ -888,7 +896,7 @@ body:not(.site-locked) img{
 <div class="page-grid">
 <div class="center-stage">
 <header class="site-header"><div class="header-inner">
-<a aria-label="미르진" class="brand" href="#top"><span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png" alt="미르:진"></span></a>
+<a aria-label="미르진" class="brand" href="#top"><span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png?v=20260726-26" alt="미르:진"></span></a>
 <nav aria-label="주요 메뉴" class="main-nav">
 <button class="nav-btn active" data-service="boss">BOSS</button><button class="nav-btn" data-service="market">경매장</button><button class="nav-btn" data-service="database">통합 DB</button><button class="nav-btn" data-service="gm">GM패왕</button><button class="nav-btn" data-service="info">정보게시판</button><button class="nav-btn" data-service="free">자유게시판</button><button class="nav-btn" data-service="chat">실시간 채팅</button>
 </nav>
@@ -5875,7 +5883,7 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     brand.removeAttribute('target');
     brand.removeAttribute('data-reload-bound');
     brand.setAttribute('aria-label','미르진');
-    brand.innerHTML='<span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png" alt="미르:진" role="button" tabindex="0" aria-label="미르진 새로고침"></span>';
+    brand.innerHTML='<span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png?v=20260726-26" alt="미르:진" role="button" tabindex="0" aria-label="미르진 새로고침"></span>';
     oldBrand.replaceWith(brand);
     const mirjin=brand.querySelector('.mirjin-image-v4');
     const reload=()=>location.reload();
@@ -6398,7 +6406,7 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   border-radius:18px!important;
   background:
     linear-gradient(180deg,rgba(255,255,255,.08),rgba(250,252,252,.08)),
-    url("assets/wuxia-ink-mountain-header-v18.png") center center/100% 100% no-repeat!important;
+    url("assets/wuxia-ink-mountain-header-v18.png?v=20260726-26") center center/100% 100% no-repeat!important;
 }
 .site-header::before{
   content:""!important;
@@ -6943,6 +6951,19 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     list.before(head);
   };
   new MutationObserver(installFreeBoardHeader).observe(document.getElementById('modalBody'),{childList:true,subtree:true});
+})();
+</script>
+<script id="first-paint-cleanup-v25">
+(()=>{
+  /* 마지막 구성까지 적용된 다음에만 화면을 공개해 예전 로고·메뉴의 순간 노출을 막습니다. */
+  document.querySelectorAll('.ara-brand-tag,.brand-lockup,.brand-lockup-v2,.aramun-lockup-v2').forEach(element=>element.remove());
+  const logo=document.querySelector('.site-header .mirjin-image-v4');
+  const reveal=()=>requestAnimationFrame(()=>document.documentElement.classList.remove('mirjin-initializing'));
+  if(logo&&!logo.complete){
+    logo.addEventListener('load',reveal,{once:true});
+    logo.addEventListener('error',reveal,{once:true});
+    setTimeout(reveal,1800);
+  }else reveal();
 })();
 </script>
 </body></html>
