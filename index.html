@@ -969,9 +969,10 @@ function weekStartKey(value=new Date()){return localDateKey(weekStartDate(value)
 function bossRemainText(end){return !end||end<=Date.now()?'':remainText(end)}
 function visibleMarket(rows=state.market){return activeMarket(rows).filter(r=>itemName(r)!=='이름 확인 중')}
 function scheduleStartMs(x){const time=/^\d{1,2}:\d{2}$/.test(String(x?.time||''))?String(x.time):'09:00';const n=Date.parse(`${x?.dateKey||''}T${time}:00`);return Number.isFinite(n)?n:0}
-function itemName(r){const fields=['manualItemName','finalItemName','confirmedItemName','canonicalItemName','detailItemName','itemName','name','mirDbItemName','detailTitle','detailItemNameRaw','ocrNameCandidate','itemNameCandidate'];for(const k of fields){const v=String(r?.[k]??'').trim();if(v&&!/^(이름|아이템)\s*(확인|판독)\s*중$/i.test(v)&&!/pending|unknown/i.test(v))return v}return'이름 확인 중'}
+function isSkeletonWaterAlias(value){const v=String(value??'').trim();return v==='해골소환(물)'||/^(?:(?:수\s*-\s*0)|(?:수\s*0\s*-\s*0)|(?:수\s*0))(?:\s+(?:(?:수\s*-\s*0)|(?:수\s*0\s*-\s*0)|(?:수\s*0)))*$/.test(v)}
+function itemName(r){const fields=['manualItemName','finalItemName','confirmedItemName','canonicalItemName','detailItemName','itemName','name','mirDbItemName','detailTitle','detailItemNameRaw','ocrNameCandidate','itemNameCandidate'];for(const k of fields){const v=String(r?.[k]??'').trim();if(isSkeletonWaterAlias(v))return'해골소환(물)';if(v&&!/^(이름|아이템)\s*(확인|판독)\s*중$/i.test(v)&&!/pending|unknown/i.test(v))return v}return'이름 확인 중'}
 function itemPrice(r){return r.listingPriceValue??r.priceValue??r.fastListingPriceValue??r.initialListingPriceValue??r.salePriceValue??r.salePrice??r.price??r.gold??r.amount}
-function itemCategory(r){return String(r.category||r.itemCategory||r.clickedCategory||r.type||'기타').trim()||'기타'}
+function itemCategory(r){if(itemName(r)==='해골소환(물)')return'무공서';return String(r.category||r.itemCategory||r.clickedCategory||r.type||'기타').trim()||'기타'}
 function worker(r){const s=String(r.workerId||r.worker||r.source||r.market||'').toUpperCase();return s.includes('B')?'B':'A'}
 function itemIcon(r){const v=String(r.iconDataUrl||r.iconUrl||r.thumbnail||r.image||'').trim();return /^(data:image\/|https?:\/\/)/.test(v)?v:''}
 function itemImage(r){const v=String(r.detailImageDataUrl||r.detailImageUrl||r.detailImage||r.fullImageDataUrl||'').trim();return /^(data:image\/|https?:\/\/)/.test(v)?v:''}
@@ -5798,7 +5799,7 @@ body:has(#serviceModal.open) .floating-schedule-drawer{visibility:hidden!importa
 <style id="mobile-request-corrections-v3">
 /* Both names are typography only. */
 .brand-lockup-v3{display:flex;align-items:center;gap:18px;min-width:0}
-.mirjin-image-v4{display:block;width:210px;max-width:42vw;height:72px;object-fit:contain;object-position:left center;cursor:pointer;filter:drop-shadow(0 2px 1px rgba(17,42,53,.14))}
+.site-header .brand .mirjin-image-v4{display:block;width:280px!important;max-width:62vw;height:86px;object-fit:contain;object-position:left center;cursor:pointer;filter:drop-shadow(0 2px 1px rgba(17,42,53,.14))}
 .mirjin-brush-v3{position:relative;display:inline-block;padding:4px 3px 7px;color:#0b1420;font-family:"Gungsuh","Batang","Nanum Myeongjo",serif;font-size:34px;font-weight:950;letter-spacing:-.16em;line-height:.95;white-space:nowrap;transform:rotate(-2deg) skew(-6deg);text-shadow:2px 1px 0 rgba(18,77,87,.12);cursor:pointer}
 .mirjin-brush-v3::before{content:"";position:absolute;z-index:-1;left:-5px;right:-8px;bottom:1px;height:8px;background:linear-gradient(90deg,rgba(11,20,32,.92),rgba(11,20,32,.55) 72%,transparent);clip-path:polygon(0 35%,78% 0,100% 48%,75% 58%,0 100%);opacity:.22}
 .mirjin-brush-v3::after{content:"印";position:absolute;right:-20px;bottom:0;display:grid;place-items:center;width:16px;height:19px;border:2px solid #b92822;color:#b92822;font-family:"Batang",serif;font-size:8px;font-weight:900;letter-spacing:0;transform:rotate(3deg) skew(6deg)}
@@ -5819,15 +5820,16 @@ body:has(.floating-chat-drawer.open) .unified-service-rail,
 body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden!important;pointer-events:none!important}
 
 @media(max-width:820px){
+  .site-header{height:84px!important}
   .brand-lockup-v3{gap:15px}
-  .mirjin-image-v4{width:190px;height:66px}
+  .site-header .brand .mirjin-image-v4{width:245px!important;max-width:68vw;height:76px}
   .mirjin-brush-v3{font-size:31px}
   .aramun-text-v3{font-size:23px;padding-inline:14px}
   .unified-service-rail{top:16vh}
 }
 @media(max-width:430px){
   .brand-lockup-v3{gap:12px}
-  .mirjin-image-v4{width:155px;max-width:45vw;height:58px}
+  .site-header .brand .mirjin-image-v4{width:225px!important;max-width:70vw;height:70px}
   .mirjin-brush-v3{font-size:27px}
   .mirjin-brush-v3::after{right:-16px;width:13px;height:16px;font-size:7px}
   .aramun-text-v3{font-size:19px;padding-inline:10px}
@@ -5842,8 +5844,8 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     brand.removeAttribute('href');
     brand.removeAttribute('target');
     brand.removeAttribute('data-reload-bound');
-    brand.setAttribute('aria-label','미르진과 아라문파');
-    brand.innerHTML='<span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png" alt="미르:진" role="button" tabindex="0" aria-label="미르진 새로고침"><span class="aramun-text-v3">아라문파</span></span>';
+    brand.setAttribute('aria-label','미르진');
+    brand.innerHTML='<span class="brand-lockup-v3"><img class="mirjin-image-v4" src="assets/mirjin-brush-logo-v3.png" alt="미르:진" role="button" tabindex="0" aria-label="미르진 새로고침"></span>';
     oldBrand.replaceWith(brand);
     const mirjin=brand.querySelector('.mirjin-image-v4');
     const reload=()=>location.reload();
@@ -5880,8 +5882,8 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
       }
     }));
     const syncCounts=()=>{
-      const chat=document.getElementById('floatingChatCount')?.textContent||'0';
-      const schedule=document.getElementById('floatingScheduleCount')?.textContent||'0';
+      const chat=String(Array.isArray(state?.chat)?state.chat.length:0);
+      const schedule=String(Array.isArray(state?.schedule)?state.schedule.length:0);
       const chatOut=document.getElementById('unifiedChatCount');
       const scheduleOut=document.getElementById('unifiedScheduleCount');
       if(chatOut)chatOut.textContent=chat;
@@ -5895,4 +5897,125 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   installUnifiedRail();
 })();
 </script>
+<style id="market-readability-and-image-layer-v5">
+/* Keep the enlarged item photo above the auction modal and every floating rail. */
+#imageViewer.image-viewer{
+  z-index:12000!important;
+  padding:18px!important;
+  background:rgba(4,10,18,.94)!important;
+  backdrop-filter:blur(8px);
+}
+#imageViewer .image-viewer-card{
+  width:min(980px,96vw);
+  max-width:96vw!important;
+  max-height:94svh!important;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+#imageViewer img{
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:100%!important;
+  max-height:82svh!important;
+  object-fit:contain;
+  border:2px solid rgba(255,255,255,.78);
+  border-radius:16px!important;
+  background:#fff;
+  box-shadow:0 24px 80px rgba(0,0,0,.55);
+}
+#imageViewer .image-viewer-close{
+  z-index:2;
+  right:4px!important;
+  top:4px!important;
+  width:46px!important;
+  height:46px!important;
+  color:#172b3d;
+  font-size:27px;
+  box-shadow:0 7px 24px rgba(0,0,0,.25);
+}
+#imageViewer .image-viewer-title{margin-top:10px!important;font-size:16px;font-weight:900}
+
+/* Auction list: clearer hierarchy and larger touch targets. */
+.modal-dialog:has(.market-compact-shell){width:min(1040px,calc(100vw - 24px))!important}
+.market-compact-shell{color:#263b50}
+.market-app-notice{padding:13px 15px!important}
+.market-app-notice b{font-size:14px!important}
+.market-app-notice small{font-size:11px!important}
+.market-compact-toolbar{grid-template-columns:minmax(250px,1fr) 150px 160px auto!important;gap:10px!important;padding:13px!important}
+.market-compact-search input,.market-compact-toolbar .field,.market-compact-toolbar .soft-btn{height:46px!important;font-size:13px!important}
+.market-compact-panel>header{padding:15px 17px!important}
+.market-compact-panel>header h3{font-size:18px!important}
+.market-compact-panel>header span{font-size:12px!important}
+.market-compact-rows{padding:7px 10px!important}
+.market-compact-row{
+  grid-template-columns:60px minmax(0,1fr) 135px 105px!important;
+  gap:14px!important;
+  min-height:82px!important;
+  padding:10px 12px!important;
+  border-radius:12px!important;
+}
+.market-compact-thumb{width:56px!important;height:56px!important;border-radius:13px!important}
+.market-compact-copy small,.market-compact-copy em{font-size:11px!important}
+.market-compact-copy strong{font-size:16px!important}
+.market-compact-price b{font-size:14px!important}
+.market-compact-price small{font-size:10px!important}
+.market-compact-row time{font-size:13px!important}
+
+/* Auction detail: image and essential values are prominent, options are card based. */
+.market-detail-nav{padding:1px 2px 12px!important}
+.market-detail-nav button{min-height:43px;font-size:14px!important}
+.market-detail-nav span{font-size:12px!important}
+.market-compact-detail-card{padding:20px!important;background:linear-gradient(180deg,#fff,#fbfdff)!important}
+.market-compact-detail-hero{grid-template-columns:118px minmax(0,1fr)!important;gap:20px!important;padding-bottom:19px!important}
+.market-compact-detail-image{
+  width:116px!important;
+  height:116px!important;
+  border:2px solid #d6e5f1!important;
+  border-radius:20px!important;
+  background:#f3f7fa!important;
+  box-shadow:0 8px 20px rgba(42,91,128,.12);
+  cursor:zoom-in;
+}
+.market-compact-detail-image img{object-fit:contain!important;background:#fff}
+.market-compact-detail-hero span{font-size:12px!important}
+.market-compact-detail-hero h3{margin-top:7px!important;font-size:26px!important;line-height:1.25}
+.market-compact-detail-hero p{font-size:12px!important}
+.market-compact-metrics{gap:12px!important;margin:17px 0!important}
+.market-compact-metrics>div{padding:16px 17px!important;background:#f7faff!important}
+.market-compact-metrics span{font-size:11px!important}
+.market-compact-metrics strong{font-size:19px!important}
+.market-compact-options{gap:12px!important}
+.market-compact-options section{padding:15px!important;background:#fff!important;box-shadow:0 5px 16px rgba(35,66,104,.04)}
+.market-compact-options h4{font-size:15px!important}
+.market-compact-options section>div{padding:8px 0!important;font-size:13px!important}
+.market-compact-no-options{font-size:13px!important}
+.market-compact-detail-card .raw-detail{padding:14px!important;font-size:12px!important;line-height:1.65}
+
+@media(max-width:760px){
+  .modal-dialog:has(.market-compact-shell){width:100vw!important}
+  .market-app-notice b{font-size:12px!important}
+  .market-app-notice small{font-size:9.5px!important}
+  .market-compact-toolbar{grid-template-columns:1fr 1fr!important;padding:10px!important}
+  .market-compact-search{grid-column:1/-1}
+  .market-compact-toolbar .soft-btn{grid-column:1/-1}
+  .market-compact-row{grid-template-columns:50px minmax(0,1fr) 94px!important;gap:9px!important;min-height:74px!important;padding:8px!important}
+  .market-compact-thumb{width:48px!important;height:48px!important}
+  .market-compact-copy strong{font-size:14px!important}
+  .market-compact-price b{font-size:12px!important}
+  .market-compact-row time{grid-column:2/4!important;text-align:left!important;font-size:11.5px!important}
+  .market-detail-nav span{display:none}
+  .market-compact-detail-card{padding:14px!important}
+  .market-compact-detail-hero{grid-template-columns:88px minmax(0,1fr)!important;gap:13px!important}
+  .market-compact-detail-image{width:86px!important;height:86px!important;border-radius:16px!important}
+  .market-compact-detail-hero h3{font-size:21px!important}
+  .market-compact-metrics{grid-template-columns:1fr!important;gap:8px!important;margin:12px 0!important}
+  .market-compact-metrics>div{padding:13px 14px!important}
+  .market-compact-metrics strong{font-size:17px!important}
+  .market-compact-options{grid-template-columns:1fr!important}
+  #imageViewer{padding:10px!important}
+  #imageViewer img{max-height:78svh!important}
+}
+</style>
 </body></html>
