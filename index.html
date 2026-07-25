@@ -5688,7 +5688,7 @@ document.querySelectorAll('.side-rail').forEach(rail=>rail.remove());
 
   installHeader();
   installQuickServices();
-  setTimeout(()=>{installHeader();renderInfoHome();renderChatHome();enforceFloatingChat()},100);
+  setTimeout(()=>{renderInfoHome();renderChatHome();enforceFloatingChat()},100);
 })();
 </script>
 <style id="mobile-request-corrections-v2">
@@ -5780,7 +5780,7 @@ body:has(#serviceModal.open) .floating-schedule-drawer{visibility:hidden!importa
   /* The DB browser previously focused search automatically, opening the phone keyboard.
      Blur only that automatic focus; a user's later tap on search still works normally. */
   function blurProgrammaticDatabaseFocus(){
-    [0,40,160,350].forEach(delay=>setTimeout(()=>{
+    [0,30].forEach(delay=>setTimeout(()=>{
       if(document.querySelector('#serviceModal.open .human-db-browser-layer')){
         const active=document.activeElement;
         if(active?.matches?.('#humanDbV3Search,.human-db-browser-search input'))active.blur();
@@ -5790,14 +5790,106 @@ body:has(#serviceModal.open) .floating-schedule-drawer{visibility:hidden!importa
   document.addEventListener('click',event=>{
     if(event.target.closest('[data-db-launch]'))blurProgrammaticDatabaseFocus();
   },true);
-  const dbObserver=new MutationObserver(()=>{
-    if(document.querySelector('#serviceModal.open .human-db-browser-layer'))blurProgrammaticDatabaseFocus();
-  });
-  dbObserver.observe(document.getElementById('modalBody'),{childList:true,subtree:true});
-
   installCorrectHeader();
   installMatchingServiceRail();
-  setTimeout(()=>{installCorrectHeader();installMatchingServiceRail()},120);
+  setTimeout(()=>{installMatchingServiceRail()},120);
+})();
+</script>
+<style id="mobile-request-corrections-v3">
+/* Both names are typography only. */
+.brand-lockup-v3{display:flex;align-items:center;gap:18px;min-width:0}
+.mirjin-brush-v3{position:relative;display:inline-block;padding:4px 3px 7px;color:#0b1420;font-family:"Gungsuh","Batang","Nanum Myeongjo",serif;font-size:34px;font-weight:950;letter-spacing:-.16em;line-height:.95;white-space:nowrap;transform:rotate(-2deg) skew(-6deg);text-shadow:2px 1px 0 rgba(18,77,87,.12);cursor:pointer}
+.mirjin-brush-v3::before{content:"";position:absolute;z-index:-1;left:-5px;right:-8px;bottom:1px;height:8px;background:linear-gradient(90deg,rgba(11,20,32,.92),rgba(11,20,32,.55) 72%,transparent);clip-path:polygon(0 35%,78% 0,100% 48%,75% 58%,0 100%);opacity:.22}
+.mirjin-brush-v3::after{content:"印";position:absolute;right:-20px;bottom:0;display:grid;place-items:center;width:16px;height:19px;border:2px solid #b92822;color:#b92822;font-family:"Batang",serif;font-size:8px;font-weight:900;letter-spacing:0;transform:rotate(3deg) skew(6deg)}
+.aramun-text-v3{position:relative;display:inline-grid;place-items:center;padding:8px 17px 9px;color:#0c5b46;font-family:"Gungsuh","Batang","Nanum Myeongjo",serif;font-size:26px;font-weight:950;letter-spacing:-.09em;line-height:1;white-space:nowrap;text-shadow:0 1px 0 #f0d78a,1px 2px 0 rgba(18,68,55,.12)}
+.aramun-text-v3::before,.aramun-text-v3::after{content:"";position:absolute;left:2px;right:2px;height:3px;border-radius:50%;background:linear-gradient(90deg,transparent,#c59a34 18%,#0d7359 50%,#c59a34 82%,transparent)}
+.aramun-text-v3::before{top:0}.aramun-text-v3::after{bottom:0;transform:scaleX(.78)}
+
+/* One fixed rail establishes one origin and one exact gap for all five buttons. */
+.floating-chat-toggle,.floating-schedule-toggle,.service-rail-toggle{visibility:hidden!important}
+.unified-service-rail{position:fixed;z-index:860;right:0;top:17vh;display:grid;gap:4px}
+.unified-service-button{display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;height:72px;padding:7px 3px;border:1px solid rgba(255,255,255,.45);border-right:0;border-radius:16px 0 0 16px;background:linear-gradient(155deg,#3c4d68,#24344d);box-shadow:-8px 9px 24px rgba(22,34,53,.22);color:#fff7df;font-weight:950}
+.unified-service-button i{font-size:19px;font-style:normal;line-height:1}
+.unified-service-button span{display:grid;place-items:center;min-width:32px;min-height:19px;margin-top:7px;padding:3px;border-radius:999px;background:rgba(244,217,142,.16);color:#ffe7a8;font-size:7.5px;line-height:1}
+.unified-service-button.chat{background:linear-gradient(155deg,#159a78,#08705c)}
+.unified-service-button.chat span{background:rgba(255,255,255,.14);color:#eafff8}
+body:has(#serviceModal.open) .unified-service-rail,
+body:has(.floating-chat-drawer.open) .unified-service-rail,
+body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden!important;pointer-events:none!important}
+
+@media(max-width:820px){
+  .brand-lockup-v3{gap:15px}
+  .mirjin-brush-v3{font-size:31px}
+  .aramun-text-v3{font-size:23px;padding-inline:14px}
+  .unified-service-rail{top:16vh}
+}
+@media(max-width:430px){
+  .brand-lockup-v3{gap:12px}
+  .mirjin-brush-v3{font-size:27px}
+  .mirjin-brush-v3::after{right:-16px;width:13px;height:16px;font-size:7px}
+  .aramun-text-v3{font-size:19px;padding-inline:10px}
+}
+</style>
+<script id="mobile-request-corrections-script-v3">
+(()=>{
+  function installTextBrands(){
+    const oldBrand=document.querySelector('.site-header .brand');
+    if(!oldBrand)return;
+    const brand=oldBrand.cloneNode(false);
+    brand.removeAttribute('href');
+    brand.removeAttribute('target');
+    brand.removeAttribute('data-reload-bound');
+    brand.setAttribute('aria-label','미르진과 아라문파');
+    brand.innerHTML='<span class="brand-lockup-v3"><span class="mirjin-brush-v3" role="button" tabindex="0" aria-label="미르진 새로고침">미르:진</span><span class="aramun-text-v3">아라문파</span></span>';
+    oldBrand.replaceWith(brand);
+    const mirjin=brand.querySelector('.mirjin-brush-v3');
+    const reload=()=>location.reload();
+    mirjin.addEventListener('click',reload);
+    mirjin.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();reload()}});
+  }
+
+  function installUnifiedRail(){
+    document.querySelector('.unified-service-rail')?.remove();
+    const rail=document.createElement('nav');
+    rail.className='unified-service-rail';
+    rail.setAttribute('aria-label','우측 빠른 메뉴');
+    rail.innerHTML=`
+      <button class="unified-service-button chat" type="button" data-unified="chat"><i>💬</i><span id="unifiedChatCount">0</span></button>
+      <button class="unified-service-button schedule" type="button" data-unified="schedule"><i>📅</i><span id="unifiedScheduleCount">0</span></button>
+      <button class="unified-service-button" type="button" data-unified="boss"><i>👹</i><span>BOSS</span></button>
+      <button class="unified-service-button" type="button" data-unified="market"><i>⚒</i><span>경매장</span></button>
+      <button class="unified-service-button" type="button" data-unified="database"><i>▦</i><span>통합 DB</span></button>`;
+    document.body.appendChild(rail);
+    rail.querySelectorAll('[data-unified]').forEach(button=>button.addEventListener('click',()=>{
+      const service=button.dataset.unified;
+      if(service==='chat')document.getElementById('floatingChatToggle')?.click();
+      else if(service==='schedule')document.getElementById('floatingScheduleToggle')?.click();
+      else{
+        document.getElementById('floatingChatDrawer')?.classList.remove('open');
+        document.getElementById('floatingScheduleDrawer')?.classList.remove('open');
+        openService(service);
+        if(service==='database'){
+          [0,30].forEach(delay=>setTimeout(()=>{
+            const active=document.activeElement;
+            if(active?.matches?.('#humanDbV3Search,.human-db-browser-search input'))active.blur();
+          },delay));
+        }
+      }
+    }));
+    const syncCounts=()=>{
+      const chat=document.getElementById('floatingChatCount')?.textContent||'0';
+      const schedule=document.getElementById('floatingScheduleCount')?.textContent||'0';
+      const chatOut=document.getElementById('unifiedChatCount');
+      const scheduleOut=document.getElementById('unifiedScheduleCount');
+      if(chatOut)chatOut.textContent=chat;
+      if(scheduleOut)scheduleOut.textContent=schedule;
+    };
+    syncCounts();
+    setInterval(syncCounts,1500);
+  }
+
+  installTextBrands();
+  installUnifiedRail();
 })();
 </script>
 </body></html>
