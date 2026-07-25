@@ -1875,7 +1875,7 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     }
     const visible=visibleMarket(state.market);
     const categories=['전체',...new Set(visible.map(itemCategory))];
-    $('modalBody').innerHTML=`<div class="market-compact-shell"><div class="market-app-notice"><span>APP</span><div><b>경매장 알림은 미르진 앱에서만 가능합니다</b><small>PC·휴대폰 인터넷에서는 알림을 지원하지 않습니다. 알림이 필요하면 미르진 앱을 설치해 주세요.</small></div></div><section class="market-compact-list-view" id="marketCompactListView"><div class="market-compact-toolbar"><label class="market-compact-search"><span>⌕</span><input class="field" id="marketCompactSearch" placeholder="아이템 이름 검색"></label><select class="field" id="marketCompactCategory">${categories.map(category=>`<option>${esc(category)}</option>`).join('')}</select><select class="field" id="marketCompactSort"><option value="remain">종료 임박 순</option><option value="priceAsc">낮은 가격 순</option><option value="priceDesc">높은 가격 순</option></select><button class="soft-btn" id="marketCompactRefresh" type="button">새로고침</button></div><section class="market-compact-panel"><header><h3>실시간 경매장</h3><span id="marketCompactCount">0개</span></header><div class="market-compact-rows" id="marketCompactRows"></div></section></section><section class="market-compact-detail-view hidden" id="marketCompactDetailView"><header class="market-detail-nav"><button class="soft-btn" id="marketCompactBack" type="button">‹ 목록으로</button><span>선택한 아이템의 가격과 옵션</span></header><article class="market-compact-detail-card" id="marketCompactDetail"></article></section></div>`;
+    $('modalBody').innerHTML=`<div class="market-compact-shell"><div class="market-app-notice"><span>APP</span><div><b>경매장 알림은 미르진 앱에서만 가능합니다</b><small>PC·휴대폰 인터넷에서는 알림을 지원하지 않습니다. 알림이 필요하면 미르진 앱을 설치해 주세요.</small></div></div><section class="market-compact-list-view" id="marketCompactListView"><div class="market-compact-toolbar"><label class="market-compact-search"><span>⌕</span><input class="field" id="marketCompactSearch" placeholder="아이템 이름 검색"></label><select class="field" id="marketCompactCategory">${categories.map(category=>`<option>${esc(category)}</option>`).join('')}</select><select class="field" id="marketCompactSort"><option value="remain">종료 임박 순</option><option value="priceAsc">낮은 가격 순</option><option value="priceDesc">높은 가격 순</option></select><button class="soft-btn" id="marketCompactRefresh" type="button">새로고침</button></div><section class="market-compact-panel"><header><h3>실시간 경매장</h3><span id="marketCompactCount">0개</span></header><div class="market-board-columns"><span>사진</span><span>아이템명</span><span>종류·마켓</span><span>판매자</span><span>가격</span><span>남은 시간</span></div><div class="market-compact-rows" id="marketCompactRows"></div></section></section><section class="market-compact-detail-view hidden" id="marketCompactDetailView"><header class="market-detail-nav"><button class="soft-btn" id="marketCompactBack" type="button">‹ 목록으로</button><span>선택한 아이템의 가격과 옵션</span></header><article class="market-compact-detail-card" id="marketCompactDetail"></article></section></div>`;
     const filteredRows=()=>{
       const query=$('marketCompactSearch').value.trim().toLocaleLowerCase('ko-KR');
       const category=$('marketCompactCategory').value;
@@ -1896,7 +1896,7 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     const draw=()=>{
       const rows=filteredRows();
       $('marketCompactCount').textContent=`${rows.length.toLocaleString('ko-KR')}개`;
-      $('marketCompactRows').innerHTML=rows.length?rows.map((record,index)=>`<button class="market-compact-row" data-market-compact-index="${index}" type="button"><span class="market-compact-thumb">${itemIcon(record)?`<img src="${esc(itemIcon(record))}" alt="${esc(itemName(record))}">`:'◇'}</span><span class="market-compact-copy"><small>${esc(itemCategory(record))} · 마켓 ${worker(record)}</small><strong>${esc(itemName(record))}</strong><em>${esc(record.seller||record.sellerName||'판매자 확인 중')}</em></span><span class="market-compact-price"><b>${esc(fmtPrice(itemPrice(record)))}</b><small>금화</small></span><time data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</time></button>`).join(''):'<div class="market-result-empty"><span>⌕</span><b>조건에 맞는 매물이 없습니다</b><p>검색어나 분류를 바꿔보세요.</p></div>';
+      $('marketCompactRows').innerHTML=rows.length?rows.map((record,index)=>`<button class="market-compact-row ${remainingEnd(record)&&remainingEnd(record)-Date.now()<=300000?'ending-soon':''}" data-market-compact-index="${index}" type="button"><span class="market-compact-thumb">${itemIcon(record)?`<img src="${esc(itemIcon(record))}" alt="${esc(itemName(record))}">`:'◇'}</span><span class="market-compact-copy"><small>${esc(itemCategory(record))} · 마켓 ${worker(record)}</small><strong>${esc(itemName(record))}</strong><em>${esc(record.seller||record.sellerName||'판매자 확인 중')}</em></span><span class="market-compact-price"><b>${esc(fmtPrice(itemPrice(record)))}</b><small>금화</small></span><time data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</time></button>`).join(''):'<div class="market-result-empty"><span>⌕</span><b>조건에 맞는 매물이 없습니다</b><p>검색어나 분류를 바꿔보세요.</p></div>';
       $('marketCompactRows').querySelectorAll('[data-market-compact-index]').forEach(button=>button.addEventListener('click',()=>showDetail(rows[num(button.dataset.marketCompactIndex)])));
     };
     $('marketCompactBack').addEventListener('click',()=>{$('marketCompactDetailView').classList.add('hidden');$('marketCompactListView').classList.remove('hidden')});
@@ -6957,13 +6957,123 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
 (()=>{
   /* 마지막 구성까지 적용된 다음에만 화면을 공개해 예전 로고·메뉴의 순간 노출을 막습니다. */
   document.querySelectorAll('.ara-brand-tag,.brand-lockup,.brand-lockup-v2,.aramun-lockup-v2').forEach(element=>element.remove());
-  const logo=document.querySelector('.site-header .mirjin-image-v4');
   const reveal=()=>requestAnimationFrame(()=>document.documentElement.classList.remove('mirjin-initializing'));
-  if(logo&&!logo.complete){
-    logo.addEventListener('load',reveal,{once:true});
-    logo.addEventListener('error',reveal,{once:true});
-    setTimeout(reveal,1800);
-  }else reveal();
+  /* 로고가 늦게 받아져도 홈페이지 전체 표시를 지연시키지 않습니다. */
+  reveal();
 })();
 </script>
+<style id="market-pc-board-v27">
+.market-board-columns{display:none}
+@media(min-width:821px){
+  .modal-dialog:has(.market-compact-shell){
+    width:min(1020px,calc(100vw - 30px))!important;
+    height:min(720px,calc(100svh - 24px))!important;
+  }
+  .modal-dialog:has(.market-compact-shell) .modal-head{
+    height:56px!important;
+    min-height:56px!important;
+    flex-basis:56px!important;
+    padding:0 15px!important;
+  }
+  .modal-dialog:has(.market-compact-shell) .modal-body{padding:9px!important}
+  .market-compact-shell>.market-app-notice{display:none!important}
+  .market-compact-toolbar{
+    position:relative!important;
+    z-index:5!important;
+    grid-template-columns:minmax(270px,1fr) 145px 150px 76px!important;
+    gap:7px!important;
+    padding:7px!important;
+    border-radius:10px!important;
+  }
+  .market-compact-search input,
+  .market-compact-toolbar .field,
+  .market-compact-toolbar .soft-btn{
+    height:34px!important;
+    font-size:10.5px!important;
+  }
+  .market-compact-panel{
+    margin-top:7px!important;
+    border-radius:11px!important;
+  }
+  .market-compact-panel>header{padding:8px 12px!important}
+  .market-compact-panel>header h3{font-size:13px!important}
+  .market-compact-panel>header span{font-size:9px!important;padding:3px 7px!important}
+  .market-board-columns{
+    position:relative;
+    z-index:2;
+    display:grid!important;
+    grid-template-columns:36px minmax(190px,1.5fr) 112px 120px 100px 90px;
+    gap:7px;
+    align-items:center;
+    min-height:34px;
+    padding:0 9px;
+    border-bottom:1px solid #d9e4ed;
+    background:#edf4f8;
+    color:#526b80;
+    font-size:8.5px;
+    font-weight:900;
+  }
+  .market-board-columns span:nth-child(5),
+  .market-board-columns span:nth-child(6){text-align:right}
+  .market-compact-rows{
+    padding:0 5px!important;
+    background:#fff!important;
+  }
+  .market-compact-row{
+    grid-template-columns:36px minmax(190px,1.5fr) 112px 120px 100px 90px!important;
+    gap:7px!important;
+    min-height:42px!important;
+    padding:4px 4px!important;
+    border-radius:0!important;
+    border-bottom:1px solid #e7edf2!important;
+  }
+  .market-compact-row:hover{
+    background:#eef7ff!important;
+    box-shadow:inset 3px 0 #2879bc!important;
+  }
+  .market-compact-row.ending-soon{background:#fff8f7!important}
+  .market-compact-row.ending-soon:hover{background:#ffefec!important}
+  .market-compact-thumb{
+    grid-column:1!important;
+    width:30px!important;
+    height:30px!important;
+    border-radius:6px!important;
+  }
+  .market-compact-copy{display:contents!important}
+  .market-compact-copy strong{
+    grid-column:2!important;
+    grid-row:1!important;
+    margin:0!important;
+    color:#20384e!important;
+    font-size:10.5px!important;
+  }
+  .market-compact-copy small{
+    grid-column:3!important;
+    grid-row:1!important;
+    color:#657b8f!important;
+    font-size:8.5px!important;
+  }
+  .market-compact-copy em{
+    display:block!important;
+    grid-column:4!important;
+    grid-row:1!important;
+    margin:0!important;
+    color:#657b8f!important;
+    font-size:8.5px!important;
+  }
+  .market-compact-price{
+    grid-column:5!important;
+    grid-row:1!important;
+    text-align:right!important;
+  }
+  .market-compact-price b{font-size:10px!important}
+  .market-compact-price small{display:none!important}
+  .market-compact-row time{
+    grid-column:6!important;
+    grid-row:1!important;
+    text-align:right!important;
+    font-size:9px!important;
+  }
+}
+</style>
 </body></html>
