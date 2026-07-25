@@ -5876,8 +5876,18 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
       <button class="unified-service-button" type="button" data-unified="market"><i>⚒</i><span>경매장</span></button>
       <button class="unified-service-button" type="button" data-unified="database"><i>▦</i><span>통합 DB</span></button>`;
     document.body.appendChild(rail);
-    rail.querySelectorAll('[data-unified]').forEach(button=>button.addEventListener('click',()=>{
+    const setRailOpen=open=>{
+      rail.classList.toggle('expanded',open);
+      rail.setAttribute('aria-expanded',String(open));
+    };
+    rail.querySelectorAll('[data-unified]').forEach(button=>button.addEventListener('click',event=>{
+      event.stopPropagation();
+      if(!rail.classList.contains('expanded')){
+        setRailOpen(true);
+        return;
+      }
       const service=button.dataset.unified;
+      setRailOpen(false);
       if(service==='chat'){
         const drawer=document.getElementById('floatingChatDrawer');
         const toggle=document.getElementById('floatingChatToggle');
@@ -6207,6 +6217,64 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   .unified-service-button:focus-visible{transform:translateX(-20px)}
   .boss-table-panel .panel-body{padding-left:8px!important;padding-right:8px!important}
   .boss-table-panel .data-table th,.boss-table-panel .data-table td{padding-left:5px!important;padding-right:5px!important}
+}
+</style>
+<style id="mobile-rail-no-cover-v12">
+/* 모바일 본문을 가리던 우측 빠른메뉴를 화면 밖으로 접어 둔다.
+   평소에는 14px 손잡이만 보이며, 누르거나 키보드로 선택한 동안만 펼쳐진다. */
+@media(max-width:900px){
+  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+  .site-header .brand{
+    justify-content:center!important;
+    transform:translateX(12px)!important;
+  }
+  .page-grid,.center-stage,.showcase,.top-grid,
+  .top-grid>.panel,.top-grid>.feature-card{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .showcase{
+    padding-left:10px!important;
+    padding-right:10px!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .unified-service-rail{
+    right:-38px!important;
+    width:56px!important;
+    gap:4px!important;
+    transition:right .18s ease!important;
+  }
+  .unified-service-rail.expanded{
+    right:0!important;
+  }
+  .unified-service-button{
+    width:56px!important;
+    min-width:56px!important;
+    height:64px!important;
+    padding:5px 4px!important;
+    transform:none!important;
+  }
+  .unified-service-button i{font-size:18px!important}
+  .unified-service-button span{font-size:7px!important}
+  .boss-table-panel .panel-body{
+    width:100%!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+    overflow:hidden!important;
+  }
+  .boss-table-panel .data-table{
+    width:100%!important;
+    table-layout:fixed!important;
+  }
+  .boss-table-panel .data-table th,
+  .boss-table-panel .data-table td{
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
 }
 </style>
 </body></html>
