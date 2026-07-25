@@ -1010,6 +1010,46 @@ function marketAttributeText(r,type){
     :optionGroup(r,['advancedOptions','상급옵션','상급 속성','advancedAttributes']);
   return rows.length?rows.map(([key,value])=>`${key} ${value}`).join(' · '):'없음';
 }
+function marketPairsText(rows){return rows.map(([key,value])=>`${key}=${value}`).join('\n')}
+function parseMarketPairs(text){
+  const result={};
+  String(text||'').split(/\r?\n/).forEach(line=>{
+    const index=line.indexOf('=');
+    if(index<1)return;
+    const key=line.slice(0,index).trim(),value=line.slice(index+1).trim();
+    if(key&&value)result[key]=value;
+  });
+  return result;
+}
+function marketOverrideId(value){
+  let hash=2166136261;
+  for(const char of String(value)){hash^=char.charCodeAt(0);hash=Math.imul(hash,16777619)}
+  return `listing_${(hash>>>0).toString(16)}`;
+}
+async function saveMarketAdminEdit(record){
+  if(!isAdminMode()){toast('관리자 로그인 후 수정할 수 있습니다');return}
+  const name=$('marketAdminName')?.value.trim()||'',category=$('marketAdminCategory')?.value.trim()||'기타';
+  const price=Math.max(0,num($('marketAdminPrice')?.value)),minutes=Math.max(0,num($('marketAdminMinutes')?.value));
+  if(!name){toast('아이템 이름을 입력하세요');return}
+  const targetKey=listingKey(record),override={
+    targetKey,listingId:record.listingId||'',manualItemName:name,category,
+    listingPriceValue:price,expiresAtMs:minutes?Date.now()+minutes*60000:remainingEnd(record),
+    attributes:{
+      ...attributeRoot(record),
+      basicOptions:parseMarketPairs($('marketAdminBasic')?.value),
+      advancedOptions:parseMarketPairs($('marketAdminAdvanced')?.value)
+    },
+    adminEditedAt:Date.now()
+  };
+  Object.assign(record,override);
+  record.attributes=override.attributes;
+  try{
+    await fetchJson(`${DB}/mirAuctionAdminOverrides/${marketOverrideId(targetKey)}.json`,7000,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(override)});
+    toast('경매장 수정 내용을 저장했습니다');
+    renderHome();
+    renderMarketModal(false);
+  }catch(_){toast('온라인 저장에 실패했습니다')}
+}
 function gmRows(payload){const src=payload?.items||payload?.posts||payload||[];const rows=Array.isArray(src)?src:Object.values(src||{});return rows.map(x=>({id:String(x.id||x.articleId||x.link||x.title||''),articleId:String(x.articleId||x.id||''),title:String(x.title||'제목 없음'),writer:String(x.writer||'GM패왕'),timestamp:x.timestamp||x.publishedAt||x.date||0,summary:String(x.summary||x.preview||''),link:String(x.link||GM_BOARD_URL),isNew:Boolean(x.isNew)})).filter(x=>x.title).sort((a,b)=>num(b.articleId)-num(a.articleId)||ts(b.timestamp)-ts(a.timestamp))}
 function normalizePosts(payload){if(!payload||typeof payload!=='object')return[];return Object.entries(payload).map(([id,r])=>({id,type:r?.type||'자유',name:r?.name||'익명',title:r?.title||'제목 없음',content:r?.content||'',time:num(r?.time),owner:r?.owner||'',views:num(r?.views)})).sort((a,b)=>b.time-a.time)}
 function normalizeChat(payload){if(!payload||typeof payload!=='object')return[];return Object.entries(payload).map(([id,r])=>({id,nickname:r?.nickname||r?.name||'익명',text:r?.text||r?.message||'',time:num(r?.time||r?.timestamp),owner:r?.owner||'',clientMessageId:r?.clientMessageId||'',room:String(r?.room||r?.channel||'all').toLowerCase()})).filter(x=>x.text).sort((a,b)=>a.time-b.time).slice(-250)}
@@ -1048,8 +1088,8 @@ function renderHome(){renderBossPreview();renderMarketPreview();renderSimplePrev
 function demoData(){const now=Date.now();state.boss=[['백령마왕','백령마성 3층','출현',85],['마도교주','마도교 본부','출현',220],['천마신장','천마의 둥지','출현',465],['혈마대제','혈마의 전장','출현',735],['적혈마군주','적혈마성 2층','이동 중',850],['사마교주','사마교 본거지','대기 중',1350],['사마장로','사마교 제단','대기 중',1500],['마도고수','마도교 외곽','이동 중',1720]].map(([name,location,status,s])=>({name,location,status,respawnAt:now+s*1000}));state.market=[['천마의 도','전설상인',1200000,130,'무기'],['용사의 투구','강호무사',350000,275,'모자'],['환영의 목걸이','신비상인',750000,340,'목걸이'],['고급 생명의 돌','무림거상',120000,440,'재료'],['아이언 갑옷','강화대장',200000,520,'의상'],['청룡의 비늘','용왕상인',500000,630,'재료'],['마력의 구슬','마도사',180000,735,'재료'],['전사의 반지','무기상인',220000,820,'반지']].map((x,i)=>({listingId:'d'+i,itemName:x[0],seller:x[1],listingPriceValue:x[2],remainingSeconds:x[3],category:x[4],workerId:i%2?'B':'A',verified:true,attributes:{level:30+i,weight:5,basicOptions:{공격력:'+12',방어력:'+8'},advancedOptions:{치명타:'+3%',정확도:'+4'},enhanceOptions:{강화단계:'+5'},engraveOptions:{각인:'청룡'}}}));state.marketStatus={workers:{A:{ok:true,heartbeat:now},B:{ok:true,heartbeat:now}}};state.gm=[['GM패왕 이벤트 안내 (07/20)','07.20 14:25'],['정기 점검 안내 (07/19)','07.19 18:30'],['신규 아이템 추가 안내','07.19 14:10'],['7월 주말 이벤트 안내','07.19 10:05'],['불법 프로그램 제재 안내','07.18 21:15'],['고객센터 운영 시간 변경 안내','07.18 16:40'],['7월 4주차 업데이트 안내','07.18 11:20'],['서버 안정화 작업 안내','07.17 17:50']].map((x,i)=>({articleId:String(100-i),title:x[0],writer:'GM패왕',timestamp:now-i*3600000,displayDate:x[1],summary:'자동 수집 게시글 예시입니다.',link:GM_BOARD_URL}));state.free=[['잡담','오늘 득템했어요!','미르유저'],['잡담','파티 구합니다 ㅎㅎ','강호유저'],['잡담','이번 업데이트 어때요?','미르전설'],['잡담','주말 이벤트 기대되네요!','무협인'],['잡담','거래하실 분 구해요~','상인왕'],['잡담','오랜만에 복귀했습니다!','추억유저'],['잡담','길드원 모집합니다','길드장'],['잡담','추천 사냥터 알려주세요','초보자']].map((x,i)=>({id:'f'+i,type:x[0],title:x[1],name:x[2],time:now-i*86400000,views:[120,85,98,76,65,112,90,54][i]}));state.chat=[['전사왕','보스 지금 막 떴어요!'],['작은도적','어디에 떴나요?'],['마법사99','경매장 시세 좀 봐주세요'],['지존무사','흑룡 지금 갑니다'],['사신','파티 구합니다 ㅋㅋ']].map((x,i)=>({id:'c'+i,nickname:x[0],text:x[1],time:now-(5-i)*60000}));const ws=weekStartDate(new Date());state.schedule=[0,2,5].map((off,i)=>{const d=new Date(ws);d.setDate(d.getDate()+off);return{id:`demo_schedule_${i}`,title:['정기 점검','문파 일정','주말 일정'][i],dateKey:localDateKey(d),time:['10:00','20:30','15:00'][i],category:'스케줄',description:'데모 화면 확인용 일정입니다.',notifyMinutes:30}});}
 async function loadAll(){if(DEMO){demoData();renderHome();return}const now=Date.now();const requests=[
   `${DB}/mirBossMonitor/current.json?v=${now}`,`${DB}/mirBossMonitor/stats.json?v=${now}`,`${DB}/mirAuctionMonitor/current.json?v=${now}`,`${DB}/mirAuctionMonitor/status.json?v=${now}`,`${DB}/mirAuctionMonitor/currentMeta.json?v=${now}`,`gm-paewang-posts.json?v=${now}`,`complaints.json?v=${now}`,`${DB}/mirjinCommunityPosts.json?v=${now}`,`${DB}/mirChat/messages.json?orderBy=%22$key%22&limitToLast=250&v=${now}`,
-  `${DB}/mirjinSchedule.json?v=${now}`,`${DB}/mirjinSchedules.json?v=${now}`,`${DB}/mirjinEventSchedule.json?v=${now}`,`${DB}/mirEvents.json?v=${now}`,`${DB}/mirSchedule.json?v=${now}`,`${DB}/schedule.json?v=${now}`,`${DB}/schedules.json?v=${now}`,`${DB}/eventSchedule.json?v=${now}`,`${DB}/events.json?v=${now}`,`${DB}/mirjinEventBoard.json?v=${now}`,`${DB}/mirjinScheduleBoard.json?v=${now}`
-];const results=await Promise.allSettled(requests.map((url,i)=>fetchJson(url,i===0||i===2?12000:7000)));const val=i=>results[i].status==='fulfilled'?results[i].value:{};const bossCurrent=val(0),bossStats=val(1);state.boss=deepRows(bossCurrent,'boss').map(r=>({...asObject(bossStats?.[r.firebaseKey]||bossStats?.[[r.region||'',bossName(r),r.distribution||r.location||''].join('|')]),...r}));state.market=deepRows(val(2),'market');state.marketStatus=val(3)||null;state.marketMeta=val(4)||null;state.gm=gmRows(val(5)).filter(x=>!isAdminHidden('gm',x.id));if(val(6)?.issues?.length)state.info=val(6).issues.map(x=>({...x,author:'운영자'})).filter(x=>!isAdminHidden('info',x.id||x.title));let localFree=[],localChat=[],localSchedule=[];try{localFree=JSON.parse(localStorage.getItem('mirjinCommunityLocalV1')||'[]')}catch(_){}try{localChat=JSON.parse(localStorage.getItem('mirjinChatLocalV1')||'[]')}catch(_){}try{localSchedule=JSON.parse(localStorage.getItem('mirjinScheduleLocalV1')||'[]')}catch(_){}state.free=mergeRows(normalizePosts(val(7)),localFree).sort((a,b)=>num(b.time)-num(a.time));state.chat=mergeRows(normalizeChat(val(8)),localChat).sort((a,b)=>num(a.time)-num(b.time)).slice(-250);state.schedule=normalizeSchedules(...results.slice(9).map(r=>r.status==='fulfilled'?r.value:{}),localSchedule);renderHome();checkScheduleNotifications();if(state.activeService&&state.activeService!=='schedule')renderModal(state.activeService,false)}
+  `${DB}/mirjinSchedule.json?v=${now}`,`${DB}/mirjinSchedules.json?v=${now}`,`${DB}/mirjinEventSchedule.json?v=${now}`,`${DB}/mirEvents.json?v=${now}`,`${DB}/mirSchedule.json?v=${now}`,`${DB}/schedule.json?v=${now}`,`${DB}/schedules.json?v=${now}`,`${DB}/eventSchedule.json?v=${now}`,`${DB}/events.json?v=${now}`,`${DB}/mirjinEventBoard.json?v=${now}`,`${DB}/mirjinScheduleBoard.json?v=${now}`,`${DB}/mirAuctionAdminOverrides.json?v=${now}`
+];const results=await Promise.allSettled(requests.map((url,i)=>fetchJson(url,i===0||i===2?12000:7000)));const val=i=>results[i].status==='fulfilled'?results[i].value:{};const bossCurrent=val(0),bossStats=val(1);state.boss=deepRows(bossCurrent,'boss').map(r=>({...asObject(bossStats?.[r.firebaseKey]||bossStats?.[[r.region||'',bossName(r),r.distribution||r.location||''].join('|')]),...r}));const marketOverrides=Object.values(val(21)||{});state.market=deepRows(val(2),'market').map(r=>{const override=marketOverrides.find(x=>String(x?.targetKey||'')===listingKey(r)||String(x?.listingId||'')===String(r.listingId||''));return override?{...r,...override,attributes:{...attributeRoot(r),...asObject(override.attributes)}}:r});state.marketStatus=val(3)||null;state.marketMeta=val(4)||null;state.gm=gmRows(val(5)).filter(x=>!isAdminHidden('gm',x.id));if(val(6)?.issues?.length)state.info=val(6).issues.map(x=>({...x,author:'운영자'})).filter(x=>!isAdminHidden('info',x.id||x.title));let localFree=[],localChat=[],localSchedule=[];try{localFree=JSON.parse(localStorage.getItem('mirjinCommunityLocalV1')||'[]')}catch(_){}try{localChat=JSON.parse(localStorage.getItem('mirjinChatLocalV1')||'[]')}catch(_){}try{localSchedule=JSON.parse(localStorage.getItem('mirjinScheduleLocalV1')||'[]')}catch(_){}state.free=mergeRows(normalizePosts(val(7)),localFree).sort((a,b)=>num(b.time)-num(a.time));state.chat=mergeRows(normalizeChat(val(8)),localChat).sort((a,b)=>num(a.time)-num(b.time)).slice(-250);state.schedule=normalizeSchedules(...results.slice(9,21).map(r=>r.status==='fulfilled'?r.value:{}),localSchedule);renderHome();checkScheduleNotifications();if(state.activeService&&state.activeService!=='schedule')renderModal(state.activeService,false)}
 function openService(service){state.activeService=service;const meta=serviceMeta[service];$('modalIcon').textContent=meta[0];$('modalTitle').textContent=meta[1];$('modalSubtitle').textContent=meta[2];document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.service===service));renderModal(service,true);$('serviceModal').classList.add('open');$('serviceModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.body.classList.remove('nav-open')}
 function closeModal(){$('serviceModal').classList.remove('open');$('serviceModal').setAttribute('aria-hidden','true');document.body.style.overflow='';state.activeService=null;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))}
 function renderModal(service,reset=false){if(service==='boss')renderBossModal();if(service==='market')renderMarketModal(reset);if(service==='gm')renderGmModal();if(service==='info')renderInfoModal();if(service==='free')renderFreeModal();if(service==='chat')renderChatModal();if(service==='database')renderDatabaseModal(reset);if(service==='app')renderAppInstallModal()}
@@ -1881,7 +1921,7 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     }
     const visible=visibleMarket(state.market);
     const categories=['전체',...new Set(visible.map(itemCategory))];
-    $('modalBody').innerHTML=`<div class="market-compact-shell"><div class="market-app-notice"><span>APP</span><div><b>경매장 알림은 미르진 앱에서만 가능합니다</b><small>PC·휴대폰 인터넷에서는 알림을 지원하지 않습니다. 알림이 필요하면 미르진 앱을 설치해 주세요.</small></div></div><section class="market-compact-list-view" id="marketCompactListView"><div class="market-compact-toolbar"><label class="market-compact-search"><span>⌕</span><input class="field" id="marketCompactSearch" placeholder="아이템 이름 검색"></label><select class="field" id="marketCompactCategory">${categories.map(category=>`<option>${esc(category)}</option>`).join('')}</select><select class="field" id="marketCompactSort"><option value="remain">종료 임박 순</option><option value="priceAsc">낮은 가격 순</option><option value="priceDesc">높은 가격 순</option></select><button class="soft-btn" id="marketCompactRefresh" type="button">새로고침</button></div><section class="market-compact-panel"><header><h3>실시간 경매장</h3><span id="marketCompactCount">0개</span></header><div class="market-board-columns"><span>사진</span><span>아이템 이름</span><span>종류</span><span>가격</span><span>남은 시간</span></div><div class="market-compact-rows" id="marketCompactRows"></div></section></section><section class="market-compact-detail-view hidden" id="marketCompactDetailView"><header class="market-detail-nav"><button class="soft-btn" id="marketCompactBack" type="button">‹ 목록으로</button><span>선택한 아이템의 가격과 옵션</span></header><article class="market-compact-detail-card" id="marketCompactDetail"></article></section></div>`;
+    $('modalBody').innerHTML=`<div class="market-compact-shell"><div class="market-app-notice"><span>APP</span><div><b>경매장 알림은 미르진 앱에서만 가능합니다</b><small>PC·휴대폰 인터넷에서는 알림을 지원하지 않습니다. 알림이 필요하면 미르진 앱을 설치해 주세요.</small></div></div><section class="market-compact-list-view" id="marketCompactListView"><div class="market-compact-toolbar"><label class="market-compact-search"><span>⌕</span><input class="field" id="marketCompactSearch" placeholder="아이템 이름 검색"></label><select class="field" id="marketCompactCategory">${categories.map(category=>`<option>${esc(category)}</option>`).join('')}</select><select class="field" id="marketCompactSort"><option value="remain">종료 임박 순</option><option value="priceAsc">낮은 가격 순</option><option value="priceDesc">높은 가격 순</option></select><button class="soft-btn" id="marketCompactRefresh" type="button">새로고침</button>${adminButton('marketAdminToggle')}</div><section class="market-compact-panel"><header><h3>실시간 경매장</h3><span id="marketCompactCount">0개</span></header><div class="market-board-columns"><span>사진</span><span>아이템 이름</span><span>종류</span><span>가격</span><span>남은 시간</span></div><div class="market-compact-rows" id="marketCompactRows"></div></section></section><section class="market-compact-detail-view hidden" id="marketCompactDetailView"><header class="market-detail-nav"><button class="soft-btn" id="marketCompactBack" type="button">‹ 목록으로</button><span>선택한 아이템의 가격과 옵션</span></header><article class="market-compact-detail-card" id="marketCompactDetail"></article></section></div>`;
     const filteredRows=()=>{
       const query=$('marketCompactSearch').value.trim().toLocaleLowerCase('ko-KR');
       const category=$('marketCompactCategory').value;
@@ -1895,8 +1935,11 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
       $('marketCompactListView').classList.add('hidden');
       $('marketCompactDetailView').classList.remove('hidden');
       const groups=detailGroups(record),raw=String(record.attributesText||record.attributesCandidateText||attributeRoot(record).raw||'').trim(),image=itemImage(record)||itemIcon(record);
-      $('marketCompactDetail').innerHTML=`<div class="market-compact-detail-hero"><button class="market-compact-detail-image" id="marketCompactImage" type="button">${image?`<img src="${esc(image)}" alt="${esc(itemName(record))}">`:'◇'}</button><div><span>${esc(itemCategory(record))} · 경매장 ${worker(record)}</span><h3>${esc(itemName(record))}</h3><p>${esc(record.seller||record.sellerName||'판매자 확인 중')} · ${record.verified===false?'상세 정보 검수 중':'실시간 상세 정보'}</p></div></div><div class="market-compact-metrics"><div><span>판매 가격</span><strong>${esc(fmtPrice(itemPrice(record)))} <small>금화</small></strong></div><div><span>남은 시간</span><strong class="time-hot" data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</strong></div></div><div class="market-compact-options">${Object.entries(groups).filter(([,rows])=>rows.length).map(([title,rows])=>`<section><h4>${esc(title)}</h4>${rows.map(([key,value])=>`<div><span>${esc(key)}</span><b>${esc(value)}</b></div>`).join('')}</section>`).join('')||'<div class="market-compact-no-options">등록된 상세 옵션이 없습니다.</div>'}</div>${raw?`<div class="raw-detail">${esc(raw)}</div>`:''}`;
+      const basic=optionGroup(record,['basicOptions','기본옵션','기본 속성','basicAttributes']),advanced=optionGroup(record,['advancedOptions','상급옵션','상급 속성','advancedAttributes']);
+      const remainMinutes=Math.max(0,Math.ceil((remainingEnd(record)-Date.now())/60000));
+      $('marketCompactDetail').innerHTML=`<div class="market-compact-detail-hero"><button class="market-compact-detail-image" id="marketCompactImage" type="button">${image?`<img src="${esc(image)}" alt="${esc(itemName(record))}">`:'◇'}</button><div><span>${esc(itemCategory(record))} · 경매장 ${worker(record)}</span><h3>${esc(itemName(record))}</h3><p>${esc(record.seller||record.sellerName||'판매자 확인 중')} · ${record.verified===false?'상세 정보 검수 중':'실시간 상세 정보'}</p></div></div><div class="market-compact-metrics"><div><span>판매 가격</span><strong>${esc(fmtPrice(itemPrice(record)))} <small>금화</small></strong></div><div><span>남은 시간</span><strong class="time-hot" data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</strong></div></div><div class="market-compact-options">${Object.entries(groups).filter(([,rows])=>rows.length).map(([title,rows])=>`<section><h4>${esc(title)}</h4>${rows.map(([key,value])=>`<div><span>${esc(key)}</span><b>${esc(value)}</b></div>`).join('')}</section>`).join('')||'<div class="market-compact-no-options">등록된 상세 옵션이 없습니다.</div>'}</div>${raw?`<div class="raw-detail">${esc(raw)}</div>`:''}${isAdminMode()?`<form class="market-admin-editor" id="marketAdminEditor"><h3>관리자 매물 수정</h3><div class="market-admin-grid"><label>아이템 이름<input class="field" id="marketAdminName" value="${esc(itemName(record))}"></label><label>종류<input class="field" id="marketAdminCategory" value="${esc(itemCategory(record))}"></label><label>가격<input class="field" id="marketAdminPrice" inputmode="numeric" value="${esc(num(itemPrice(record)))}"></label><label>남은 시간(분)<input class="field" id="marketAdminMinutes" inputmode="numeric" value="${remainMinutes}"></label><label class="wide">기본 속성<textarea class="field" id="marketAdminBasic" placeholder="공격력=12">${esc(marketPairsText(basic))}</textarea></label><label class="wide">상급 속성<textarea class="field" id="marketAdminAdvanced" placeholder="치명타=3%">${esc(marketPairsText(advanced))}</textarea></label></div><p>속성은 한 줄에 하나씩 이름=값 형식으로 입력하세요.</p><button class="primary-btn" type="submit">수정 내용 저장</button></form>`:''}`;
       $('marketCompactImage').addEventListener('click',()=>{if(image)openImageViewer(image,itemName(record))});
+      $('marketAdminEditor')?.addEventListener('submit',event=>{event.preventDefault();saveMarketAdminEdit(record)});
       $('marketCompactDetail').scrollTop=0;
     };
     const draw=()=>{
@@ -1910,6 +1953,7 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     $('marketCompactCategory').addEventListener('change',draw);
     $('marketCompactSort').addEventListener('change',draw);
     $('marketCompactRefresh').addEventListener('click',()=>{loadAll();toast('경매장 데이터를 새로고침합니다')});
+    $('marketAdminToggle').addEventListener('click',()=>toggleAdminMode(()=>renderMarketModal(false)));
     draw();
   };
 })();
@@ -6704,57 +6748,57 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   width:184%;
   pointer-events:none;
   border-radius:50%;
-  filter:blur(12px);
-  mix-blend-mode:multiply;
+  filter:blur(16px);
+  mix-blend-mode:normal;
   will-change:transform,opacity;
 }
 .site-header .header-inner::before{
-  top:8%;
-  height:78%;
-  opacity:.58;
+  top:-4%;
+  height:92%;
+  opacity:.92;
   background:
-    radial-gradient(ellipse at 8% 58%,rgba(102,124,128,.28) 0 8%,rgba(183,198,198,.24) 15%,transparent 31%),
-    radial-gradient(ellipse at 31% 38%,rgba(122,142,145,.25) 0 10%,rgba(216,224,222,.30) 19%,transparent 34%),
-    radial-gradient(ellipse at 58% 66%,rgba(94,119,124,.24) 0 9%,rgba(207,218,216,.30) 18%,transparent 33%),
-    radial-gradient(ellipse at 84% 39%,rgba(112,134,139,.27) 0 9%,rgba(220,226,224,.28) 18%,transparent 34%);
-  animation:mirjinMistDriftA 13s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 8% 58%,rgba(83,108,114,.48) 0 8%,rgba(224,231,229,.64) 17%,transparent 34%),
+    radial-gradient(ellipse at 31% 38%,rgba(111,134,139,.43) 0 10%,rgba(255,255,255,.74) 21%,transparent 38%),
+    radial-gradient(ellipse at 58% 66%,rgba(74,102,109,.44) 0 9%,rgba(238,243,241,.72) 20%,transparent 37%),
+    radial-gradient(ellipse at 84% 39%,rgba(102,128,134,.46) 0 9%,rgba(255,255,255,.70) 20%,transparent 38%);
+  animation:mirjinMistDriftA 10s linear infinite alternate!important;
 }
 .site-header .header-inner::after{
-  bottom:-16%;
-  height:76%;
-  opacity:.46;
+  bottom:-22%;
+  height:96%;
+  opacity:.82;
   background:
-    radial-gradient(ellipse at 14% 58%,rgba(77,104,111,.25) 0 10%,rgba(185,201,201,.26) 19%,transparent 36%),
-    radial-gradient(ellipse at 47% 42%,rgba(122,145,148,.24) 0 13%,rgba(218,226,224,.31) 22%,transparent 39%),
-    radial-gradient(ellipse at 80% 63%,rgba(82,108,115,.27) 0 10%,rgba(190,205,205,.28) 19%,transparent 36%);
-  animation:mirjinMistDriftB 18s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 14% 58%,rgba(66,96,104,.46) 0 10%,rgba(242,246,244,.70) 21%,transparent 39%),
+    radial-gradient(ellipse at 47% 42%,rgba(105,132,137,.42) 0 13%,rgba(255,255,255,.76) 24%,transparent 42%),
+    radial-gradient(ellipse at 80% 63%,rgba(70,101,109,.48) 0 10%,rgba(235,241,239,.72) 21%,transparent 39%);
+  animation:mirjinMistDriftB 14s linear infinite alternate!important;
 }
 .site-header .brand,
 .site-header .wuxia-header-info{z-index:5!important}
 @keyframes mirjinMistDriftA{
-  0%{transform:translate3d(-18%,3px,0) scale(1.00);opacity:.38}
-  45%{opacity:.68}
-  100%{transform:translate3d(18%,-5px,0) scale(1.10);opacity:.54}
+  0%{transform:translate3d(-22%,3px,0) scale(1.00);opacity:.66}
+  45%{opacity:.94}
+  100%{transform:translate3d(22%,-5px,0) scale(1.12);opacity:.78}
 }
 @keyframes mirjinMistDriftB{
-  0%{transform:translate3d(20%,0,0) scale(1.11);opacity:.32}
-  55%{opacity:.57}
-  100%{transform:translate3d(-20%,-4px,0) scale(1.00);opacity:.49}
+  0%{transform:translate3d(24%,0,0) scale(1.12);opacity:.58}
+  55%{opacity:.86}
+  100%{transform:translate3d(-24%,-4px,0) scale(1.00);opacity:.72}
 }
 @media(max-width:700px){
   .site-header .header-inner::before{
-    top:15%;
-    height:68%;
-    opacity:.62;
-    filter:blur(9px);
-    animation-duration:12s;
+    top:2%;
+    height:82%;
+    opacity:.92;
+    filter:blur(11px);
+    animation-duration:9s;
   }
   .site-header .header-inner::after{
-    bottom:-12%;
-    height:64%;
-    opacity:.54;
-    filter:blur(10px);
-    animation-duration:16s;
+    bottom:-18%;
+    height:84%;
+    opacity:.84;
+    filter:blur(12px);
+    animation-duration:12s;
   }
 }
 </style>
@@ -7159,6 +7203,26 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   }
   .market-row-attrs>span{grid-template-columns:70px minmax(0,1fr);padding:6px 8px}
   .market-row-attrs b,.market-row-attrs em{font-size:10px}
+}
+</style>
+<style id="market-admin-editor-v30">
+.market-admin-editor{
+  margin-top:16px;
+  padding:16px;
+  border:2px solid #d5b45e;
+  border-radius:12px;
+  background:#fffaf0;
+}
+.market-admin-editor>h3{margin:0 0 12px;color:#754f00;font-size:16px}
+.market-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.market-admin-grid label{display:grid;gap:5px;color:#52677b;font-size:11px;font-weight:800}
+.market-admin-grid label.wide{grid-column:1/-1}
+.market-admin-grid textarea{min-height:72px;resize:vertical;line-height:1.55}
+.market-admin-editor>p{margin:9px 0;color:#7f6c45;font-size:10px}
+.market-admin-editor>.primary-btn{width:100%;min-height:42px}
+@media(max-width:700px){
+  .market-admin-grid{grid-template-columns:1fr}
+  .market-admin-grid label.wide{grid-column:auto}
 }
 </style>
 </body></html>
