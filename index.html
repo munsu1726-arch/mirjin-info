@@ -5681,13 +5681,11 @@ document.querySelectorAll('.side-rail').forEach(rail=>rail.remove());
     setTimeout(()=>$('scheduleFormDate')?.showPicker?.(),80);
   };
 
-  /* Existing full DB browser is retained, but its item list opens immediately. */
+  /* 통합 DB는 항상 세 항목을 고르는 첫 화면부터 연다. */
   const originalDatabaseModal=renderDatabaseModal;
   renderDatabaseModal=function(reset=true){
     if(!reset&&state.activeService==='database'&&document.getElementById('humanDbBrowserLayer'))return;
     originalDatabaseModal(reset);
-    document.querySelector('.human-db-launcher-shell')?.classList.add('db-auto-open');
-    setTimeout(()=>document.querySelector('[data-db-launch="items"]')?.click(),0);
   };
 
   /* Floating chat also has one room only. */
@@ -6675,40 +6673,42 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   left:-28%;
   width:156%;
   pointer-events:none;
-  opacity:.48;
-  filter:blur(10px);
+  opacity:.7;
+  filter:blur(7px);
+  mix-blend-mode:screen;
   will-change:transform,opacity;
 }
 .site-header .header-inner::before{
-  top:32%;
-  height:48%;
+  top:18%;
+  height:66%;
   background:
-    radial-gradient(ellipse at 13% 55%,rgba(255,255,255,.86) 0 7%,transparent 22%),
-    radial-gradient(ellipse at 40% 44%,rgba(226,232,230,.64) 0 9%,transparent 27%),
-    radial-gradient(ellipse at 66% 59%,rgba(255,255,255,.82) 0 8%,transparent 24%),
-    radial-gradient(ellipse at 88% 42%,rgba(215,225,224,.60) 0 7%,transparent 24%);
-  animation:mirjinMistDriftA 18s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 8% 55%,rgba(255,255,255,.96) 0 9%,transparent 27%),
+    radial-gradient(ellipse at 32% 42%,rgba(222,232,231,.88) 0 11%,transparent 31%),
+    radial-gradient(ellipse at 59% 62%,rgba(255,255,255,.94) 0 10%,transparent 29%),
+    radial-gradient(ellipse at 86% 40%,rgba(216,228,227,.84) 0 10%,transparent 30%);
+  animation:mirjinMistDriftA 15s linear infinite;
 }
 .site-header .header-inner::after{
-  bottom:4%;
-  height:38%;
-  opacity:.32;
+  bottom:-5%;
+  height:58%;
+  opacity:.54;
   background:
-    radial-gradient(ellipse at 20% 60%,rgba(205,220,220,.72) 0 8%,transparent 26%),
-    radial-gradient(ellipse at 52% 48%,rgba(255,255,255,.84) 0 11%,transparent 30%),
-    radial-gradient(ellipse at 82% 62%,rgba(205,217,220,.66) 0 8%,transparent 27%);
-  animation:mirjinMistDriftB 24s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 17% 62%,rgba(203,219,219,.90) 0 11%,transparent 31%),
+    radial-gradient(ellipse at 49% 45%,rgba(255,255,255,.96) 0 14%,transparent 35%),
+    radial-gradient(ellipse at 80% 64%,rgba(199,216,220,.88) 0 11%,transparent 32%);
+  animation:mirjinMistDriftB 21s linear infinite;
 }
 .site-header .brand,
 .site-header .wuxia-header-info{z-index:3!important}
 @keyframes mirjinMistDriftA{
-  0%{transform:translate3d(-3%,2px,0) scale(1);opacity:.34}
-  50%{opacity:.56}
-  100%{transform:translate3d(7%,-3px,0) scale(1.06);opacity:.40}
+  0%{transform:translate3d(-13%,2px,0) scale(1.02);opacity:.50}
+  45%{opacity:.78}
+  100%{transform:translate3d(13%,-4px,0) scale(1.08);opacity:.56}
 }
 @keyframes mirjinMistDriftB{
-  0%{transform:translate3d(6%,0,0) scale(1.05);opacity:.22}
-  100%{transform:translate3d(-7%,-2px,0) scale(1);opacity:.40}
+  0%{transform:translate3d(14%,0,0) scale(1.08);opacity:.40}
+  55%{opacity:.64}
+  100%{transform:translate3d(-14%,-3px,0) scale(1.01);opacity:.48}
 }
 @media(max-width:700px){
   .site-header .header-inner::before{
@@ -6722,10 +6722,6 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     height:42%;
     animation-duration:21s;
   }
-}
-@media(prefers-reduced-motion:reduce){
-  .site-header .header-inner::before,
-  .site-header .header-inner::after{animation:none!important}
 }
 </style>
 </body></html>
