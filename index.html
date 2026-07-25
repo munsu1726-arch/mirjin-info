@@ -6190,4 +6190,23 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   .monster-drop-item em{font-size:9.5px}
 }
 </style>
+<style id="mobile-centered-content-v11">
+@media(max-width:700px){
+  .page-grid,.center-stage,.showcase,.top-grid,.panel{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .showcase{padding-left:8px!important;padding-right:8px!important;margin-left:0!important;margin-right:0!important}
+  .top-grid{justify-items:center!important}
+  .top-grid>.panel,.top-grid>.feature-card{justify-self:center!important}
+  /* 빠른 메뉴는 손잡이 부분만 본문 위에 남겨 표의 중앙 영역을 가리지 않는다. */
+  .unified-service-rail{right:-24px!important}
+  .unified-service-button{width:48px!important;padding-right:16px!important}
+  .unified-service-button:focus-visible{transform:translateX(-20px)}
+  .boss-table-panel .panel-body{padding-left:8px!important;padding-right:8px!important}
+  .boss-table-panel .data-table th,.boss-table-panel .data-table td{padding-left:5px!important;padding-right:5px!important}
+}
+</style>
 </body></html>
