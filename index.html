@@ -5862,6 +5862,23 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     const reload=()=>location.reload();
     mirjin.addEventListener('click',reload);
     mirjin.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();reload()}});
+
+    const headerInner=document.querySelector('.site-header .header-inner');
+    if(headerInner&&!headerInner.querySelector('.wuxia-header-info')){
+      const left=document.createElement('aside');
+      left.className='wuxia-header-info wuxia-header-left';
+      left.innerHTML='<i>▥</i><span><b>실시간 게임 정보</b><small>BOSS · 경매장 · 통합 DB</small></span>';
+      const right=document.createElement('aside');
+      right.className='wuxia-header-info wuxia-header-right';
+      right.innerHTML='<i></i><span><b>데이터 정상 연결</b><small>마지막 갱신 <time id="wuxiaHeaderUpdated">--:--</time></small></span>';
+      headerInner.append(left,right);
+      const updateHeaderTime=()=>{
+        const output=document.getElementById('wuxiaHeaderUpdated');
+        if(output)output.textContent=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false});
+      };
+      updateHeaderTime();
+      setInterval(updateHeaderTime,30000);
+    }
   }
 
   function installUnifiedRail(){
@@ -6351,6 +6368,138 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     opacity:1!important;
     pointer-events:auto!important;
   }
+}
+</style>
+<style id="wuxia-balanced-header-v17">
+.site-header{
+  position:relative!important;
+  height:176px!important;
+  overflow:hidden!important;
+  border:1px solid #dce6ed!important;
+  border-radius:18px!important;
+  background:
+    radial-gradient(ellipse at 8% 100%,rgba(64,91,111,.11),transparent 32%),
+    radial-gradient(ellipse at 92% 100%,rgba(64,91,111,.10),transparent 30%),
+    linear-gradient(180deg,#fff 0%,#fbfcfd 72%,#f3f7f9 100%)!important;
+}
+.site-header::before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;right:0!important;bottom:0!important;
+  display:block!important;
+  height:4px!important;
+  background:linear-gradient(90deg,transparent 2%,#3e8992 14%,#8fb8b5 44%,#b4433f 60%,#d68b82 86%,transparent 98%)!important;
+  opacity:.8!important;
+}
+.site-header::after{
+  content:""!important;
+  position:absolute!important;
+  left:7%!important;right:7%!important;bottom:16px!important;
+  display:block!important;
+  height:48px!important;
+  background:
+    linear-gradient(155deg,transparent 0 10%,rgba(56,80,98,.06) 10% 13%,transparent 13% 22%,rgba(56,80,98,.045) 22% 25%,transparent 25%),
+    linear-gradient(25deg,transparent 0 72%,rgba(56,80,98,.045) 72% 75%,transparent 75%)!important;
+  pointer-events:none!important;
+}
+.site-header .header-inner{
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0 36px!important;
+}
+.site-header .brand{
+  left:50%!important;
+  top:48%!important;
+  transform:translate(-50%,-50%)!important;
+}
+.site-header .brand .mirjin-image-v4{
+  width:310px!important;
+  max-width:34vw!important;
+  height:116px!important;
+  object-position:center!important;
+}
+.wuxia-header-info{
+  position:absolute;
+  top:50%;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:250px;
+  padding:15px 18px;
+  transform:translateY(-50%);
+  border:1px solid rgba(119,141,158,.28);
+  border-radius:6px;
+  background:rgba(255,255,255,.74);
+  box-shadow:0 8px 24px rgba(36,60,77,.05);
+  backdrop-filter:blur(5px);
+}
+.wuxia-header-left{left:42px}
+.wuxia-header-right{right:42px}
+.wuxia-header-info>i{
+  display:grid;
+  place-items:center;
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:#e9f3f5;
+  color:#176276;
+  font-size:18px;
+  font-style:normal;
+}
+.wuxia-header-right>i{
+  flex-basis:12px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#19ad67;
+  box-shadow:0 0 0 5px rgba(25,173,103,.10);
+}
+.wuxia-header-info b,.wuxia-header-info small{display:block;white-space:nowrap}
+.wuxia-header-info b{color:#17314b;font-size:15px}
+.wuxia-header-info small{margin-top:6px;color:#63778b;font-size:11px}
+@media(max-width:1050px) and (min-width:701px){
+  .wuxia-header-info{min-width:205px;padding:12px;gap:9px}
+  .wuxia-header-left{left:20px}.wuxia-header-right{right:20px}
+  .wuxia-header-info b{font-size:13px}.wuxia-header-info small{font-size:9px}
+  .site-header .brand .mirjin-image-v4{width:255px!important}
+}
+@media(max-width:700px){
+  .site-header{
+    height:188px!important;
+    border-width:0 0 1px!important;
+    border-radius:0!important;
+  }
+  .site-header .header-inner{padding:0 10px!important}
+  .site-header .brand{
+    top:48px!important;
+    transform:translate(calc(-50% + 12px),-50%)!important;
+  }
+  .site-header .brand .mirjin-image-v4{
+    width:245px!important;
+    max-width:72vw!important;
+    height:82px!important;
+  }
+  .wuxia-header-info{
+    top:auto;
+    bottom:22px;
+    width:calc(50% - 15px);
+    min-width:0;
+    min-height:64px;
+    padding:9px 8px;
+    gap:7px;
+    transform:none;
+    border-radius:11px;
+  }
+  .wuxia-header-left{left:10px}
+  .wuxia-header-right{right:10px}
+  .wuxia-header-info>i{flex-basis:28px;width:28px;height:28px;font-size:14px}
+  .wuxia-header-right>i{flex-basis:9px;width:9px;height:9px}
+  .wuxia-header-info b{overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+  .wuxia-header-info small{overflow:hidden;text-overflow:ellipsis;margin-top:4px;font-size:7.5px}
 }
 </style>
 </body></html>
