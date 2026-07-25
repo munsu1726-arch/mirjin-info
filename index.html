@@ -4093,7 +4093,8 @@ body{
       return;
     }
     notice.className='market-app-notice market-mobile-watch';
-    notice.innerHTML=`<div class="market-watch-head"><i>♧</i><div><b>관심 아이템 신규 매물 알림</b><small>아이템 이름 두 글자부터 등록할 수 있습니다</small></div><button class="market-watch-toggle" id="marketWatchToggle" type="button"></button></div><form class="market-watch-form" id="marketWatchForm"><input id="marketWatchInput" maxlength="30" minlength="2" placeholder="예: 위스, 금전, 도사"><button type="submit">추가</button></form><div class="market-watch-keywords" id="marketWatchKeywords"></div><div class="market-watch-status" id="marketWatchStatus"></div>`;
+    notice.classList.add('collapsed');
+    notice.innerHTML=`<div class="market-watch-head"><i>♧</i><div><b>관심 아이템 신규 매물 알림</b><small>필요할 때만 설정을 펼쳐 사용하세요</small></div><button class="market-watch-expand" id="marketWatchExpand" type="button">설정 열기</button><button class="market-watch-toggle" id="marketWatchToggle" type="button"></button></div><form class="market-watch-form" id="marketWatchForm"><input id="marketWatchInput" maxlength="30" minlength="2" placeholder="예: 위스, 금전, 도사"><button type="submit">추가</button></form><div class="market-watch-keywords" id="marketWatchKeywords"></div><div class="market-watch-status" id="marketWatchStatus"></div>`;
     const draw=()=>{
       const toggle=document.getElementById('marketWatchToggle');
       const keywords=document.getElementById('marketWatchKeywords');
@@ -4114,6 +4115,10 @@ body{
       else await requestMobilePermission();
       saveConfig();
       draw();
+    });
+    document.getElementById('marketWatchExpand').addEventListener('click',()=>{
+      const collapsed=notice.classList.toggle('collapsed');
+      document.getElementById('marketWatchExpand').textContent=collapsed?'설정 열기':'설정 닫기';
     });
     document.getElementById('marketWatchForm').addEventListener('submit',async event=>{
       event.preventDefault();
@@ -6545,6 +6550,182 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   .unified-service-button{
     min-height:58px!important;
   }
+}
+</style>
+<style id="mobile-market-many-rows-v20">
+.market-watch-expand{
+  height:30px;
+  padding:0 9px;
+  border:1px solid #bcd8d1;
+  border-radius:8px;
+  background:#fff;
+  color:#176b5c;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+}
+@media(max-width:700px){
+  .modal-dialog:has(.market-compact-shell) .modal-head{
+    flex:0 0 66px!important;
+    height:66px!important;
+    padding:0 14px!important;
+  }
+  .modal-dialog:has(.market-compact-shell) .modal-body{
+    min-height:0!important;
+    padding:8px!important;
+    overflow:hidden!important;
+  }
+  .market-compact-shell{height:100%!important}
+  .market-mobile-watch{
+    margin-bottom:6px!important;
+    padding:7px 8px!important;
+    border-radius:10px!important;
+  }
+  .market-mobile-watch.collapsed{
+    flex:0 0 43px!important;
+    height:43px!important;
+    min-height:43px!important;
+    overflow:hidden!important;
+  }
+  .market-mobile-watch.collapsed .market-watch-form,
+  .market-mobile-watch.collapsed .market-watch-keywords,
+  .market-mobile-watch.collapsed .market-watch-status,
+  .market-mobile-watch.collapsed .market-watch-toggle{
+    display:none!important;
+  }
+  .market-watch-head{
+    grid-template-columns:28px minmax(0,1fr) auto auto!important;
+    gap:6px!important;
+  }
+  .market-watch-head>i{
+    width:27px!important;
+    height:27px!important;
+    border-radius:8px!important;
+  }
+  .market-watch-head b{font-size:9.5px!important}
+  .market-watch-head small{font-size:7.5px!important}
+  .market-watch-toggle{height:30px!important;padding:0 8px!important;font-size:8px!important}
+
+  .market-compact-toolbar{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:5px!important;
+    padding:6px!important;
+    border-radius:10px!important;
+  }
+  .market-compact-search{grid-column:1/-1!important}
+  .market-compact-search input,
+  .market-compact-toolbar .field,
+  .market-compact-toolbar .soft-btn{
+    height:34px!important;
+    min-height:34px!important;
+    font-size:10px!important;
+  }
+  .market-compact-search input{padding-left:32px!important}
+  .market-compact-toolbar .soft-btn{
+    grid-column:1/-1!important;
+    padding:0 8px!important;
+  }
+  .market-compact-panel{
+    margin-top:6px!important;
+    border-radius:11px!important;
+  }
+  .market-compact-panel>header{
+    padding:7px 10px!important;
+  }
+  .market-compact-panel>header h3{font-size:13px!important}
+  .market-compact-panel>header span{font-size:9px!important;padding:3px 7px!important}
+  .market-compact-rows{
+    padding:0 4px 4px!important;
+  }
+  .market-compact-row{
+    grid-template-columns:30px minmax(0,1fr) 78px 64px!important;
+    gap:5px!important;
+    min-height:46px!important;
+    height:46px!important;
+    padding:4px 5px!important;
+    border-radius:0!important;
+  }
+  .market-compact-thumb{
+    width:28px!important;
+    height:28px!important;
+    border-radius:7px!important;
+  }
+  .market-compact-copy small{font-size:7px!important}
+  .market-compact-copy strong{
+    margin-top:2px!important;
+    font-size:10.5px!important;
+  }
+  .market-compact-copy em{display:none!important}
+  .market-compact-price b{font-size:9.5px!important}
+  .market-compact-price small{display:none!important}
+  .market-compact-row time{
+    grid-column:4!important;
+    text-align:right!important;
+    font-size:8.5px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
+<style id="animated-ink-mist-v20">
+.site-header .header-inner::before,
+.site-header .header-inner::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:-28%;
+  width:156%;
+  pointer-events:none;
+  opacity:.48;
+  filter:blur(10px);
+  will-change:transform,opacity;
+}
+.site-header .header-inner::before{
+  top:32%;
+  height:48%;
+  background:
+    radial-gradient(ellipse at 13% 55%,rgba(255,255,255,.86) 0 7%,transparent 22%),
+    radial-gradient(ellipse at 40% 44%,rgba(226,232,230,.64) 0 9%,transparent 27%),
+    radial-gradient(ellipse at 66% 59%,rgba(255,255,255,.82) 0 8%,transparent 24%),
+    radial-gradient(ellipse at 88% 42%,rgba(215,225,224,.60) 0 7%,transparent 24%);
+  animation:mirjinMistDriftA 18s ease-in-out infinite alternate;
+}
+.site-header .header-inner::after{
+  bottom:4%;
+  height:38%;
+  opacity:.32;
+  background:
+    radial-gradient(ellipse at 20% 60%,rgba(205,220,220,.72) 0 8%,transparent 26%),
+    radial-gradient(ellipse at 52% 48%,rgba(255,255,255,.84) 0 11%,transparent 30%),
+    radial-gradient(ellipse at 82% 62%,rgba(205,217,220,.66) 0 8%,transparent 27%);
+  animation:mirjinMistDriftB 24s ease-in-out infinite alternate;
+}
+.site-header .brand,
+.site-header .wuxia-header-info{z-index:3!important}
+@keyframes mirjinMistDriftA{
+  0%{transform:translate3d(-3%,2px,0) scale(1);opacity:.34}
+  50%{opacity:.56}
+  100%{transform:translate3d(7%,-3px,0) scale(1.06);opacity:.40}
+}
+@keyframes mirjinMistDriftB{
+  0%{transform:translate3d(6%,0,0) scale(1.05);opacity:.22}
+  100%{transform:translate3d(-7%,-2px,0) scale(1);opacity:.40}
+}
+@media(max-width:700px){
+  .site-header .header-inner::before{
+    top:30%;
+    height:52%;
+    opacity:.42;
+    animation-duration:16s;
+  }
+  .site-header .header-inner::after{
+    bottom:0;
+    height:42%;
+    animation-duration:21s;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header .header-inner::before,
+  .site-header .header-inner::after{animation:none!important}
 }
 </style>
 </body></html>
