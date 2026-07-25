@@ -6378,9 +6378,8 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   border:1px solid #dce6ed!important;
   border-radius:18px!important;
   background:
-    radial-gradient(ellipse at 8% 100%,rgba(64,91,111,.11),transparent 32%),
-    radial-gradient(ellipse at 92% 100%,rgba(64,91,111,.10),transparent 30%),
-    linear-gradient(180deg,#fff 0%,#fbfcfd 72%,#f3f7f9 100%)!important;
+    linear-gradient(180deg,rgba(255,255,255,.08),rgba(250,252,252,.08)),
+    url("assets/wuxia-ink-mountain-header-v18.png") center center/100% 100% no-repeat!important;
 }
 .site-header::before{
   content:""!important;
@@ -6392,15 +6391,8 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   opacity:.8!important;
 }
 .site-header::after{
-  content:""!important;
-  position:absolute!important;
-  left:7%!important;right:7%!important;bottom:16px!important;
-  display:block!important;
-  height:48px!important;
-  background:
-    linear-gradient(155deg,transparent 0 10%,rgba(56,80,98,.06) 10% 13%,transparent 13% 22%,rgba(56,80,98,.045) 22% 25%,transparent 25%),
-    linear-gradient(25deg,transparent 0 72%,rgba(56,80,98,.045) 72% 75%,transparent 75%)!important;
-  pointer-events:none!important;
+  content:none!important;
+  display:none!important;
 }
 .site-header .header-inner{
   position:relative!important;
