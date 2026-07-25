@@ -6704,57 +6704,57 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   width:184%;
   pointer-events:none;
   border-radius:50%;
-  filter:blur(16px);
-  mix-blend-mode:normal;
+  filter:blur(12px);
+  mix-blend-mode:multiply;
   will-change:transform,opacity;
 }
 .site-header .header-inner::before{
-  top:-4%;
-  height:92%;
-  opacity:.92;
+  top:8%;
+  height:78%;
+  opacity:.58;
   background:
-    radial-gradient(ellipse at 8% 58%,rgba(83,108,114,.48) 0 8%,rgba(224,231,229,.64) 17%,transparent 34%),
-    radial-gradient(ellipse at 31% 38%,rgba(111,134,139,.43) 0 10%,rgba(255,255,255,.74) 21%,transparent 38%),
-    radial-gradient(ellipse at 58% 66%,rgba(74,102,109,.44) 0 9%,rgba(238,243,241,.72) 20%,transparent 37%),
-    radial-gradient(ellipse at 84% 39%,rgba(102,128,134,.46) 0 9%,rgba(255,255,255,.70) 20%,transparent 38%);
-  animation:mirjinMistDriftA 10s linear infinite alternate!important;
+    radial-gradient(ellipse at 8% 58%,rgba(102,124,128,.28) 0 8%,rgba(183,198,198,.24) 15%,transparent 31%),
+    radial-gradient(ellipse at 31% 38%,rgba(122,142,145,.25) 0 10%,rgba(216,224,222,.30) 19%,transparent 34%),
+    radial-gradient(ellipse at 58% 66%,rgba(94,119,124,.24) 0 9%,rgba(207,218,216,.30) 18%,transparent 33%),
+    radial-gradient(ellipse at 84% 39%,rgba(112,134,139,.27) 0 9%,rgba(220,226,224,.28) 18%,transparent 34%);
+  animation:mirjinMistDriftA 13s ease-in-out infinite alternate;
 }
 .site-header .header-inner::after{
-  bottom:-22%;
-  height:96%;
-  opacity:.82;
+  bottom:-16%;
+  height:76%;
+  opacity:.46;
   background:
-    radial-gradient(ellipse at 14% 58%,rgba(66,96,104,.46) 0 10%,rgba(242,246,244,.70) 21%,transparent 39%),
-    radial-gradient(ellipse at 47% 42%,rgba(105,132,137,.42) 0 13%,rgba(255,255,255,.76) 24%,transparent 42%),
-    radial-gradient(ellipse at 80% 63%,rgba(70,101,109,.48) 0 10%,rgba(235,241,239,.72) 21%,transparent 39%);
-  animation:mirjinMistDriftB 14s linear infinite alternate!important;
+    radial-gradient(ellipse at 14% 58%,rgba(77,104,111,.25) 0 10%,rgba(185,201,201,.26) 19%,transparent 36%),
+    radial-gradient(ellipse at 47% 42%,rgba(122,145,148,.24) 0 13%,rgba(218,226,224,.31) 22%,transparent 39%),
+    radial-gradient(ellipse at 80% 63%,rgba(82,108,115,.27) 0 10%,rgba(190,205,205,.28) 19%,transparent 36%);
+  animation:mirjinMistDriftB 18s ease-in-out infinite alternate;
 }
 .site-header .brand,
 .site-header .wuxia-header-info{z-index:5!important}
 @keyframes mirjinMistDriftA{
-  0%{transform:translate3d(-22%,3px,0) scale(1.00);opacity:.66}
-  45%{opacity:.94}
-  100%{transform:translate3d(22%,-5px,0) scale(1.12);opacity:.78}
+  0%{transform:translate3d(-18%,3px,0) scale(1.00);opacity:.38}
+  45%{opacity:.68}
+  100%{transform:translate3d(18%,-5px,0) scale(1.10);opacity:.54}
 }
 @keyframes mirjinMistDriftB{
-  0%{transform:translate3d(24%,0,0) scale(1.12);opacity:.58}
-  55%{opacity:.86}
-  100%{transform:translate3d(-24%,-4px,0) scale(1.00);opacity:.72}
+  0%{transform:translate3d(20%,0,0) scale(1.11);opacity:.32}
+  55%{opacity:.57}
+  100%{transform:translate3d(-20%,-4px,0) scale(1.00);opacity:.49}
 }
 @media(max-width:700px){
   .site-header .header-inner::before{
-    top:2%;
-    height:82%;
-    opacity:.92;
-    filter:blur(11px);
-    animation-duration:9s;
+    top:15%;
+    height:68%;
+    opacity:.62;
+    filter:blur(9px);
+    animation-duration:12s;
   }
   .site-header .header-inner::after{
-    bottom:-18%;
-    height:84%;
-    opacity:.84;
-    filter:blur(12px);
-    animation-duration:12s;
+    bottom:-12%;
+    height:64%;
+    opacity:.54;
+    filter:blur(10px);
+    animation-duration:16s;
   }
 }
 </style>
