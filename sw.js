@@ -1,4 +1,4 @@
-const CACHE_NAME='mirjin-shell-v17';
+const CACHE_NAME='mirjin-shell-v18';
 const STATIC_FILES=[
   './',
   './index.html',
