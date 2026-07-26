@@ -1,4 +1,4 @@
-const CACHE_NAME='mirjin-shell-v18';
+const CACHE_NAME='mirjin-shell-v19';
 const STATIC_FILES=[
   './',
   './index.html',
@@ -9,7 +9,8 @@ const STATIC_FILES=[
   './assets/boss-hero.png',
   './assets/app-icon-192.png',
   './assets/app-icon-512.png',
-  './assets/ara-clan.webp'
+  './assets/ara-clan.webp',
+  './assets/item-icons/item-icon-map.js'
 ];
 
 self.addEventListener('install',event=>{

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="mirjin-initializing" lang="ko"><head><meta charset="utf-8"/><meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#eef4fb" name="theme-color"/><meta content="보스, 경매장, 게시판, 채팅과 스케줄을 한곳에서 확인하는 미르의 전설: 진 정보 허브" name="description"/><title>미르진 | 미르의 전설: 진 정보 허브</title><style>
+<html class="mirjin-initializing" lang="ko"><head><meta charset="utf-8"/><meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#eef4fb" name="theme-color"/><meta content="보스, 경매장, 게시판, 채팅과 스케줄을 한곳에서 확인하는 미르의 전설: 진 정보 허브" name="description"/><title>미르진 | 미르의 전설: 진 정보 허브</title><script src="assets/item-icons/item-icon-map.js"></script><style>
 :root{
   --bg:#edf5fc;--panel:#fff;--line:#e1e8ef;--text:#101820;--muted:#7a8795;
   --blue:#145eb5;--green:#079358;--purple:#6a4fd6;--orange:#d96817;--red:#d92127;
@@ -1023,15 +1023,49 @@ function itemName(r){const fields=['manualItemName','finalItemName','confirmedIt
 function itemPrice(r){return r.listingPriceValue??r.priceValue??r.fastListingPriceValue??r.initialListingPriceValue??r.salePriceValue??r.salePrice??r.price??r.gold??r.amount}
 function itemCategory(r){if(itemName(r)==='해골소환(물)')return'무공서';return String(r.category||r.itemCategory||r.clickedCategory||r.type||'기타').trim()||'기타'}
 function worker(r){const s=String(r.workerId||r.worker||r.source||r.market||'').toUpperCase();return s.includes('B')?'B':'A'}
-function itemIcon(r){const v=String(r.iconDataUrl||r.iconUrl||r.thumbnail||r.image||'').trim();return /^(data:image\/|https?:\/\/)/.test(v)?v:''}
+function itemIcon(r){
+  const v=String(r.iconDataUrl||r.iconUrl||r.thumbnail||r.image||'').trim();
+  if(/^(data:image\/|https?:\/\/)/.test(v))return v;
+  const itemId=String(r.itemId??r.itemCode??r.protoId??'').trim();
+  const shape=window.MIRJIN_ITEM_ICON_SHAPES?.[itemId];
+  return shape?`assets/item-icons/${encodeURIComponent(shape)}.png`:'';
+}
 function itemImage(r){const v=String(r.detailImageDataUrl||r.detailImageUrl||r.detailImage||r.fullImageDataUrl||'').trim();return /^(data:image\/|https?:\/\/)/.test(v)?v:''}
 function itemFallbackMark(r){const category=itemCategory(r);const marks={의상:'衣',무공서:'卷',모자:'冠',무기:'劍',목걸이:'玉',팔찌:'環',반지:'戒',재료:'材',시약:'藥',기타:'◆'};return marks[category]||'◆'}
 function listingKey(r){return String(r.listingId||r.firebaseKey||r.identityHash||r.rowHash||`${worker(r)}|${r.page||''}|${r.row||''}|${itemName(r)}|${itemPrice(r)||''}`)}
 function activeMarket(rows){return rows.filter(r=>{const end=remainingEnd(r);return end>Date.now()||(!end&&!/expired|sold|삭제|종료/i.test(String(r.status||'')))})}
 function marketHealth(payload){if(!payload)return{known:false,ok:true,label:'상태 데이터 확인 중'};const nodes=[payload?.workers?.A,payload?.workers?.B,payload?.A,payload?.B].filter(Boolean);if(nodes.length>=2){const ok=nodes.every(n=>n.ok!==false&&!n.error&&(!ts(n.heartbeat||n.updatedAt||n.lastSeen||n.timestamp)||Date.now()-ts(n.heartbeat||n.updatedAt||n.lastSeen||n.timestamp)<8*60*1000));return{known:true,ok,label:ok?'A/B 감시기 정상':'거래소 점검중'}}const raw=JSON.stringify(payload).toLowerCase();const bad=/error|offline|stale|fail|점검/.test(raw);return{known:true,ok:!bad,label:bad?'거래소 점검중':'감시기 연결됨'}}
 function asObject(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}
-function normalizeOptionPair(key,value){const label=String(key).trim(),raw=String(value).trim(),id=Number((label.match(/(?:속성|property)\s*(\d+)/i)||[])[1]);if(id===40||id===41){const amount=Number(raw.replace(/[^\d.-]/g,''));const display=Number.isFinite(amount)?`${amount/10}%`:raw;return[id===40?'피해 보너스':'피해 감소',display]}return[label,raw]}
-function pairEntries(source){const out=[];if(!source)return out;if(Array.isArray(source)){source.forEach(x=>{if(x&&typeof x==='object'){const k=x.name||x.label||x.key||x.option||x.title;const v=x.value??x.amount??x.text;if(k&&v!=null)out.push(normalizeOptionPair(k,v))}});return out}if(typeof source==='object'){Object.entries(source).forEach(([k,v])=>{if(v==null||v===''||typeof v==='object')return;out.push(normalizeOptionPair(k,v))});return out}return out}
+const GAME_PROPERTY_LABELS={
+  1:'레벨',2:'체력',3:'마력',4:'파괴력',5:'방어력',6:'마법피해',7:'정확도',8:'민첩',
+  9:'외공',10:'내공',11:'중량',12:'선악값',13:'PVP 피해 증가',14:'PVP 피해 감소',
+  15:'마법 보호',16:'마법저항',17:'이상상태 저항',18:'공격속도',19:'체력 회복',
+  20:'마력 회복',21:'정신력 회복 감소',22:'필살기 재사용 감소',23:'이동속도',
+  24:'현재 체력',25:'현재 마력',26:'현재 중량',27:'외공방어력',28:'내공방어력',
+  29:'최소 외공',30:'최소 내공',31:'화',32:'수',33:'뇌',34:'지',35:'음',36:'양',
+  37:'선',38:'악',39:'행운',40:'피해 보너스',41:'피해 감소',42:'파괴력 보너스',
+  43:'마법피해 보너스',44:'체력 보너스',45:'마력 보너스',46:'물리저항 보너스',
+  47:'마법저항 보너스',48:'이동속도 보너스',49:'경험치 보너스',50:'현재 경험치',
+  51:'PVE 피해 증가',52:'PVE 피해 감소',53:'치유 효과',54:'물리피해 증가',
+  55:'물리피해 감소',56:'수속성 피해 증가',57:'수속성 피해 감소',58:'화속성 피해 증가',
+  59:'화속성 피해 감소',60:'뇌속성 피해 증가',61:'뇌속성 피해 감소',62:'지속성 피해 증가',
+  63:'지속성 피해 감소',64:'최소 외공방어력',65:'최소 내공방어력',66:'양속성 피해 증가',
+  67:'양속성 피해 감소',68:'음속성 피해 증가',69:'음속성 피해 감소'
+};
+const GAME_PERCENT_PROPERTY_IDS=new Set([15,40,41,42,43,44,45,46,47,48,49,51,52,53,54,55,56,57,58,59,60,61,62,63,66,67,68,69]);
+function normalizeOptionPair(key,value){
+  const originalLabel=String(key).trim(),raw=String(value).trim();
+  const match=originalLabel.match(/(?:속성|property)\s*(\d+)/i);
+  const id=match?Number(match[1]):0;
+  const label=GAME_PROPERTY_LABELS[id]||originalLabel;
+  if(id&&GAME_PERCENT_PROPERTY_IDS.has(id)&&!/%/.test(raw)){
+    const numeric=raw.match(/-?\d+(?:\.\d+)?/);
+    if(numeric)return[label,`${Number(numeric[0])/10}%`];
+  }
+  return[label,raw];
+}
+function meaningfulOptionValue(value){const text=String(value??'').trim();if(!text)return false;const numeric=text.replace(/[%+,]/g,'');return !(numeric!==''&&Number.isFinite(Number(numeric))&&Number(numeric)===0)}
+function pairEntries(source){const out=[];if(!source)return out;if(Array.isArray(source)){source.forEach(x=>{if(x&&typeof x==='object'){const k=x.name||x.label||x.key||x.option||x.title;const v=x.value??x.amount??x.text;if(k&&v!=null&&meaningfulOptionValue(v))out.push(normalizeOptionPair(k,v))}});return out}if(typeof source==='object'){Object.entries(source).forEach(([k,v])=>{if(v==null||v===''||typeof v==='object'||!meaningfulOptionValue(v))return;out.push(normalizeOptionPair(k,v))});return out}return out}
 function attributeRoot(r){for(const x of [r.attributes,r.attributesCandidate,r.detailAttributes,r.detailOptions,r.itemAttributes])if(x&&typeof x==='object'&&Object.keys(x).length)return x;return{}}
 function optionGroup(r,names){const root=attributeRoot(r),sources=[];for(const name of names){sources.push(root[name],r[name],r.detailOptions?.[name],r.attributes?.[name])}for(const source of sources){const rows=pairEntries(source);if(rows.length)return rows}return[]}
 function detailGroups(r){const root=attributeRoot(r),base=[];[['레벨',root.level??r.level],['중량',root.weight??r.weight],['승급',root.promotion??r.promotion],['품질',root.quality??r.quality],['수량',r.quantity]].forEach(([k,v])=>{if(v!=null&&String(v).trim()!=='')base.push([k,String(v)]) });return{
@@ -1989,8 +2023,10 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
     };
     const draw=()=>{
       const rows=filteredRows();
+      const pinnedCount=rows.filter(watchMatch).length;
       $('marketCompactCount').textContent=`${rows.length.toLocaleString('ko-KR')}개`;
-      $('marketCompactRows').innerHTML=rows.length?rows.map((record,index)=>`<button class="market-compact-row ${remainingEnd(record)&&remainingEnd(record)-Date.now()<=300000?'ending-soon':''} ${watchMatch(record)?'watch-pinned':''}" data-market-compact-index="${index}" type="button"><span class="market-row-main"><span class="market-compact-thumb">${itemIcon(record)?`<img src="${esc(itemIcon(record))}" alt="${esc(itemName(record))}">`:esc(itemFallbackMark(record))}</span><strong class="market-row-name">${esc(itemName(record))}</strong><span class="market-row-category">${esc(itemCategory(record))}</span><span class="market-compact-price"><b>${esc(fmtPrice(itemPrice(record)))}</b><small>금화</small></span><time data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</time></span><span class="market-row-attrs"><span><b>기본 속성</b><em>${esc(marketAttributeText(record,'basic'))}</em></span><span><b>상급 속성</b><em>${esc(marketAttributeText(record,'advanced'))}</em></span></span></button>`).join(''):'<div class="market-result-empty"><span>⌕</span><b>조건에 맞는 매물이 없습니다</b><p>검색어나 분류를 바꿔보세요.</p></div>';
+      const rowHtml=(record,index)=>`<button class="market-compact-row ${remainingEnd(record)&&remainingEnd(record)-Date.now()<=300000?'ending-soon':''} ${watchMatch(record)?'watch-pinned':''}" data-market-compact-index="${index}" type="button"><span class="market-row-main"><span class="market-compact-thumb">${itemIcon(record)?`<img src="${esc(itemIcon(record))}" alt="${esc(itemName(record))}">`:esc(itemFallbackMark(record))}</span><strong class="market-row-name">${esc(itemName(record))}</strong><span class="market-row-category">${esc(itemCategory(record))}</span><span class="market-compact-price"><b>${esc(fmtPrice(itemPrice(record)))}</b><small>금화</small></span><time data-end="${remainingEnd(record)}">${remainText(remainingEnd(record))}</time></span><span class="market-row-attrs"><span><b>기본 속성</b><em>${esc(marketAttributeText(record,'basic'))}</em></span><span><b>상급 속성</b><em>${esc(marketAttributeText(record,'advanced'))}</em></span></span></button>`;
+      $('marketCompactRows').innerHTML=rows.length?`${pinnedCount?`<div class="market-watch-favorite-heading"><span>★ 관심 아이템 즐겨찾기</span><b>${pinnedCount.toLocaleString('ko-KR')}개 · 전체 목록 최상단</b></div>`:''}${rows.map((record,index)=>`${pinnedCount&&index===pinnedCount?'<div class="market-all-heading">전체 매물</div>':''}${rowHtml(record,index)}`).join('')}`:'<div class="market-result-empty"><span>⌕</span><b>조건에 맞는 매물이 없습니다</b><p>검색어나 분류를 바꿔보세요.</p></div>';
       $('marketCompactRows').querySelectorAll('[data-market-compact-index]').forEach(button=>button.addEventListener('click',()=>showDetail(rows[num(button.dataset.marketCompactIndex)])));
     };
     $('marketCompactBack').addEventListener('click',()=>{$('marketCompactDetailView').classList.add('hidden');$('marketCompactListView').classList.remove('hidden')});
@@ -4195,21 +4231,21 @@ body{
     if(!notice)return;
     if(!mobileDevice()){
       notice.className='market-app-notice market-watch-desktop';
-      notice.innerHTML='<span>PHONE</span><div><b>관심 아이템 알림은 휴대폰 전용입니다</b><small>PC에서는 알림을 설정하거나 받을 수 없습니다. 휴대폰에서 접속해 관심 아이템을 등록해 주세요.</small></div>';
+      notice.innerHTML='<span>PHONE</span><div><b>관심 아이템 즐겨찾기</b><small>휴대폰에서 단어를 등록하면 일치하는 매물이 전체 목록 최상단에 모이고 새 매물 알림도 받을 수 있습니다.</small></div>';
       return;
     }
     notice.className='market-app-notice market-mobile-watch';
     notice.classList.add('collapsed');
-    notice.innerHTML=`<div class="market-watch-head"><i>♧</i><div><b>관심 아이템 신규 매물 알림</b><small>필요할 때만 설정을 펼쳐 사용하세요</small></div><button class="market-watch-expand" id="marketWatchExpand" type="button">설정 열기</button><button class="market-watch-toggle" id="marketWatchToggle" type="button"></button></div><form class="market-watch-form" id="marketWatchForm"><input id="marketWatchInput" maxlength="30" minlength="2" placeholder="예: 위스, 금전, 도사"><button type="submit">추가</button></form><div class="market-watch-keywords" id="marketWatchKeywords"></div><div class="market-watch-status" id="marketWatchStatus"></div>`;
+    notice.innerHTML=`<div class="market-watch-head"><i>★</i><div><b>관심 아이템 즐겨찾기</b><small>등록한 단어가 포함된 매물을 전체 목록 맨 위에 모읍니다</small></div><button class="market-watch-expand" id="marketWatchExpand" type="button">설정 열기</button><button class="market-watch-toggle" id="marketWatchToggle" type="button"></button></div><form class="market-watch-form" id="marketWatchForm"><input id="marketWatchInput" maxlength="30" minlength="2" placeholder="예: 찢어, 금전, 도사"><button type="submit">추가</button></form><div class="market-watch-keywords" id="marketWatchKeywords"></div><div class="market-watch-status" id="marketWatchStatus"></div>`;
     const draw=()=>{
       const toggle=document.getElementById('marketWatchToggle');
       const keywords=document.getElementById('marketWatchKeywords');
       const status=document.getElementById('marketWatchStatus');
       toggle.className=`market-watch-toggle ${config.enabled?'on':''}`;
-      toggle.textContent=config.enabled?'알림·우선 ON':'알림·우선 OFF';
+      toggle.textContent=config.enabled?'즐겨찾기·알림 ON':'즐겨찾기·알림 OFF';
       keywords.innerHTML=config.keywords.length?config.keywords.map((keyword,index)=>`<button class="market-watch-chip" type="button" data-watch-remove="${index}">${esc(keyword)} <span>×</span></button>`).join(''):'<span class="market-watch-empty">등록된 관심 아이템이 없습니다.</span>';
       status.className=`market-watch-status ${config.enabled?'on':''}`;
-      status.textContent=config.enabled?`${permissionLabel()} · 새 매물만 알려드립니다. 홈페이지가 열려 있을 때 가장 안정적입니다.`:'관심 아이템을 추가하고 알림을 켜 주세요.';
+      status.textContent=config.enabled?`전체 목록 최상단 우선 표시 · ${permissionLabel()} · 새 매물 알림 사용`:'관심 아이템을 추가하고 즐겨찾기를 켜 주세요.';
       keywords.querySelectorAll('[data-watch-remove]').forEach(button=>button.addEventListener('click',()=>{
         config.keywords.splice(num(button.dataset.watchRemove),1);
         saveConfig();
@@ -4239,7 +4275,7 @@ body{
       saveConfig();
       draw();
       refreshPinnedOrder();
-      toast(`'${keyword}' 신규 매물 알림을 등록했습니다`);
+      toast(`'${keyword}' 관심 아이템 즐겨찾기에 등록했습니다`);
     });
     draw();
   };
@@ -7579,7 +7615,7 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
     board.insertBefore(rail,toolbar);
     const columns=document.createElement('div');
     columns.className='boss-game-columns';
-    columns.innerHTML='<span>이름</span><span>분포</span><span>회귀도달·남은 시간</span>';
+    columns.innerHTML='<span>이름</span><span>분포</span><span>상태·남은 시간</span>';
     board.insertBefore(columns,split);
     const title=document.getElementById('modalTitle');
     if(title)title.innerHTML='몹 백과 <small>지역 목록</small>';
@@ -7598,4 +7634,51 @@ body:has(.floating-schedule-drawer.open) .unified-service-rail{visibility:hidden
   };
 })();
 </script>
+<style id="mirjin-data-accuracy-mobile-v39">
+.market-watch-favorite-heading,
+.market-all-heading{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:32px;padding:6px 11px;
+  border-bottom:1px solid #8d5a27;background:linear-gradient(90deg,#7a551a,#4c280f);color:#ffe29a;
+  font-size:9px;font-weight:900
+}
+.market-watch-favorite-heading{position:sticky;top:0;z-index:3;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.market-watch-favorite-heading span{color:#ffd32e;font-size:10px}.market-watch-favorite-heading b{color:#f1d39a;font-size:8px}
+.market-all-heading{justify-content:flex-start;background:#5c3014;color:#d8b67e}
+.game-auction-board .market-compact-thumb img,
+.game-auction-board .market-compact-detail-image img{object-fit:contain!important;image-rendering:auto}
+@media(max-width:760px){
+  .game-tab-scroll{min-width:0!important;scroll-padding-inline:4px}
+  .game-tab-button{flex:0 0 auto!important;min-width:max-content!important;max-width:none!important;white-space:nowrap!important}
+  .game-boss-board,
+  .game-boss-board .boss-mobile-favorites,
+  .game-boss-board .boss-split-layout,
+  .game-boss-board .boss-lane,
+  .game-boss-board .boss-lane-list{width:100%!important;min-width:0!important;max-width:100%!important}
+  .boss-game-columns,
+  .game-boss-board .boss-v2-card{
+    width:100%!important;max-width:100%!important;
+    grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr) minmax(76px,.85fr)!important;
+    gap:3px!important;overflow:hidden!important
+  }
+  .boss-game-columns{padding-inline:5px!important;font-size:8px!important}
+  .boss-game-columns span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .game-boss-board .boss-v2-card>header,
+  .game-boss-board .boss-v2-place,
+  .game-boss-board .boss-v2-card>footer{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+  .game-boss-board .boss-v2-card>header{grid-template-columns:minmax(0,1fr) 21px!important}
+  .game-boss-board .boss-v2-card>header h4{min-width:0!important;font-size:9.5px!important}
+  .game-boss-board .boss-v2-place{align-items:center!important;gap:3px!important;font-size:8.5px!important}
+  .game-boss-board .boss-v2-place span{
+    min-width:0!important;display:-webkit-box!important;overflow:hidden!important;text-overflow:ellipsis!important;
+    white-space:normal!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-height:1.25!important
+  }
+  .game-boss-board .boss-v2-card>footer span,
+  .game-boss-board .boss-v2-card>footer strong{
+    width:100%!important;min-width:0!important;overflow:hidden!important;text-align:right!important;
+    text-overflow:ellipsis!important;white-space:nowrap!important
+  }
+  .game-boss-board .boss-mobile-favorites .boss-lane-list{max-height:190px!important;overflow-x:hidden!important;overflow-y:auto!important}
+  .market-watch-favorite-heading{align-items:flex-start;flex-direction:column;gap:2px}
+}
+</style>
 </body></html>
