@@ -2131,11 +2131,14 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
   }
 }
 </style>
-<script id="ara-access-security-v1">
+<script id="ara-access-security-v2">
 (function(){
   const ACCESS_KEY='araClanAccessDeviceV1';
+  const ACCESS_EXPIRES_KEY='araClanAccessExpiryV1';
   const LEGACY_SESSION_KEY='araClanAccessSessionV1';
-  const EXPECTED_HASH='c1f330d0aff31c1c87403f1e4347bcc21aff7c179908723535f2b31723702525';
+  const EXPECTED_HASHES=['c1f330d0aff31c1c87403f1e4347bcc21aff7c179908723535f2b31723702525','baf1ed0a18cb24d0d3c5de13ab215c0f4709c0e4fad301313b6cca944e0f6b15'];
+  let expectedHashes=[...EXPECTED_HASHES];
+  let sessionHours=24;
   const body=document.body;
   const gate=document.getElementById('siteAccessGate');
   const form=document.getElementById('araAccessForm');
@@ -2143,8 +2146,13 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
   const submit=document.getElementById('araAccessSubmit');
   const error=document.getElementById('araAccessError');
   const card=gate?.querySelector('.ara-gate-card');
-  const unlock=()=>{
-    try{localStorage.setItem(ACCESS_KEY,'granted')}catch(_){}
+  const clearSaved=()=>{try{localStorage.removeItem(ACCESS_KEY);localStorage.removeItem(ACCESS_EXPIRES_KEY);sessionStorage.removeItem(LEGACY_SESSION_KEY)}catch(_){}};
+  const unlock=matchedHash=>{
+    try{
+      localStorage.setItem(ACCESS_KEY,matchedHash);
+      localStorage.setItem(ACCESS_EXPIRES_KEY,String(Date.now()+sessionHours*60*60*1000));
+      sessionStorage.removeItem(LEGACY_SESSION_KEY);
+    }catch(_){}
     body.classList.remove('site-locked');
     gate?.setAttribute('aria-hidden','true');
   };
@@ -2154,24 +2162,43 @@ loadAll();setInterval(loadAll,30000);setInterval(tick,1000);
       const hash=await crypto.subtle.digest('SHA-256',bytes);
       return [...new Uint8Array(hash)].map(byte=>byte.toString(16).padStart(2,'0')).join('');
     }
-    return [...value].every(character=>character.charCodeAt(0)===53)&&value.length===4?EXPECTED_HASH:'';
+    return '';
   };
-  try{
-    const saved=localStorage.getItem(ACCESS_KEY)==='granted';
-    const legacy=sessionStorage.getItem(LEGACY_SESSION_KEY)==='granted';
-    if(saved||legacy)unlock();
-    else setTimeout(()=>input?.focus(),80);
-  }catch(_){setTimeout(()=>input?.focus(),80)}
+  const configReady=(async()=>{
+    try{
+      const response=await fetch('access-control.json?ts='+Date.now(),{cache:'no-store',headers:{Accept:'application/json'}});
+      if(!response.ok)throw new Error('HTTP '+response.status);
+      const config=await response.json();
+      if(config?.enabled===false||String(config?.mode||'password')!=='password'){expectedHashes=[];return}
+      const values=Array.isArray(config?.passwordHashes)?config.passwordHashes:[config?.passwordHash];
+      const hashes=values.map(v=>String(v||'').trim().toLowerCase()).filter(v=>/^[0-9a-f]{64}$/.test(v));
+      if(hashes.length)expectedHashes=[...new Set(hashes)];
+      const hours=Number(config?.sessionHours);
+      if(Number.isFinite(hours)&&hours>0&&hours<=168)sessionHours=hours;
+    }catch(_){/* 기존 배포본 호환용 FALLBACK_HASH 유지 */}
+  })();
+  const restore=async()=>{
+    await configReady;
+    try{
+      const savedHash=String(localStorage.getItem(ACCESS_KEY)||'').toLowerCase();
+      const expires=Number(localStorage.getItem(ACCESS_EXPIRES_KEY)||0);
+      if(expectedHashes.includes(savedHash)&&expires>Date.now())unlock(savedHash);
+      else{clearSaved();setTimeout(()=>input?.focus(),80)}
+    }catch(_){setTimeout(()=>input?.focus(),80)}
+  };
+  restore();
   form?.addEventListener('submit',async event=>{
     event.preventDefault();
     const value=input.value.trim();
     submit.disabled=true;
     submit.textContent='확인 중...';
-    const valid=await digest(value)===EXPECTED_HASH;
+    await configReady;
+    const actual=await digest(value);
+    const valid=expectedHashes.includes(actual);
     submit.disabled=false;
     submit.textContent='전용 홈페이지 입장';
-    if(valid){error.textContent='';input.value='';unlock();return}
-    error.textContent='비밀번호가 올바르지 않습니다. 문파 담당자에게 문의해 주세요.';
+    if(valid){error.textContent='';input.value='';unlock(actual);return}
+    error.textContent=expectedHashes.length?'비밀번호가 올바르지 않습니다. 문파 담당자에게 문의해 주세요.':'현재 입장이 제한되어 있습니다. 문파 담당자에게 문의해 주세요.';
     input.select();
     card?.classList.remove('is-error');
     void card?.offsetWidth;
