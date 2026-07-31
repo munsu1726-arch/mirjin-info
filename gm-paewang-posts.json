@@ -4,11 +4,11 @@
     "cafeId": "31717562",
     "menuId": "48",
     "sourceUrl": "https://cafe.naver.com/f-e/cafes/31717562/menus/48?viewType=L",
-    "updatedAt": "2026-07-31T19:02:33+09:00",
+    "updatedAt": "2026-08-01T01:26:06+09:00",
     "status": "ok",
-    "count": 28,
-    "newCount": 0,
-    "openedArticleCount": 0,
+    "count": 29,
+    "newCount": 1,
+    "openedArticleCount": 1,
     "collectionMethod": "Playwright browser - open new posts one by one",
     "sortMethod": "articleId descending"
   },
@@ -402,6 +402,21 @@
       "collectStatus": "ok",
       "firstCollectedAt": "2026-07-14T21:47:25+09:00",
       "isNew": false
+    },
+    {
+      "id": "2023",
+      "articleId": "2023",
+      "title": "VFG 플랫폼 공지 바로 가기_출석 체크 추가",
+      "link": "https://cafe.naver.com/f-e/cafes/31717562/articles/2023?boardtype=L&menuid=48&referrerAllArticles=false",
+      "writer": "GM미르",
+      "publishedAt": "",
+      "timestamp": "",
+      "summary": "VFG 플랫폼 공지 바로 가기_출석 체크 추가\n본문 자동 추출이 불완전합니다. 원문 게시글에서 전체 내용을 확인해 주세요.",
+      "bodyHash": "0415e7376b195dd49b346a05899b1b735f2fc9fe25c84825433f3a5e17262380",
+      "collectedAt": "2026-08-01T01:26:06+09:00",
+      "collectStatus": "ok",
+      "firstCollectedAt": "2026-08-01T01:26:06+09:00",
+      "isNew": true
     },
     {
       "id": "2002",
