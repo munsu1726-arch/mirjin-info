@@ -737,22 +737,6 @@ body:not(.site-locked) #siteAccessGate{display:none}
   height:4px;
   background:linear-gradient(90deg,#2a6d9f,#24a58e,#9a7b3d);
 }
-.ara-gate-emblem{
-  display:grid;
-  place-items:center;
-  width:72px;
-  height:72px;
-  margin:0 auto 17px;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:22px;
-  background:linear-gradient(145deg,#173f61,#16786f);
-  color:#fff;
-  font-size:17px;
-  font-weight:950;
-  letter-spacing:.14em;
-  text-indent:.14em;
-  box-shadow:0 15px 32px rgba(20,76,91,.24),inset 0 1px rgba(255,255,255,.16);
-}
 .ara-gate-kicker{
   display:block;
   color:#1b8879;
@@ -860,7 +844,6 @@ body:not(.site-locked) img{
 @media(max-width:520px){
   #siteAccessGate{padding:16px}
   .ara-gate-card{padding:31px 20px 25px;border-radius:22px}
-  .ara-gate-emblem{width:64px;height:64px;border-radius:19px;font-size:15px}
   .ara-gate-card h1{font-size:22px}
   .ara-gate-card>p{font-size:11.5px}
 }
@@ -877,7 +860,6 @@ body:not(.site-locked) img{
 </style></head><body class="site-locked">
 <section aria-labelledby="araGateTitle" aria-modal="true" id="siteAccessGate" role="dialog">
   <div class="ara-gate-card">
-    <span aria-hidden="true" class="ara-gate-emblem">MIR</span>
     <span class="ara-gate-kicker">MIRJIN INFORMATION SEARCH</span>
     <h1 id="araGateTitle">미르의전설: 진 정보검색</h1>
     <p>입장하시려면 관리자에게 연락해 주세요.<br>안내받은 비밀번호를 입력하면 홈페이지에 입장할 수 있습니다.</p>
@@ -889,7 +871,7 @@ body:not(.site-locked) img{
       <button id="araAccessSubmit" type="submit">정보검색 입장</button>
       <p aria-live="polite" id="araAccessError"></p>
     </form>
-    <div class="ara-gate-contact">접속 권한은 관리자에게 문의해 주세요</div>
+    <div class="ara-gate-contact">접속 권한은 담당자에게 문의해 주세요</div>
     <noscript>이 홈페이지에 입장하려면 브라우저에서 JavaScript를 사용하도록 설정해 주세요.</noscript>
   </div>
 </section>
