@@ -1,8 +1,7 @@
-const CACHE_NAME='mirjin-shell-v19';
+const CACHE_NAME='mirjin-shell-v20';
 const STATIC_FILES=[
   './',
   './index.html',
-  './boss.html',
   './manifest.webmanifest',
   './assets/scene.webp',
   './assets/fire-sprite.png',
